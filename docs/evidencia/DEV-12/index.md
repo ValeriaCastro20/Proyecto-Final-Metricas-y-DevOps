@@ -60,6 +60,24 @@ El tiempo total incluye 75 s de espera antes de declarar fallido el rollout. Las
 | De `d203a4f1499c` a `bd50b3cf03f2`, en API y worker | Los dos restaurados, digest comprobado en los Pods, smoke correcto, `ROLLBACK_OK` en 7 s |
 | Repetir con la misma imagen | `ya está sano en esa versión: no se modifica`; generación y Pods iguales |
 
+## Verificación del código integrado · 2026-11-09
+
+Namespace `eventos-development`, commit `c8581f0`, [ejecución de publicación](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/42746903680), digest `sha256:e726151c970772b60b4d557acfc2908fc654c45206000986cec44521f450d4e1`. Repite el simulacro con los scripts de `main`, incluido el smoke que valida la lectura exacta.
+
+| Falla provocada solo en la API | Tiempo total | Solo rollback y smoke | Worker |
+|---|---|---|---|
+| Imagen inexistente | 81 s | 5 s | Misma generación, revisión, imagen y Pod |
+| `BIND_ADDR` inválido | 80 s | 4 s | Misma generación, revisión, imagen y Pod |
+
+Las lecturas pasaron de 12873 a 12875 por los smoke, y el simulacro terminó con `SIMULACRO_OK`.
+
+| Vuelta manual | Resultado |
+|---|---|
+| De `e726151c9707` a `e76a3dbdda59`, imagen firmada del commit `f4c23e1` | Los dos restaurados, digest comprobado en los Pods, smoke correcto, `ROLLBACK_OK` en 11 s |
+| Entrega posterior de `e726151c9707` | `ENTREGA_OK`; lecturas de 12878 a 12880, solo por los smoke |
+
 ## Límite
 
 El script considera sana una revisión si tiene el digest pedido y su rollout terminó. Una configuración mala que pase las probes no se detecta ahí: el smoke final falla y hay que revisar a mano.
+
+Cada Deployment conserva 3 revisiones anteriores (`revisionHistoryLimit`). Tras varias fallas seguidas, una versión antigua deja de estar disponible: al pedir `bd50b3cf03f2` después de los simulacros, el script respondió `no conserva otra revisión con esa imagen`, terminó con error y no modificó nada.
