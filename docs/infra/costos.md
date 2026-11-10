@@ -22,7 +22,7 @@ El margen restante cubre picos de uso (pruebas de carga, defensa) y cargos que n
 
 | Medida | Implementación |
 |---|---|
-| Apagado diario automático | Workflow [`vm-power.yml`](../../.github/workflows/vm-power.yml): desasigna la VM a las 23:00 (El Salvador, cron `0 5 * * *` UTC) |
+| Apagado diario automático | Workflow [`vm-power.yml`](../../.github/workflows/vm-power.yml): desasigna la VM a las 23:00 (El Salvador, cron `0 5 * * *` UTC). Verificado en [run `42628212259`](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/42628212259) (`vm-eventos-b97e31-k3s: VM deallocated`) |
 | Encendido solo cuando se usa | **Actions → Energía de la VM → Run workflow** (`start` / `stop` / `status`), disponible para todo el equipo sin credenciales de Azure; o `bash infra/scripts/vm.sh start` / `stop` con Azure CLI. Ambos desasignan, no solo apagan el sistema operativo |
 | Privilegio mínimo | `id-eventos-ops` solo tiene el rol personalizado `eventos-<sufijo>-vm-operator`: leer, encender y desasignar VMs. No puede crear, modificar ni borrar recursos |
 | Presupuesto con alertas | `azurerm_consumption_budget_subscription`: US$100 mensuales; correo al 50 % y 80 % real y al 100 % pronosticado |

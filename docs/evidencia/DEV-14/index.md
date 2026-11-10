@@ -1,6 +1,6 @@
 # DEV-14 · Control del consumo de Azure (límite US$100)
 
-[Issue #20](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/issues/20) · [PR #40](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/pull/40). Criterios:
+[Issue #20](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/issues/20) · [PR #40](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/pull/40) · [PR #57](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/pull/57). Criterios:
 
 - estimación alineada con Terraform;
 - alertas de presupuesto configuradas;
@@ -50,6 +50,12 @@ acciones: Microsoft.Compute/virtualMachines/read, Microsoft.Compute/virtualMachi
 alcance:  /subscriptions/<sub>   (asignado a id-eventos-ops)
 ```
 
+Primera ejecución programada verificada en GitHub Actions ([run `42628212259`](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/42628212259), 2026-11-09, evento `schedule` en `main`, 49 s): autenticó por OIDC contra `id-eventos-ops` en el environment `azure-ops` (`subject: repo:marchelo23@149895391/Proyecto-Final-Metricas-y-DevOps@1427515419:environment:azure-ops`), ejecutó `az vm deallocate` y confirmó el estado final:
+
+```text
+vm-eventos-b97e31-k3s: VM deallocated
+```
+
 **Eliminación probada.** El cambio de región destruyó por Terraform todos los recursos regionales anteriores, sin recursos huérfanos: el grupo antiguo se eliminó completo.
 
 **Cargos reales al 2026-11-08** (API de Cost Management, `ActualCost` agrupado por Resource Group; comando en `costos.md`):
@@ -84,18 +90,17 @@ Costos de noviembre              2,12 US$
 
 El crédito se activó el 2026-10-18, dos días antes del inicio del proyecto. Lo consumido según el portal (≈ US$2, redondeado) coincide con el acumulado de la API. Los costos de noviembre del portal (US$2.12) son algo mayores que los de la consulta (US$2.07) porque incluyen cargos más recientes.
 
-## Pendiente
+## Verificación y seguimiento continuo
 
 - [x] Ejecutar el bootstrap actualizado, que crea `id-eventos-ops` y su rol (2026-11-08).
-- [ ] Configurar el environment `azure-ops` y la variable `OPS_CLIENT_ID` (administrador del repositorio).
-- [ ] Enlazar la primera ejecución programada de `vm-power.yml` (`VM deallocated`).
+- [x] Configurar el environment `azure-ops` y la variable `OPS_CLIENT_ID` (2026-11-08).
+- [x] Enlazar la primera ejecución programada de `vm-power.yml` (`VM deallocated`): [run `42628212259`](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/42628212259) (2026-11-09).
 - [x] Primer registro de cargos reales (2026-11-08).
 - [x] Crédito restante de Azure for Students, leído en el portal: US$98 de US$100 (2026-11-08).
-- [ ] Registrar cada semana, y antes de cada entrega y de la defensa, el acumulado del mes, el acumulado del proyecto, el crédito restante y el saldo hasta US$100 (tabla de `costos.md`). El presupuesto mensual no cubre el agregado de varios meses.
+- [ ] Seguimiento periódico: registrar cada semana, y antes de cada entrega y de la defensa, el acumulado del mes, el acumulado del proyecto, el crédito restante y el saldo hasta US$100 (tabla de `costos.md`). El presupuesto mensual no cubre el agregado de varios meses.
 - [ ] Destruir los recursos del Laboratorio 4 después de su revisión docente (≈ US$1/día).
 
 ## Limitaciones
 
 - Las alertas de presupuesto notifican, pero no detienen recursos.
 - Con la VM desasignada siguen cobrándose el disco y la IP estática (≈ US$0.28/día).
-- Hasta configurar `vm-power.yml`, el apagado es manual (`vm.sh stop`).

@@ -57,7 +57,16 @@ Con estos datos los requests actuales quedan justificados como reserva holgada. 
 
 Con PostgreSQL detenido, la API pasó a `0/1`, salió del endpoint y no se reinició. **El worker publicado siguió en `1/1`**: sin probes no refleja la caída de la base, que es lo que corrige este PR.
 
-## Pendiente
+## Verificación con `worker-health` en Azure · 2026-11-09
 
-- [ ] Integrar este PR y entregar la imagen con `worker-health`.
-- [ ] Repetir en Azure la caída de la base y la falla de liveness del worker.
+Namespace `eventos-development`, commit `c8581f0`, [ejecución de publicación](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/42746903680), digest `sha256:e726151c970772b60b4d557acfc2908fc654c45206000986cec44521f450d4e1`. La firma se comprobó con `gh attestation verify`. Se usaron los manifiestos de `main`, con las tres probes del worker.
+
+| Prueba | Resultado |
+|---|---|
+| Entrega | `ENTREGA_OK` en 19 s; API y worker `1/1`, digest `e726151c9707` en los Pods |
+| PostgreSQL detenido 93 s | API fuera del endpoint antes de 15 s; worker no listo antes de 47 s; 0 reinicios en ambos |
+| PostgreSQL restaurado | Los dos vuelven a estar listos solos, sin reinicios; smoke correcto; lecturas 12868 antes y 12869 después, por el smoke |
+| Proceso del worker congelado con `SIGSTOP` | No listo antes de 46 s, sin efecto en la API; `Container worker failed liveness probe, will be restarted`; 1 reinicio antes de 186 s y vuelve a `1/1` |
+| Después del reinicio | Smoke correcto |
+
+La readiness saca al worker antes de que la liveness lo reinicie, y una caída de la base no provoca reinicios. El consumo medido en la sección anterior corresponde a la imagen sin `worker-health`. Con esta imagen, en reposo: API 1m / 1Mi, worker 17m / 1Mi, PostgreSQL 29m / 27Mi.
