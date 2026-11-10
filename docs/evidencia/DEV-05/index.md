@@ -80,9 +80,36 @@ de revisión viejas restaura los templates capturados. Cubre cambios solo en API
 ambos Deployments, conservando intacto un worker no modificado. Estas pruebas no
 sustituyen repetir la entrega corregida en el clúster.
 
-## Pendiente
+## Entrega real en Actions · 2026-11-09
 
-- [x] Identidad de despliegue en Azure y environments.
-- [ ] Confirmar `DEPLOY_CLIENT_ID`.
-- [ ] Primera entrega real, con aprobación y certificado emitido.
-- [ ] Demostrar en Actions que un smoke fallido impide completar la entrega.
+Imagen del commit `c8581f0`, digest `sha256:e726151c970772b60b4d557acfc2908fc654c45206000986cec44521f450d4e1`, firmada en la [publicación](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/42746903680). `resolve` verificó la firma en las dos ejecuciones.
+
+| Ejecución | development | Aprobación de production | production |
+|---|---|---|---|
+| [`42753623476`](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/42753623476) | `ENTREGA_OK`, smoke correcto | `marchelo23` | `SMOKE FALLÓ: el alta del dispositivo devolvió 401`, sin `ENTREGA_OK`, ejecución fallida |
+| [`42757194366`](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/42757194366) | `ENTREGA_OK`, smoke correcto | `ValeriaCastro20` | `ENTREGA_OK`, smoke correcto, ejecución exitosa |
+
+**Smoke que detuvo la entrega.** La primera ejecución no se completó por un error del propio smoke: un `port-forward` anterior a development seguía ocupando el puerto 18080, y las claves de producción llegaron a la API de development. El [PR #75](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/pull/75) cierra el túnel y rechaza un puerto ocupado. Era la primera entrega a production, así que no había versión a la cual volver y los Deployments quedaron creados hasta la ejecución correcta.
+
+**Aprobación.** En la segunda ejecución, la misma persona lanzó la entrega y aprobó production. GitHub lo permite porque el environment no activa `prevent self-review`. En la primera, lanzó una persona y aprobó otra.
+
+## Verificación de production · 2026-11-09
+
+| Prueba | Resultado |
+|---|---|
+| Digest en API y worker | `e726151c9707` en el Deployment y en el `imageID` de los Pods, igual que en development |
+| Pods | API y worker listos, 0 reinicios |
+| `k8s-verify-security.sh production`, antes y después del Ingress | 23 de 23 controles correctos, sin recursos temporales restantes |
+| Certificado | Let's Encrypt, emitido por cert-manager `v1.21.3` y válido para el FQDN de production |
+| `GET /health/live` y `/health/ready` por HTTPS | 200 |
+| `GET /v1/devices` por HTTPS sin clave | 401 |
+| `GET /health/live` por HTTP | 404: la API no se sirve sin cifrar |
+
+## Restauración automática con la imagen final · 2026-11-09
+
+`k8s-deliver.sh` por SSH en `eventos-development`, con la imagen `e726151c9707`.
+
+| Prueba | Resultado |
+|---|---|
+| `BIND_ADDR` inválido solo en la API | API restaurada, `event-service-worker no cambió`, código de salida 1, 186 s |
+| Smoke fallido con API y worker cambiados | Los dos restaurados y comprobados, código de salida 1, 17 s |
