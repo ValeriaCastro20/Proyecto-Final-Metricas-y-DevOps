@@ -47,13 +47,22 @@ impl Store {
     pub async fn reject(&self, device_id: Option<&str>, reason: &str) -> Result<Receipt, Error> {
         let receipt = Receipt {
             id: Uuid::new_v4(),
-            reading_id: None,
-            outcome: "rejected".into(),
-            reason: Some(reason.into()),
+            reading_id: Some(reading_id),
+            outcome: outcome.into(),
+            reason: None,
         };
-        sqlx::query("INSERT INTO reception_receipts(id,device_id,outcome,reason) VALUES ($1,$2,'rejected',$3)")
+        sqlx::query("INSERT INTO reception_receipts(id,device_id,outcome,reason) VALUES ($1,$2,$3,$4)",)
             .bind(receipt.id).bind(device_id).bind(reason).execute(&self.pool).await.map_err(db)?;
         Ok(receipt)
+
+        .execute(&mut *tx)
+        .await
+        .map_err(db)?;
+        
+        // MET-03: Emit domain metrics for reception
+        metrics::counter!("esc3_events_received_total", 1, "outcome" => receipt.outcome.clone());
+
+        tx.commit().await.map_err(db)?;
     }
     /// Uniqueness arbitrates concurrent retries. Limits are snapshotted at reception.
     pub async fn receive(&self, event: &ReadingCreate) -> Result<Receipt, Error> {
@@ -157,7 +166,9 @@ impl Store {
         if !(1..=1000).contains(&batch_size) {
             return Err(Error::InvalidInput);
         }
+        let start = std::time::Instant::now();
         let mut tx = self.pool.begin().await.map_err(db)?;
+
         let ids: Vec<Uuid> = sqlx::query_scalar("SELECT id FROM readings WHERE processed_at IS NULL ORDER BY received_at,id LIMIT $1 FOR UPDATE SKIP LOCKED")
             .bind(batch_size).fetch_all(&mut *tx).await.map_err(db)?;
         sqlx::query("INSERT INTO business_alerts(id,reading_id,kind,value,threshold) SELECT gen_random_uuid(),r.id,v.kind,v.value,v.threshold FROM readings r CROSS JOIN LATERAL (VALUES ('temperature_low',temperature,temperature_min,temperature < temperature_min), ('temperature_high',temperature,temperature_max,temperature > temperature_max), ('humidity_low',humidity,humidity_min,humidity < humidity_min), ('humidity_high',humidity,humidity_max,humidity > humidity_max)) AS v(kind,value,threshold,exceeded) WHERE r.id=ANY($1) AND v.exceeded ON CONFLICT(reading_id,kind) DO NOTHING")
@@ -170,6 +181,19 @@ impl Store {
                 .map_err(db)?
                 .rows_affected();
         tx.commit().await.map_err(db)?;
+        
+        let duration = start.elapsed().as_secs_f64();
+        
+        // MET-03 & MET-04: Record processor metrics and trace details
+        tracing::info!(batch_size, processed = changed, duration_s = duration, "batch processed");
+        metrics::counter!("esc3_events_processed_total", changed);
+        metrics::histogram!("esc3_processor_duration_seconds", duration);
+        
+        // Query the backlog to expose it as a gauge
+        if let Ok(counters) = self.counters(None).await {
+             metrics::gauge!("esc3_events_backlog_total", counters.pending as f64);
+        }
+
         Ok(changed)
     }
 }

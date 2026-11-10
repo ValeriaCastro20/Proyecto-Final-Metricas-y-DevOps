@@ -46,9 +46,17 @@ impl FromRequestParts<AppState> for Principal {
 /// The outer correlation layer also normalizes extraction, routing and panic errors.
 pub fn router(state: AppState) -> Router {
     let scenario = crate::scenario::http::router(state.settings.clone(), state.scenario.clone());
+
+    // MET-03: Expose Prometheus metrics endpoint
+    use metrics_exporter_prometheus::PrometheusHandle;
+    let recorder_handle = metrics_exporter_prometheus::PrometheusBuilder::new()
+        .build_recorder()
+        .handle();
+
     Router::new()
         .route("/health/live", get(live))
         .route("/health/ready", get(ready))
+        .route("/metrics", get(move || std::future::ready(recorder_handle.render())))
         .route("/v1/events", post(create_event).get(list_events))
         .route("/v1/events/batch", post(create_batch))
         .route("/v1/events/{id}", get(get_event))
@@ -99,7 +107,21 @@ async fn correlate(request: Request, next: Next) -> Response {
         .get::<MatchedPath>()
         .map(|p| p.as_str().to_owned())
         .unwrap_or_else(|| "<unmatched>".to_owned());
+
+    // MET-04: Start a trace span for the HTTP request
+    let span = tracing::info_span!("http_request", %request_id, %route, status = tracing::field::Empty);
+    let _enter = span.enter();
+
+    let start = std::time::Instant::now();
     let mut response = next.run(request).await;
+    let latency = start.elapsed().as_secs_f64();
+
+    // MET-03: Record HTTP latency and count
+    metrics::histogram!("http_request_duration_seconds", latency, "route" => route.clone(), "status" => response.status().as_u16().to_string());
+    metrics::counter!("http_requests_total", 1, "route" => route.clone(), "status" => response.status().as_u16().to_string());
+
+    span.record("status", &response.status().as_u16());
+
     if (response.status().is_client_error() || response.status().is_server_error())
         && response
             .extensions()
