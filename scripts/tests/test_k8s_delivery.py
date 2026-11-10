@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import socket
 import subprocess
 import tempfile
 import unittest
@@ -57,6 +58,48 @@ print(code, end='')
                                         env=env, capture_output=True, text=True, timeout=15)
                 self.assertEqual(result.returncode, 0 if processed else 1, result.stderr)
                 self.assertEqual("SMOKE OK" in result.stdout, processed)
+
+    def test_smoke_refuses_a_port_already_in_use(self):
+        """A listener left on the port must not answer for the environment under test."""
+        with tempfile.TemporaryDirectory() as directory, socket.socket() as listener:
+            work = Path(directory)
+            listener.bind(("127.0.0.1", 0))
+            listener.listen()
+            self.executable(work / "kubectl", '#!/bin/sh\ntouch "$MOCK_CALLED"\n')
+            env = dict(os.environ, KUBECTL=str(work / "kubectl"), MOCK_CALLED=str(work / "called"),
+                       SMOKE_PORT=str(listener.getsockname()[1]))
+            result = subprocess.run(["bash", str(ROOT / "scripts/k8s-smoke.sh"), "production"],
+                                    env=env, capture_output=True, text=True, timeout=15)
+            self.assertEqual(result.returncode, 1, result.stderr)
+            self.assertIn("ya está en uso", result.stderr)
+            self.assertFalse((work / "called").exists())
+
+    def test_smoke_closes_its_port_forward(self):
+        """The tunnel must end with the script so the next environment can use the port."""
+        with tempfile.TemporaryDirectory() as directory:
+            work = Path(directory)
+            pid_file = work / "pid"
+            self.executable(work / "kubectl", '''#!/bin/sh
+case "$*" in
+  *port-forward*) echo $$ >"$MOCK_PID.tmp"; mv "$MOCK_PID.tmp" "$MOCK_PID"; exec python3 -c 'import time; time.sleep(30)' ;;
+esac
+''')
+            self.executable(work / "sleep", "#!/bin/sh\nexit 0\n")
+            self.executable(work / "curl", '#!/bin/sh\nwhile [ ! -s "$MOCK_PID" ]; do :; done\nprintf 500\n')
+            env = dict(os.environ, PATH=f"{work}:{os.environ['PATH']}", KUBECTL=str(work / "kubectl"),
+                       MOCK_PID=str(pid_file))
+            result = subprocess.run(["bash", str(ROOT / "scripts/k8s-smoke.sh"), "development"],
+                                    env=env, capture_output=True, text=True, timeout=15)
+            self.assertEqual(result.returncode, 1, result.stderr)
+            pid = int(pid_file.read_text())
+            try:
+                with self.assertRaises(ProcessLookupError):
+                    os.kill(pid, 0)
+            finally:
+                try:
+                    os.kill(pid, 9)
+                except ProcessLookupError:
+                    pass
 
     def test_partial_apply_restores_templates_with_stale_revision_annotations(self):
         """Restore changed templates immediately, leaving an unchanged worker untouched."""
