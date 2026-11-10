@@ -26,6 +26,7 @@ forward_pid=
 cleanup() {
   if [[ -n "$forward_pid" ]]; then
     kill "$forward_pid" 2>/dev/null || true
+    wait "$forward_pid" 2>/dev/null || true
   fi
   rm -rf "$workdir"
 }
@@ -52,7 +53,13 @@ request() {
   fi
 }
 
-kube -n "$namespace" port-forward service/event-service "$port:8000" --address 127.0.0.1 >/dev/null 2>&1 &
+# Con un puerto ocupado, las peticiones llegarían a otro servicio, quizá de otro ambiente.
+if (exec 3<>"/dev/tcp/127.0.0.1/$port") 2>/dev/null; then
+  fail "el puerto local $port ya está en uso"
+fi
+
+# Sin la función kube: en segundo plano, $! sería un subshell y kubectl sobreviviría al kill.
+"${kubectl_cmd[@]}" -n "$namespace" port-forward service/event-service "$port:8000" --address 127.0.0.1 >/dev/null 2>&1 &
 forward_pid=$!
 for _ in $(seq 1 30); do
   [[ "$(request GET /health/live '')" == 200 ]] && break
