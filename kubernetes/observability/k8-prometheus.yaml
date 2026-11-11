@@ -12,7 +12,10 @@ data:
     scrape_configs:
       - job_name: 'event-service'
         static_configs:
-          - targets: ['api.eventos-development.svc.cluster.local:8000']
+          - targets: ['event-service.eventos-development.svc.cluster.local:8000']
+      - job_name: 'event-service-worker'
+        static_configs:
+          - targets: ['event-service-worker-metrics.eventos-development.svc.cluster.local:9000']
   alerts.yml: |
     groups:
       - name: esc3-alerts
@@ -49,15 +52,29 @@ spec:
       labels:
         app: prometheus
     spec:
+      securityContext:
+        fsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: prometheus
-        image: prom/prometheus:latest
+        image: prom/prometheus:v3.2.1
+        securityContext:
+          runAsUser: 65534
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
         args:
           - "--config.file=/etc/prometheus/prometheus.yml"
           - "--storage.tsdb.retention.time=2d"
+          - "--storage.tsdb.path=/prometheus"
         ports:
         - containerPort: 9090
         volumeMounts:
+        - name: prometheus-data
+          mountPath: /prometheus
         - name: config-volume
           mountPath: /etc/prometheus
         resources:
@@ -68,6 +85,8 @@ spec:
             memory: "512Mi"
             cpu: "300m"
       volumes:
+      - name: prometheus-data
+        emptyDir: {}
       - name: config-volume
         configMap:
           name: prometheus-config
@@ -84,3 +103,59 @@ spec:
     targetPort: 9090
   selector:
     app: prometheus
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-service-worker-metrics
+  namespace: eventos-development
+spec:
+  ports:
+  - port: 9000
+    targetPort: 9000
+    name: metrics
+  selector:
+    app.kubernetes.io/name: event-service
+    app.kubernetes.io/component: worker
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: prometheus-scrape
+  namespace: eventos-development
+spec:
+  podSelector:
+    matchLabels:
+      app: prometheus
+  policyTypes: [Egress]
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: event-service
+    ports:
+    - protocol: TCP
+      port: 8000
+    - protocol: TCP
+      port: 9000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: event-service-metrics
+  namespace: eventos-development
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: event-service
+  policyTypes: [Ingress]
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: prometheus
+    ports:
+    - protocol: TCP
+      port: 8000
+    - protocol: TCP
+      port: 9000

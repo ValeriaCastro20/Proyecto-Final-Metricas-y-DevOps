@@ -34,6 +34,7 @@ fn worker(db: &Database, mode: &str) -> std::process::Child {
         .env("DATABASE_URL", db.settings.database_url.as_ref().unwrap())
         .env("PROCESSOR_BATCH_SIZE", "1")
         .env("PROCESSOR_POLL_MS", "20")
+        .env("WORKER_METRICS_ADDR", "127.0.0.1:0")
         .stdout(Stdio::null())
         .stderr(Stdio::null())
         .spawn()
@@ -51,6 +52,9 @@ async fn shared_pool_aligns_readiness_with_scenario_routes() {
         settings: std::sync::Arc::new(db.settings.clone()),
         service: event_service::service::EventService::new(std::sync::Arc::new(repository)),
         scenario: Some(Store { pool: pool.clone() }),
+        metrics: metrics_exporter_prometheus::PrometheusBuilder::new()
+            .build_recorder()
+            .handle(),
     });
     assert_eq!(
         request(&app, "GET", "/health/ready", None, None).await.0,

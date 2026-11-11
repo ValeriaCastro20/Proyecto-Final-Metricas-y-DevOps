@@ -47,22 +47,23 @@ impl Store {
     pub async fn reject(&self, device_id: Option<&str>, reason: &str) -> Result<Receipt, Error> {
         let receipt = Receipt {
             id: Uuid::new_v4(),
-            reading_id: Some(reading_id),
-            outcome: outcome.into(),
-            reason: None,
+            reading_id: None,
+            outcome: "rejected".into(),
+            reason: Some(reason.into()),
         };
-        sqlx::query("INSERT INTO reception_receipts(id,device_id,outcome,reason) VALUES ($1,$2,$3,$4)",)
-            .bind(receipt.id).bind(device_id).bind(reason).execute(&self.pool).await.map_err(db)?;
-        Ok(receipt)
-
-        .execute(&mut *tx)
+        sqlx::query(
+            "INSERT INTO reception_receipts(id,device_id,outcome,reason) VALUES ($1,$2,$3,$4)",
+        )
+        .bind(receipt.id)
+        .bind(device_id)
+        .bind(&receipt.outcome)
+        .bind(reason)
+        .execute(&self.pool)
         .await
         .map_err(db)?;
-        
-        // MET-03: Emit domain metrics for reception
-        metrics::counter!("esc3_events_received_total", 1, "outcome" => receipt.outcome.clone());
-
-        tx.commit().await.map_err(db)?;
+        metrics::counter!("esc3_events_received_total", "outcome" => receipt.outcome.clone())
+            .increment(1);
+        Ok(receipt)
     }
     /// Uniqueness arbitrates concurrent retries. Limits are snapshotted at reception.
     pub async fn receive(&self, event: &ReadingCreate) -> Result<Receipt, Error> {
@@ -120,6 +121,8 @@ impl Store {
         .await
         .map_err(db)?;
         tx.commit().await.map_err(db)?;
+        metrics::counter!("esc3_events_received_total", "outcome" => receipt.outcome.clone())
+            .increment(1);
         Ok(receipt)
     }
     /// Retrieve safe durable reception metadata by its verifiable UUID.
@@ -135,6 +138,13 @@ impl Store {
     pub async fn counters(&self, device: Option<&str>) -> Result<Counters, Error> {
         sqlx::query_as("WITH r AS (SELECT count(*) AS received, count(*) FILTER (WHERE outcome != 'rejected') AS validated, count(*) FILTER (WHERE outcome='accepted') AS accepted, count(*) FILTER (WHERE outcome='duplicate') AS duplicates, count(*) FILTER (WHERE outcome='rejected') AS rejected FROM reception_receipts WHERE ($1::text IS NULL OR device_id=$1)), p AS (SELECT count(*) FILTER (WHERE processed_at IS NOT NULL) AS processed, count(*) FILTER (WHERE processed_at IS NULL) AS pending FROM readings WHERE ($1::text IS NULL OR device_id=$1)) SELECT * FROM r CROSS JOIN p")
             .bind(device).fetch_one(&self.pool).await.map_err(db)
+    }
+    /// Count only pending readings, without scanning the reception ledger.
+    pub async fn pending(&self) -> Result<i64, Error> {
+        sqlx::query_scalar("SELECT count(*) FROM readings WHERE processed_at IS NULL")
+            .fetch_one(&self.pool)
+            .await
+            .map_err(db)
     }
     /// List accepted work by generation in [from,to), including unprocessed readings.
     pub async fn readings(&self, device: &str, period: &Period) -> Result<Vec<Reading>, Error> {
@@ -181,18 +191,18 @@ impl Store {
                 .map_err(db)?
                 .rows_affected();
         tx.commit().await.map_err(db)?;
-        
+
         let duration = start.elapsed().as_secs_f64();
-        
+
         // MET-03 & MET-04: Record processor metrics and trace details
-        tracing::info!(batch_size, processed = changed, duration_s = duration, "batch processed");
-        metrics::counter!("esc3_events_processed_total", changed);
-        metrics::histogram!("esc3_processor_duration_seconds", duration);
-        
-        // Query the backlog to expose it as a gauge
-        if let Ok(counters) = self.counters(None).await {
-             metrics::gauge!("esc3_events_backlog_total", counters.pending as f64);
-        }
+        tracing::info!(
+            batch_size,
+            processed = changed,
+            duration_s = duration,
+            "batch processed"
+        );
+        metrics::counter!("esc3_events_processed_total").increment(changed);
+        metrics::histogram!("esc3_processor_duration_seconds").record(duration);
 
         Ok(changed)
     }

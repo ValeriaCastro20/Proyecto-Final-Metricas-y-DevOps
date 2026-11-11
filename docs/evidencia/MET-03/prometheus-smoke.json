@@ -1,0 +1,29 @@
+{
+  "scope": "Local smoke; Kubernetes DNS targets replaced with ephemeral loopback ports",
+  "prometheus_image": "prom/prometheus:v3.2.1",
+  "run_as": "65534:65534",
+  "read_only_root_filesystem": true,
+  "targets_up": 2,
+  "queries": {
+    "esc3_events_backlog_total": [
+      {
+        "metric": {
+          "__name__": "esc3_events_backlog_total",
+          "instance": "127.0.0.1:45879",
+          "job": "event-service"
+        },
+        "value": [1794358277.284, "0"]
+      }
+    ],
+    "esc3_processor_duration_seconds_count": [
+      {
+        "metric": {
+          "__name__": "esc3_processor_duration_seconds_count",
+          "instance": "127.0.0.1:41029",
+          "job": "event-service-worker"
+        },
+        "value": [1794358277.286, "103"]
+      }
+    ]
+  }
+}
