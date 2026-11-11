@@ -50,8 +50,10 @@ jobs:
             echo "::error::El commit no pertenece a main."
             exit 1
           fi
+          # El filtro remoto --status success puede omitir una ejecución que ya
+          # consta como exitosa. Filtrar la conclusión de la respuesta por SHA.
           run_id="$(gh run list --workflow publish-image.yml --commit "$COMMIT" --event push \
-            --status success --limit 1 --json databaseId --jq '.[0].databaseId')"
+            --limit 20 --json databaseId,conclusion --jq '[.[] | select(.conclusion == "success")][0].databaseId')"
           if [[ -z "$run_id" ]]; then
             echo "::error::No hay una publicación correcta para ese commit."
             exit 1
