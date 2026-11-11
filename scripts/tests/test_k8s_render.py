@@ -132,12 +132,14 @@ class RenderTests(unittest.TestCase):
         self.assertEqual(ingress["metadata"]["annotations"]["traefik.ingress.kubernetes.io/router.entrypoints"], "websecure")
 
     def test_public_ingress_excludes_metrics_but_preserves_api_routes(self):
+        """Keep metrics internal without removing the API's public application routes."""
         host = "eventos-abc123.mexicocentral.cloudapp.azure.com"
         items = MODULE.render("production", "ingress", IMAGE, POSTGRES, host)["items"]
         ingress = next(item for item in items if item["kind"] == "Ingress")
         paths = ingress["spec"]["rules"][0]["http"]["paths"]
 
         def matches(request_path, rule):
+            """Apply Kubernetes Exact or segment-based Prefix path matching."""
             if rule["pathType"] == "Exact":
                 return request_path == rule["path"]
             prefix = rule["path"].rstrip("/")

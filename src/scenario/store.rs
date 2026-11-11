@@ -194,15 +194,17 @@ impl Store {
 
         let duration = start.elapsed().as_secs_f64();
 
-        // MET-03 & MET-04: Record processor metrics and trace details
-        tracing::info!(
-            batch_size,
-            processed = changed,
-            duration_s = duration,
-            "batch processed"
-        );
+        // Empty polls do not represent processed batches or latency observations.
+        if changed > 0 {
+            tracing::info!(
+                batch_size,
+                processed = changed,
+                duration_s = duration,
+                "batch processed"
+            );
+            metrics::histogram!("esc3_processor_duration_seconds").record(duration);
+        }
         metrics::counter!("esc3_events_processed_total").increment(changed);
-        metrics::histogram!("esc3_processor_duration_seconds").record(duration);
 
         Ok(changed)
     }

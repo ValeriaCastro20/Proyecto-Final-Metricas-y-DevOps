@@ -153,3 +153,45 @@ Validación local del ciclo:
 
 No se eluden CodeRabbit, la aprobación humana ni CI. Sigue pendiente comprobar
 el enforcement real de las políticas y el Ingress en el ambiente autorizado.
+
+## Revisión: trazas opcionales y latencia de lotes no vacíos
+
+Hallazgos verificados y corregidos:
+
+- El exportador se instala únicamente si `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`
+  existe y no está vacía. Se elimina el endpoint de development del binario.
+  El SDK lee la URL completa de esa variable específica, sin añadir otro path.
+- Los manifiestos de Jaeger incluyen el ConfigMap `event-service-telemetry` de
+  development. API y worker lo consumen mediante `envFrom` opcional; sin instalar
+  ese ConfigMap no se habilitan trazas. Production no lo define ni hereda la
+  dirección de development. Tras añadir/cambiar el ConfigMap, los pods existentes
+  requieren reinicio autorizado para cargar el entorno.
+- `batch processed` y el histograma se registran solo si `changed > 0`. El
+  contador de eventos sigue incrementándose por `changed` después del COMMIT;
+  no se modifica el procesamiento transaccional.
+- SLI-02 documenta el intervalo completo medido: adquisición de conexión y
+  transacción, SELECT/alertas, UPDATE y COMMIT. Distingue el umbral de 0,5 s,
+  la alerta de media móvil y el SLO de percentil 95; no cuenta sondeos vacíos.
+- README aclara el Service opcional del worker. Se añaden docstrings a todas
+  las funciones nuevas del contrato de red, al test de Ingress y a los helpers
+  y pruebas de métricas/telemetría, sin rebajar el umbral de revisión.
+
+Validación local:
+
+- Formato, Clippy con `-D warnings`, rustdoc con `-D warnings`: OK.
+- `cargo test --locked --all-targets`: 28 pruebas OK, incluidas dos regresiones
+  con procesos HTTP reales y un colector OTLP local. Prueban ausencia de export
+  sin opt-in y conservación de un path específico configurado.
+- Aceptación PostgreSQL: 12/12 OK; regresión de métricas con BD: 1/1 OK.
+  Esta última comprueba un sondeo vacío inicial sin histograma, un lote real
+  con una observación y otro sondeo vacío sin aumentar count ni eventos.
+- Python: 23 pruebas existentes y 4 contratos de observabilidad OK. AST del
+  contrato: 8/8 funciones con docstrings. La cobertura de CodeRabbit se vuelve a
+  solicitar; no se afirma que este conteo sustituya su check externo.
+- Paso exacto de Kubeconform del workflow: 53/53 recursos válidos (16 de
+  observabilidad). Verificada configuración opcional en ambos ambientes y URL
+  específica del namespace donde se declara Jaeger.
+
+No se omite ningún hallazgo válido. La definición usa un ConfigMap opcional de
+telemetría, no el ConfigMap base compartido, para no activar exportación cuando
+los manifiestos de Jaeger no están instalados. Sin despliegue real en cluster.

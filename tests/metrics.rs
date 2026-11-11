@@ -10,6 +10,7 @@ use http_body_util::BodyExt;
 use std::sync::{Arc, OnceLock};
 use tower::ServiceExt;
 
+/// Install one recorder per test process and share its handle with the HTTP adapter.
 fn handle() -> metrics_exporter_prometheus::PrometheusHandle {
     static HANDLE: OnceLock<metrics_exporter_prometheus::PrometheusHandle> = OnceLock::new();
     HANDLE
@@ -21,6 +22,7 @@ fn handle() -> metrics_exporter_prometheus::PrometheusHandle {
         .clone()
 }
 
+/// Request the real metrics endpoint and collect its successful text exposition.
 async fn scrape(app: &axum::Router) -> String {
     let response = app
         .clone()
@@ -46,6 +48,7 @@ async fn scrape(app: &axum::Router) -> String {
 }
 
 #[tokio::test]
+/// Expose global instruments while excluding user-controlled URLs from metric labels.
 async fn endpoint_renders_global_recorder_and_bounded_http_labels() {
     let metrics = handle();
     let repository = event_service::postgres::PostgresRepository::new(&support::settings());
@@ -67,6 +70,7 @@ async fn endpoint_renders_global_recorder_and_bounded_http_labels() {
 
 #[tokio::test]
 #[ignore = "requires TEST_DATABASE_URL pointing to dedicated PostgreSQL"]
+/// Verify durable outcomes, live backlog and nonempty batch latency against PostgreSQL.
 async fn backlog_scrape_tracks_database_without_worker_and_fails_closed() {
     let db = support::Database::new().await;
     let repository = db.repository();
@@ -78,6 +82,12 @@ async fn backlog_scrape_tracks_database_without_worker_and_fails_closed() {
         scenario: Some(store.clone()),
         metrics: handle(),
     });
+    assert_eq!(store.process(1000).await.unwrap(), 0);
+    assert!(
+        !scrape(&app)
+            .await
+            .contains("esc3_processor_duration_seconds")
+    );
     let device: event_service::scenario::DeviceCreate = serde_json::from_value(serde_json::json!({
         "id": db.source, "facility_id": "metrics-test",
         "limits": {"temperature_min": 0, "temperature_max": 40, "humidity_min": 0, "humidity_max": 100}
@@ -105,7 +115,12 @@ async fn backlog_scrape_tracks_database_without_worker_and_fails_closed() {
     store.process(1000).await.unwrap();
     let text = scrape(&app).await;
     assert!(text.contains("esc3_events_backlog_total 0"));
-    assert!(text.contains("esc3_processor_duration_seconds"));
+    assert!(text.contains("esc3_processor_duration_seconds_count 1"));
+    assert!(text.contains("esc3_events_processed_total 1"));
+    assert_eq!(store.process(1000).await.unwrap(), 0);
+    let text = scrape(&app).await;
+    assert!(text.contains("esc3_processor_duration_seconds_count 1"));
+    assert!(text.contains("esc3_events_processed_total 1"));
     sqlx::query("DELETE FROM reception_receipts WHERE device_id=$1")
         .bind(&db.source)
         .execute(&pool)

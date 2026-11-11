@@ -152,7 +152,7 @@
             "containers": [{
               "name": "api", "image": "$IMAGE", "args": ["serve"],
               "ports": [{"name": "http", "containerPort": 8000}],
-              "envFrom": [{"configMapRef": {"name": "event-service-config"}}, {"secretRef": {"name": "event-service-credentials"}}],
+              "envFrom": [{"configMapRef": {"name": "event-service-config"}}, {"configMapRef": {"name": "event-service-telemetry", "optional": true}}, {"secretRef": {"name": "event-service-credentials"}}],
               "securityContext": {"allowPrivilegeEscalation": false, "readOnlyRootFilesystem": true, "capabilities": {"drop": ["ALL"]}},
               "resources": {"requests": {"cpu": "100m", "memory": "128Mi"}, "limits": {"cpu": "500m", "memory": "256Mi"}},
               "startupProbe": {"httpGet": {"path": "/health/live", "port": "http"}, "periodSeconds": 2, "failureThreshold": 30},
@@ -177,7 +177,7 @@
             "terminationGracePeriodSeconds": 30,
             "containers": [{
               "name": "worker", "image": "$IMAGE", "args": ["process"],
-              "envFrom": [{"configMapRef": {"name": "event-service-config"}}],
+              "envFrom": [{"configMapRef": {"name": "event-service-config"}}, {"configMapRef": {"name": "event-service-telemetry", "optional": true}}],
               "env": [{"name": "DATABASE_URL", "valueFrom": {"secretKeyRef": {"name": "event-service-credentials", "key": "DATABASE_URL"}}}, {"name": "WORKER_HEALTH_DIR", "value": "/run/worker-health"}],
               "securityContext": {"allowPrivilegeEscalation": false, "readOnlyRootFilesystem": true, "capabilities": {"drop": ["ALL"]}},
               "resources": {"requests": {"cpu": "100m", "memory": "128Mi"}, "limits": {"cpu": "500m", "memory": "256Mi"}},

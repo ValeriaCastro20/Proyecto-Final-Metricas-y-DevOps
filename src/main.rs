@@ -6,8 +6,6 @@ use event_service::{
     postgres::PostgresRepository,
     service::EventService,
 };
-use opentelemetry::trace::TracerProvider;
-use opentelemetry_otlp::WithExportConfig;
 use std::{path::Path, process::ExitCode, sync::Arc, time::Duration};
 use utoipa::OpenApi;
 
@@ -256,27 +254,26 @@ async fn main() -> ExitCode {
         Err(_) => return ExitCode::FAILURE,
     };
 
-    // MET-04: Initialize OpenTelemetry for Tracing (export to Jaeger)
-    let tracer =
-        opentelemetry_otlp::new_pipeline()
-            .tracing()
-            .with_exporter(opentelemetry_otlp::new_exporter().http().with_endpoint(
-                "http://jaeger-collector.eventos-development.svc.cluster.local:4318",
-            ))
-            .with_trace_config(opentelemetry_sdk::trace::config().with_resource(
-                opentelemetry_sdk::Resource::new(vec![opentelemetry::KeyValue::new(
-                    "service.name",
-                    "event-service",
-                )]),
-            ))
-            .install_batch(opentelemetry_sdk::runtime::Tokio)
-            .unwrap_or_else(|_| {
-                opentelemetry_sdk::trace::TracerProvider::builder()
-                    .build()
-                    .tracer("fallback")
-            });
+    // The HTTP exporter reads the full per-signal URL from the same variable.
+    // Without explicit configuration, no exporter or cross-environment traffic is created.
+    let tracer = std::env::var("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT")
+        .ok()
+        .filter(|endpoint| !endpoint.trim().is_empty())
+        .and_then(|_| {
+            opentelemetry_otlp::new_pipeline()
+                .tracing()
+                .with_exporter(opentelemetry_otlp::new_exporter().http())
+                .with_trace_config(opentelemetry_sdk::trace::config().with_resource(
+                    opentelemetry_sdk::Resource::new(vec![opentelemetry::KeyValue::new(
+                        "service.name",
+                        "event-service",
+                    )]),
+                ))
+                .install_batch(opentelemetry_sdk::runtime::Tokio)
+                .ok()
+        });
 
-    let telemetry = tracing_opentelemetry::layer().with_tracer(tracer);
+    let telemetry = tracer.map(|tracer| tracing_opentelemetry::layer().with_tracer(tracer));
     use tracing_subscriber::layer::SubscriberExt;
     use tracing_subscriber::util::SubscriberInitExt;
 
