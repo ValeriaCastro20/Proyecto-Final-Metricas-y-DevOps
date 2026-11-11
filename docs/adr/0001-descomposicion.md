@@ -1,5 +1,8 @@
 # ADR-0001 · Monolito modular con puerto de repositorio
 
+> Alcance histórico: API genérica `events`. Para ESC3 y los ciclos de vida
+> independientes de API/worker, prevalece [ADR-0005](0005-inbox-esc3.md).
+
 - Estado: aceptada; adaptación Rust, 2026-11-07.
 - Contexto: Escenario 3 necesita ingesta, exploración y análisis coherentes, sin equipos/ciclos de despliegue independientes.
 

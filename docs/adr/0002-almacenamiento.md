@@ -1,5 +1,8 @@
 # ADR-0002 · PostgreSQL 16 y SQLx
 
+> El esquema `events` corresponde al contrato genérico. Las tablas y garantías
+> actuales de ESC3 se documentan en [ADR-0005](0005-inbox-esc3.md).
+
 - Estado: aceptada; adaptación Rust, 2026-11-07.
 - Contexto: unicidad concurrente, lote atómico, durabilidad y agregados JSONB.
 

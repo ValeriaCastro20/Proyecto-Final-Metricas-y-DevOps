@@ -1,5 +1,8 @@
 # ADR-0003 · HTTP/JSON con confirmación inmediata e I/O async
 
+> La exclusión de 202 de esta decisión histórica aplica al contrato genérico
+> `events`. ESC3 usa recepción durable 202 e inbox según [ADR-0005](0005-inbox-esc3.md).
+
 - Estado: aceptada; adaptación Rust, 2026-11-07.
 - Contexto: productores necesitan saber si sus datos están confirmados, duplicados o rechazados; analistas requieren datos confirmados.
 
