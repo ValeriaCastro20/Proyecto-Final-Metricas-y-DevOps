@@ -6,9 +6,7 @@ use event_service::{
     postgres::PostgresRepository,
     service::EventService,
 };
-use std::path::Path;
-use std::time::Duration;
-use std::{process::ExitCode, sync::Arc};
+use std::{path::Path, process::ExitCode, sync::Arc, time::Duration};
 use utoipa::OpenApi;
 
 /// Heartbeat file names inside `WORKER_HEALTH_DIR`.
@@ -49,7 +47,7 @@ fn heartbeat_is_fresh(path: &Path, max_age: Duration) -> bool {
         .is_some_and(|age| age <= max_age)
 }
 
-/// Exec probe for the worker, which has no HTTP server and whose image has no shell.
+/// Exec probe for the worker; the image has no shell.
 fn worker_health(kind: Option<String>) -> Result<(), &'static str> {
     let (name, max_age) = match kind.as_deref() {
         Some("live") => (WORKER_LIVE_FILE, WORKER_LIVE_MAX_AGE),
@@ -95,31 +93,8 @@ impl RetryBackoff {
     }
 }
 
-#[tokio::main]
-/// Initialize safe diagnostics and translate command failures to a nonzero process exit status.
-async fn main() -> ExitCode {
-    // The default hook prints panic payloads even when catch_unwind handles them.
-    // Never send potentially sensitive panic messages to application logs.
-    std::panic::set_hook(Box::new(|_| tracing::error!("unexpected panic")));
-    tracing_subscriber::fmt()
-        .json()
-        .with_writer(std::io::stderr)
-        .with_env_filter(
-            tracing_subscriber::EnvFilter::try_from_default_env()
-                .unwrap_or_else(|_| "event_service=info,sqlx=off".into()),
-        )
-        .init();
-    match run().await {
-        Ok(()) => ExitCode::SUCCESS,
-        Err(message) => {
-            tracing::error!(message, "operation failed");
-            ExitCode::FAILURE
-        }
-    }
-}
-
-/// Dispatch explicit serve/migrate/openapi operations without implicitly migrating during startup.
-async fn run() -> Result<(), &'static str> {
+/// Dispatch explicit commands without implicitly migrating during startup.
+async fn run(metrics: metrics_exporter_prometheus::PrometheusHandle) -> Result<(), &'static str> {
     let command = std::env::args()
         .nth(1)
         .unwrap_or_else(|| "serve".to_owned());
@@ -194,7 +169,26 @@ async fn run() -> Result<(), &'static str> {
                 tokio::time::sleep(wait).await;
             }
         };
-        return tokio::select! { result = worker => result, _ = shutdown() => Ok(()) };
+        if command == "drain" {
+            return tokio::select! { result = worker => result, _ = shutdown() => Ok(()) };
+        }
+        let address =
+            std::env::var("WORKER_METRICS_ADDR").unwrap_or_else(|_| "0.0.0.0:9000".into());
+        let listener = tokio::net::TcpListener::bind(address)
+            .await
+            .map_err(|_| "Cannot bind worker metrics listener")?;
+        let app = axum::Router::new().route(
+            "/metrics",
+            axum::routing::get(move || {
+                let metrics = metrics.clone();
+                async move { metrics.render() }
+            }),
+        );
+        let server = axum::serve(listener, app).with_graceful_shutdown(shutdown());
+        return tokio::select! {
+            result = worker => result,
+            result = server => result.map_err(|_| "Worker metrics server failed"),
+        };
     }
     if command == "migrate" {
         MIGRATOR
@@ -217,6 +211,7 @@ async fn run() -> Result<(), &'static str> {
         settings: Arc::new(settings),
         service: EventService::new(Arc::new(repository)),
         scenario,
+        metrics,
     };
     let address = std::env::var("BIND_ADDR").unwrap_or_else(|_| "127.0.0.1:8000".to_owned());
     let listener = tokio::net::TcpListener::bind(&address)
@@ -241,6 +236,70 @@ async fn shutdown() {
         }
     }
     let _ = tokio::signal::ctrl_c().await;
+}
+
+#[tokio::main]
+/// Initialize safe diagnostics and translate command failures to a nonzero process exit status.
+async fn main() -> ExitCode {
+    // The default hook prints panic payloads even when catch_unwind handles them.
+    // Never send potentially sensitive panic messages to application logs.
+    std::panic::set_hook(Box::new(|_| tracing::error!("unexpected panic")));
+
+    // MET-03: Initialize Prometheus Exporter
+    let metrics = match metrics_exporter_prometheus::PrometheusBuilder::new()
+        .set_buckets(&[0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0])
+        .and_then(|builder| builder.install_recorder())
+    {
+        Ok(handle) => handle,
+        Err(_) => return ExitCode::FAILURE,
+    };
+
+    // The HTTP exporter reads the full per-signal URL from the same variable.
+    // Without explicit configuration, no exporter or cross-environment traffic is created.
+    let tracer = std::env::var("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT")
+        .ok()
+        .filter(|endpoint| !endpoint.trim().is_empty())
+        .and_then(|_| {
+            opentelemetry_otlp::new_pipeline()
+                .tracing()
+                .with_exporter(opentelemetry_otlp::new_exporter().http())
+                .with_trace_config(opentelemetry_sdk::trace::config().with_resource(
+                    opentelemetry_sdk::Resource::new(vec![opentelemetry::KeyValue::new(
+                        "service.name",
+                        "event-service",
+                    )]),
+                ))
+                .install_batch(opentelemetry_sdk::runtime::Tokio)
+                .ok()
+        });
+
+    let telemetry = tracer.map(|tracer| tracing_opentelemetry::layer().with_tracer(tracer));
+    use tracing_subscriber::layer::SubscriberExt;
+    use tracing_subscriber::util::SubscriberInitExt;
+
+    // MET-02: Structured JSON Logs
+    tracing_subscriber::registry()
+        .with(
+            tracing_subscriber::EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| "event_service=info,sqlx=off".into()),
+        )
+        .with(
+            tracing_subscriber::fmt::layer()
+                .json()
+                .with_writer(std::io::stderr),
+        )
+        .with(telemetry)
+        .init();
+
+    let result = run(metrics).await;
+    opentelemetry::global::shutdown_tracer_provider();
+    match result {
+        Ok(()) => ExitCode::SUCCESS,
+        Err(message) => {
+            tracing::error!(message, "operation failed");
+            ExitCode::FAILURE
+        }
+    }
 }
 
 #[cfg(test)]

@@ -11,7 +11,7 @@
 | `ConfigMap/postgres-init` | Roles distintos para migración y runtime, solo al inicializar un volumen vacío |
 | `Job/event-service-migrate-<digest16>` | `migrate` explícito con identidad DDL; mismo digest que API y worker |
 | `Deployment/event-service-api` | `serve`, Service interno en 8000, readiness DB y liveness del proceso |
-| `Deployment/event-service-worker` | `process`, sin Service, probes por `exec` con `worker-health`, solo credencial DB |
+| `Deployment/event-service-worker` | `process`, probes por `exec` con `worker-health`, solo credencial DB; Service `event-service-worker-metrics` en 9000 al instalar los manifiestos de observabilidad |
 | `ServiceAccount/event-service` | Sin token montado ni permisos RBAC concedidos |
 | `ServiceAccount/event-service-deployer` | Solo actualiza workloads y crea Jobs de su namespace; sin acceso a la API de Secrets (ver alcance en DEV-10) |
 | `NetworkPolicy` | Todo denegado salvo DNS y event-service → PostgreSQL:5432 |
@@ -44,6 +44,31 @@ Las contraseñas de los DSN deben corresponder a las de los roles del primer Sec
 **El init solo corre con volumen vacío.** Cambiar el Secret no cambia contraseñas en una DB existente ni vuelve a ejecutar el script. No resetear el volumen si falla el init: inspeccionar y recuperar con el DBA. Para rotaciones o una BD preexistente se necesita un procedimiento aparte y respaldo; no automatizar una recreación.
 
 El renderer no produce Secrets. Red denegada por defecto, cuenta de despliegue limitada y qué protege un Secret: [DEV-10](../docs/evidencia/DEV-10/index.md). No se publican Services al exterior; el Ingress/TLS y entrega controlada corresponden a #11.
+
+El Ingress público permite solo `/v1` (prefijo), `/health/live`, `/health/ready`,
+`/docs` y `/openapi.json` (rutas exactas). `/metrics` no tiene ruta pública:
+Prometheus accede directamente al Service `event-service:8000`. Si se añade una
+ruta pública nueva, actualizar esta lista y la prueba del renderer; no restaurar
+el prefijo global `/`. Las políticas de `observability/jaeger.yaml` permiten
+OTLP HTTP desde API/worker a Jaeger únicamente por TCP 4318 en desarrollo.
+
+La red de observabilidad también permite Grafana→Prometheus solo por TCP 9090.
+Para comprobar los contratos offline: instalar `PyYAML==6.0.3` y ejecutar
+`python3 scripts/test-observability.py`. CI ejecuta estos contratos y valida los
+esquemas de todos los manifiestos de `observability/`; no sustituye una prueba
+del CNI en el cluster.
+
+Los manifiestos de Jaeger crean el ConfigMap `event-service-telemetry` en
+development con `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`. Es la URL completa
+`http://jaeger-collector.eventos-development.svc.cluster.local:4318/v1/traces`.
+Production no instala Jaeger ni define esta variable: no crea un exportador ni
+envía trazas a development. Si se incorpora Jaeger a otro ambiente, configurar
+su endpoint propio en el ConfigMap y sus políticas de red antes de habilitarlo.
+API y worker leen ese ConfigMap opcional por `envFrom`: sin instalarlo tampoco
+exportan trazas en development. Instalarlo antes de crear los pods; si ya están
+ejecutándose, un operador debe reiniciarlos para cargar la nueva configuración.
+Los comandos locales
+no exportan trazas salvo que se defina explícitamente esta variable.
 
 ## Entrega y recuperación
 

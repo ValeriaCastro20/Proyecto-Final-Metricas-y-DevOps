@@ -131,5 +131,29 @@ class RenderTests(unittest.TestCase):
         self.assertEqual(ingress["spec"]["tls"][0]["hosts"], [host])
         self.assertEqual(ingress["metadata"]["annotations"]["traefik.ingress.kubernetes.io/router.entrypoints"], "websecure")
 
+    def test_public_ingress_excludes_metrics_but_preserves_api_routes(self):
+        """Keep metrics internal without removing the API's public application routes."""
+        host = "eventos-abc123.mexicocentral.cloudapp.azure.com"
+        items = MODULE.render("production", "ingress", IMAGE, POSTGRES, host)["items"]
+        ingress = next(item for item in items if item["kind"] == "Ingress")
+        paths = ingress["spec"]["rules"][0]["http"]["paths"]
+
+        def matches(request_path, rule):
+            """Apply Kubernetes Exact or segment-based Prefix path matching."""
+            if rule["pathType"] == "Exact":
+                return request_path == rule["path"]
+            prefix = rule["path"].rstrip("/")
+            return request_path == prefix or request_path.startswith(prefix + "/")
+
+        for private in ("/metrics", "/metrics/", "/metrics/example"):
+            self.assertFalse(any(matches(private, rule) for rule in paths), private)
+        for public in ("/v1/events", "/v1/readings", "/health/live", "/health/ready", "/docs", "/openapi.json"):
+            self.assertTrue(any(matches(public, rule) for rule in paths), public)
+        for rule in paths:
+            self.assertEqual(rule["backend"]["service"], {"name": "event-service", "port": {"name": "http"}})
+        service = self.stage("workloads")[0]
+        self.assertEqual(service["spec"]["type"], "ClusterIP")
+        self.assertEqual(service["spec"]["ports"][0]["port"], 8000)
+
 if __name__ == "__main__":
     unittest.main()

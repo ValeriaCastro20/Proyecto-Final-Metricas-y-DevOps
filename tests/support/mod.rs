@@ -39,6 +39,9 @@ pub fn app(settings: Settings) -> Router {
         settings: Arc::new(settings),
         service: EventService::new(Arc::new(repository)),
         scenario,
+        metrics: metrics_exporter_prometheus::PrometheusBuilder::new()
+            .build_recorder()
+            .handle(),
     })
 }
 /// Build a valid event whose natural key is owned by the calling test.

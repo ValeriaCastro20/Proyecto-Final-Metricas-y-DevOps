@@ -16,6 +16,7 @@ use axum::{
 };
 use serde::Serialize;
 use std::sync::Arc;
+use tracing::Instrument;
 use utoipa::{
     Modify, OpenApi, ToSchema,
     openapi::security::{ApiKey, ApiKeyValue, SecurityScheme},
@@ -28,6 +29,7 @@ pub struct AppState {
     pub service: EventService,
     /// ESC3 shares the service's pool, including the connection tested by readiness.
     pub scenario: Option<crate::scenario::store::Store>,
+    pub metrics: metrics_exporter_prometheus::PrometheusHandle,
 }
 
 impl FromRequestParts<AppState> for Principal {
@@ -46,9 +48,11 @@ impl FromRequestParts<AppState> for Principal {
 /// The outer correlation layer also normalizes extraction, routing and panic errors.
 pub fn router(state: AppState) -> Router {
     let scenario = crate::scenario::http::router(state.settings.clone(), state.scenario.clone());
+
     Router::new()
         .route("/health/live", get(live))
         .route("/health/ready", get(ready))
+        .route("/metrics", get(render_metrics))
         .route("/v1/events", post(create_event).get(list_events))
         .route("/v1/events/batch", post(create_batch))
         .route("/v1/events/{id}", get(get_event))
@@ -99,7 +103,21 @@ async fn correlate(request: Request, next: Next) -> Response {
         .get::<MatchedPath>()
         .map(|p| p.as_str().to_owned())
         .unwrap_or_else(|| "<unmatched>".to_owned());
-    let mut response = next.run(request).await;
+
+    // MET-04: Start a trace span for the HTTP request
+    let span =
+        tracing::info_span!("http_request", %request_id, %route, status = tracing::field::Empty);
+
+    let start = std::time::Instant::now();
+    let mut response = next.run(request).instrument(span.clone()).await;
+    let latency = start.elapsed().as_secs_f64();
+
+    // MET-03: Record HTTP latency and count
+    metrics::histogram!("http_request_duration_seconds", "route" => route.clone(), "status" => response.status().as_u16().to_string()).record(latency);
+    metrics::counter!("http_requests_total", "route" => route.clone(), "status" => response.status().as_u16().to_string()).increment(1);
+
+    span.record("status", response.status().as_u16());
+
     if (response.status().is_client_error() || response.status().is_server_error())
         && response
             .extensions()
@@ -143,6 +161,15 @@ async fn correlate(request: Request, next: Next) -> Response {
 #[derive(Serialize, ToSchema)]
 struct Health {
     status: &'static str,
+}
+
+/// Read pending work at scrape time, including when all processors are stopped.
+async fn render_metrics(State(state): State<AppState>) -> Result<String, Error> {
+    if let Some(store) = &state.scenario {
+        let pending = store.pending().await?;
+        metrics::gauge!("esc3_events_backlog_total").set(pending as f64);
+    }
+    Ok(state.metrics.render())
 }
 
 #[utoipa::path(get, path = "/health/live", responses((status = 200, body = Health)))]

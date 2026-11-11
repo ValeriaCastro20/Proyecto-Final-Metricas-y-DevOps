@@ -139,6 +139,9 @@ async fn dependency_recovers_without_rebuilding_app() {
         settings: Arc::new(support::settings()),
         service: EventService::new(repository.clone()),
         scenario: None,
+        metrics: metrics_exporter_prometheus::PrometheusBuilder::new()
+            .build_recorder()
+            .handle(),
     });
     support::assert_error(
         &support::request(&app, "GET", "/health/ready", None, None).await,

@@ -51,8 +51,18 @@ impl Store {
             outcome: "rejected".into(),
             reason: Some(reason.into()),
         };
-        sqlx::query("INSERT INTO reception_receipts(id,device_id,outcome,reason) VALUES ($1,$2,'rejected',$3)")
-            .bind(receipt.id).bind(device_id).bind(reason).execute(&self.pool).await.map_err(db)?;
+        sqlx::query(
+            "INSERT INTO reception_receipts(id,device_id,outcome,reason) VALUES ($1,$2,$3,$4)",
+        )
+        .bind(receipt.id)
+        .bind(device_id)
+        .bind(&receipt.outcome)
+        .bind(reason)
+        .execute(&self.pool)
+        .await
+        .map_err(db)?;
+        metrics::counter!("esc3_events_received_total", "outcome" => receipt.outcome.clone())
+            .increment(1);
         Ok(receipt)
     }
     /// Uniqueness arbitrates concurrent retries. Limits are snapshotted at reception.
@@ -111,6 +121,8 @@ impl Store {
         .await
         .map_err(db)?;
         tx.commit().await.map_err(db)?;
+        metrics::counter!("esc3_events_received_total", "outcome" => receipt.outcome.clone())
+            .increment(1);
         Ok(receipt)
     }
     /// Retrieve safe durable reception metadata by its verifiable UUID.
@@ -126,6 +138,13 @@ impl Store {
     pub async fn counters(&self, device: Option<&str>) -> Result<Counters, Error> {
         sqlx::query_as("WITH r AS (SELECT count(*) AS received, count(*) FILTER (WHERE outcome != 'rejected') AS validated, count(*) FILTER (WHERE outcome='accepted') AS accepted, count(*) FILTER (WHERE outcome='duplicate') AS duplicates, count(*) FILTER (WHERE outcome='rejected') AS rejected FROM reception_receipts WHERE ($1::text IS NULL OR device_id=$1)), p AS (SELECT count(*) FILTER (WHERE processed_at IS NOT NULL) AS processed, count(*) FILTER (WHERE processed_at IS NULL) AS pending FROM readings WHERE ($1::text IS NULL OR device_id=$1)) SELECT * FROM r CROSS JOIN p")
             .bind(device).fetch_one(&self.pool).await.map_err(db)
+    }
+    /// Count only pending readings, without scanning the reception ledger.
+    pub async fn pending(&self) -> Result<i64, Error> {
+        sqlx::query_scalar("SELECT count(*) FROM readings WHERE processed_at IS NULL")
+            .fetch_one(&self.pool)
+            .await
+            .map_err(db)
     }
     /// List accepted work by generation in [from,to), including unprocessed readings.
     pub async fn readings(&self, device: &str, period: &Period) -> Result<Vec<Reading>, Error> {
@@ -157,7 +176,9 @@ impl Store {
         if !(1..=1000).contains(&batch_size) {
             return Err(Error::InvalidInput);
         }
+        let start = std::time::Instant::now();
         let mut tx = self.pool.begin().await.map_err(db)?;
+
         let ids: Vec<Uuid> = sqlx::query_scalar("SELECT id FROM readings WHERE processed_at IS NULL ORDER BY received_at,id LIMIT $1 FOR UPDATE SKIP LOCKED")
             .bind(batch_size).fetch_all(&mut *tx).await.map_err(db)?;
         sqlx::query("INSERT INTO business_alerts(id,reading_id,kind,value,threshold) SELECT gen_random_uuid(),r.id,v.kind,v.value,v.threshold FROM readings r CROSS JOIN LATERAL (VALUES ('temperature_low',temperature,temperature_min,temperature < temperature_min), ('temperature_high',temperature,temperature_max,temperature > temperature_max), ('humidity_low',humidity,humidity_min,humidity < humidity_min), ('humidity_high',humidity,humidity_max,humidity > humidity_max)) AS v(kind,value,threshold,exceeded) WHERE r.id=ANY($1) AND v.exceeded ON CONFLICT(reading_id,kind) DO NOTHING")
@@ -170,6 +191,21 @@ impl Store {
                 .map_err(db)?
                 .rows_affected();
         tx.commit().await.map_err(db)?;
+
+        let duration = start.elapsed().as_secs_f64();
+
+        // Empty polls do not represent processed batches or latency observations.
+        if changed > 0 {
+            tracing::info!(
+                batch_size,
+                processed = changed,
+                duration_s = duration,
+                "batch processed"
+            );
+            metrics::histogram!("esc3_processor_duration_seconds").record(duration);
+        }
+        metrics::counter!("esc3_events_processed_total").increment(changed);
+
         Ok(changed)
     }
 }
