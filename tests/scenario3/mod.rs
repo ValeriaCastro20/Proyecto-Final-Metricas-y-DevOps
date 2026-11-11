@@ -1,4 +1,5 @@
 //! Real PostgreSQL + HTTP + separate OS processor, run by the existing postgres CI job.
+mod telemetry;
 use super::support::*;
 use axum::{body::Body, http::Request};
 use chrono::{TimeZone, Utc};

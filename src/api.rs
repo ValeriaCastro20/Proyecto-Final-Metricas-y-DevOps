@@ -105,8 +105,13 @@ async fn correlate(request: Request, next: Next) -> Response {
         .unwrap_or_else(|| "<unmatched>".to_owned());
 
     // MET-04: Start a trace span for the HTTP request
-    let span =
-        tracing::info_span!("http_request", %request_id, %route, status = tracing::field::Empty);
+    let span = tracing::info_span!("http_request", component = "api", otel.kind = "server", %request_id, %route, status = tracing::field::Empty, otel.status_code = tracing::field::Empty);
+    use tracing_opentelemetry::OpenTelemetrySpanExt;
+    let mut parents = request.headers().get_all("traceparent").iter();
+    let supplied_parent = parents.next().and_then(|value| value.to_str().ok());
+    if parents.next().is_none() {
+        span.set_parent(crate::telemetry::parent(supplied_parent));
+    }
 
     let start = std::time::Instant::now();
     let mut response = next.run(request).instrument(span.clone()).await;
@@ -117,6 +122,14 @@ async fn correlate(request: Request, next: Next) -> Response {
     metrics::counter!("http_requests_total", "route" => route.clone(), "status" => response.status().as_u16().to_string()).increment(1);
 
     span.record("status", response.status().as_u16());
+    span.record(
+        "otel.status_code",
+        if response.status().is_server_error() {
+            "ERROR"
+        } else {
+            "OK"
+        },
+    );
 
     if (response.status().is_client_error() || response.status().is_server_error())
         && response

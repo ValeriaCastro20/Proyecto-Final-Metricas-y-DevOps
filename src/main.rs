@@ -266,7 +266,14 @@ async fn main() -> ExitCode {
                 .with_trace_config(opentelemetry_sdk::trace::config().with_resource(
                     opentelemetry_sdk::Resource::new(vec![opentelemetry::KeyValue::new(
                         "service.name",
-                        "event-service",
+                        if matches!(
+                            std::env::args().nth(1).as_deref(),
+                            Some("process" | "drain")
+                        ) {
+                            "event-service-worker"
+                        } else {
+                            "event-service-api"
+                        },
                     )]),
                 ))
                 .install_batch(opentelemetry_sdk::runtime::Tokio)
