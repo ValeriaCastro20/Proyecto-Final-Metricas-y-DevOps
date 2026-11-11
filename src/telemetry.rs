@@ -7,10 +7,33 @@ use tracing_opentelemetry::OpenTelemetrySpanExt;
 /// Extract a valid remote parent; invalid/missing context starts an independent trace.
 pub fn parent(traceparent: Option<&str>) -> Context {
     let mut carrier = HashMap::new();
-    if let Some(value) = traceparent.filter(|v| v.len() <= 512) {
+    if let Some(value) = traceparent.filter(|v| valid_traceparent(v)) {
         carrier.insert("traceparent".to_owned(), value.to_owned());
     }
     TraceContextPropagator::new().extract(&carrier)
+}
+
+/// Check W3C field widths and lowercase hex before the older SDK parses IDs.
+fn valid_traceparent(value: &str) -> bool {
+    if value.len() > 512 {
+        return false;
+    }
+    let fields: Vec<_> = value.split('-').collect();
+    if fields.len() < 4 {
+        return false;
+    }
+    let hex = |text: &str, len: usize| {
+        text.len() == len
+            && text
+                .bytes()
+                .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
+    };
+    hex(fields[0], 2)
+        && fields[0] != "ff"
+        && hex(fields[1], 32)
+        && hex(fields[2], 16)
+        && hex(fields[3], 2)
+        && (fields[0] != "00" || fields.len() == 4)
 }
 
 /// Serialize the current span for the durable inbox, omitting invalid/no-op contexts.
@@ -33,6 +56,8 @@ mod tests {
         for input in [
             None,
             Some("invalid"),
+            Some("00-1-1-00"),
+            Some("00-4BF92F3577B34DA6A3CE929D0E0E4736-00f067aa0ba902b7-01"),
             Some("00-00000000000000000000000000000000-00f067aa0ba902b7-01"),
             Some("00-4bf92f3577b34da6a3ce929d0e0e4736-0000000000000000-01"),
         ] {

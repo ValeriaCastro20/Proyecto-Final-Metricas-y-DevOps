@@ -1,7 +1,6 @@
 //! PostgreSQL inbox: a reception commits before 202; processing and alerts commit together.
 use super::*;
 use sqlx::PgPool;
-use tracing::Instrument;
 use tracing_opentelemetry::OpenTelemetrySpanExt;
 
 #[derive(Clone)]
@@ -184,29 +183,23 @@ impl Store {
 
         let rows: Vec<(Uuid, Option<String>)> = sqlx::query_as("SELECT id,traceparent FROM readings WHERE processed_at IS NULL ORDER BY received_at,id LIMIT $1 FOR UPDATE SKIP LOCKED")
             .bind(batch_size).fetch_all(&mut *tx).await.map_err(db)?;
-        let mut changed = 0;
+        let ids: Vec<Uuid> = rows.iter().map(|(id, _)| *id).collect();
         let mut processing_spans = Vec::with_capacity(rows.len());
         for (id, traceparent) in rows {
-            let span = tracing::info_span!("process_reading", component = "worker", reading_id = %id, otel.kind = "consumer", otel.status_code = tracing::field::Empty);
+            let span = tracing::info_span!("process_reading", component = "worker", reading_id = %id, batch_size = ids.len(), otel.kind = "consumer", otel.status_code = tracing::field::Empty);
             span.set_parent(crate::telemetry::parent(traceparent.as_deref()));
-            let result: Result<u64, Error> = async {
-                sqlx::query("INSERT INTO business_alerts(id,reading_id,kind,value,threshold) SELECT gen_random_uuid(),r.id,v.kind,v.value,v.threshold FROM readings r CROSS JOIN LATERAL (VALUES ('temperature_low',temperature,temperature_min,temperature < temperature_min), ('temperature_high',temperature,temperature_max,temperature > temperature_max), ('humidity_low',humidity,humidity_min,humidity < humidity_min), ('humidity_high',humidity,humidity_max,humidity > humidity_max)) AS v(kind,value,threshold,exceeded) WHERE r.id=$1 AND v.exceeded ON CONFLICT(reading_id,kind) DO NOTHING")
-                    .bind(id).execute(&mut *tx).await.map_err(db)?;
-                Ok(sqlx::query("UPDATE readings SET processed_at=clock_timestamp() WHERE id=$1")
-                    .bind(id).execute(&mut *tx).await.map_err(db)?.rows_affected())
-            }.instrument(span.clone()).await;
             processing_spans.push(span);
-            match result {
-                Ok(count) => changed += count,
-                Err(error) => {
-                    for span in &processing_spans {
-                        span.record("otel.status_code", "ERROR");
-                    }
-                    return Err(error);
-                }
-            }
         }
-        let committed = tx.commit().await.map_err(db);
+        // All reading spans cover the same atomic batch. Keep SQL round trips
+        // constant instead of adding two sequential statements per reading.
+        let committed: Result<u64, Error> = async {
+            sqlx::query("INSERT INTO business_alerts(id,reading_id,kind,value,threshold) SELECT gen_random_uuid(),r.id,v.kind,v.value,v.threshold FROM readings r CROSS JOIN LATERAL (VALUES ('temperature_low',temperature,temperature_min,temperature < temperature_min), ('temperature_high',temperature,temperature_max,temperature > temperature_max), ('humidity_low',humidity,humidity_min,humidity < humidity_min), ('humidity_high',humidity,humidity_max,humidity > humidity_max)) AS v(kind,value,threshold,exceeded) WHERE r.id=ANY($1) AND v.exceeded ON CONFLICT(reading_id,kind) DO NOTHING")
+                .bind(&ids).execute(&mut *tx).await.map_err(db)?;
+            let changed = sqlx::query("UPDATE readings SET processed_at=clock_timestamp() WHERE id=ANY($1)")
+                .bind(&ids).execute(&mut *tx).await.map_err(db)?.rows_affected();
+            tx.commit().await.map_err(db)?;
+            Ok(changed)
+        }.await;
         for span in &processing_spans {
             span.record(
                 "otel.status_code",
@@ -214,7 +207,7 @@ impl Store {
             );
         }
         drop(processing_spans);
-        committed?;
+        let changed = committed?;
 
         let duration = start.elapsed().as_secs_f64();
 

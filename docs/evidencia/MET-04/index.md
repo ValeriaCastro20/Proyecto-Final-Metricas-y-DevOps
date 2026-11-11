@@ -36,5 +36,15 @@ correlacionarla con logs y métricas y verificar exportación/red para ambos pro
 El SDK usa su muestreo por defecto ParentBased/AlwaysOn: un padre remoto no
 muestreado puede ocultar errores posteriores. No hay política especial de errores,
 exemplars ni retención acreditada; deben definirse y probarse antes de cerrar MET-04.
-El cambio añade SQL por lectura dentro del lote: repetir carga y medir latencia
+Los spans por lectura cubren la transacción compartida del lote, no son mediciones
+aisladas de CPU por lectura. SQL conserva dos escrituras por lote (no por lectura),
+sin aumentar los viajes a DB según el tamaño del lote. Repetir carga y medir latencia
 en el entorno, sin asumir que mantiene el SLO.
+
+## Revisión CodeRabbit
+
+La revisión GitHub de `77bee5a` detectó dos problemas válidos: IDs W3C demasiado
+cortos aceptados por el SDK y consultas secuenciales por lectura que podían agotar
+las sondas. Se valida ancho/hex antes de extraer (regresión `00-1-1-00`) y se
+restauran INSERT/UPDATE por lote en una única transacción, manteniendo spans por
+lectura hasta el COMMIT y las sondas existentes para detectar bloqueos.

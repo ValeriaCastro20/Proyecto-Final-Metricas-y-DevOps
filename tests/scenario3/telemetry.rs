@@ -58,10 +58,12 @@ async fn api_context_survives_inbox_and_parents_worker_span() {
     async {
         let device = json!({"id":db.source,"facility_id":"trace-test","limits":{"temperature_min":0,"temperature_max":30,"humidity_min":20,"humidity_max":80}});
         assert_eq!(request(&app,"POST","/v1/devices",Some("test-producer"),Some(device)).await.0,201);
+        let mut first = reading(&db.source,0);
+        first["temperature"] = json!(40); // Produce an alert if the batch commits.
         let response = app.clone().oneshot(Request::builder().method("POST").uri("/v1/readings")
             .header("x-api-key","test-producer").header("content-type","application/json")
             .header("traceparent","00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01")
-            .body(Body::from(reading(&db.source,0).to_string())).unwrap()).await.unwrap();
+            .body(Body::from(first.to_string())).unwrap()).await.unwrap();
         assert_eq!(response.status(),202);
         let receipt: Value = serde_json::from_slice(&response.into_body().collect().await.unwrap().to_bytes()).unwrap();
         let id = uuid::Uuid::parse_str(receipt["reading_id"].as_str().unwrap()).unwrap();
@@ -72,12 +74,20 @@ async fn api_context_survives_inbox_and_parents_worker_span() {
         assert_eq!(retained,original);
         // A separate pool represents a worker started after API reception.
         let worker = Store { pool: db.repository().pool().unwrap().clone() };
+        // Fail after alert insertion and prove the whole batch rolls back.
+        sqlx::query("ALTER TABLE readings ADD CONSTRAINT trace_test_failure CHECK (processed_at IS NULL)").execute(&db.pool).await.unwrap();
+        assert!(worker.process(1000).await.is_err());
+        assert_eq!(store.counters(Some(&db.source)).await.unwrap().pending,1);
+        let alerts: i64 = sqlx::query_scalar("SELECT count(*) FROM business_alerts").fetch_one(&db.pool).await.unwrap();
+        assert_eq!(alerts,0);
+        sqlx::query("ALTER TABLE readings DROP CONSTRAINT trace_test_failure").execute(&db.pool).await.unwrap();
         worker.process(1000).await.unwrap();
         for result in provider.force_flush() {
             result.unwrap();
         }
         {
         let exported = spans.lock().unwrap();
+        assert!(exported.iter().any(|s| s.name == "process_reading" && matches!(s.status, opentelemetry::trace::Status::Error { .. })));
         let consumer = exported.iter().find(|s| s.name == "process_reading" && s.span_context.trace_id().to_string() == "4bf92f3577b34da6a3ce929d0e0e4736").unwrap();
         let api = exported.iter().find(|s| s.span_context.span_id() == consumer.parent_span_id).unwrap();
         assert_eq!(api.name,"http_request");
