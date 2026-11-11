@@ -1,4 +1,4 @@
-//! Real inbox propagation without a global subscriber or an external collector.
+//! Real inbox propagation and JSON logs without an external collector.
 use super::*;
 use opentelemetry::trace::TracerProvider as _;
 use opentelemetry_sdk::{
@@ -6,11 +6,21 @@ use opentelemetry_sdk::{
     trace::TracerProvider,
 };
 use std::sync::{Arc, Mutex};
-use tracing::instrument::WithSubscriber;
 use tracing_subscriber::layer::SubscriberExt;
 
 #[derive(Debug, Clone)]
 struct Exporter(Arc<Mutex<Vec<SpanData>>>);
+#[derive(Clone)]
+struct LogWriter(Arc<Mutex<Vec<u8>>>);
+impl std::io::Write for LogWriter {
+    fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+        self.0.lock().unwrap().extend_from_slice(bytes);
+        Ok(bytes.len())
+    }
+    fn flush(&mut self) -> std::io::Result<()> {
+        Ok(())
+    }
+}
 impl SpanExporter for Exporter {
     fn export(
         &mut self,
@@ -53,8 +63,18 @@ async fn api_context_survives_inbox_and_parents_worker_span() {
     let provider = TracerProvider::builder()
         .with_simple_exporter(Exporter(spans.clone()))
         .build();
+    let logs = Arc::new(Mutex::new(Vec::new()));
+    let writer = LogWriter(logs.clone());
     let subscriber = tracing_subscriber::registry()
+        .with(
+            tracing_subscriber::fmt::layer()
+                .json()
+                .with_writer(move || writer.clone()),
+        )
         .with(tracing_opentelemetry::layer().with_tracer(provider.tracer("esc3-test")));
+    // One subscriber for this integration binary avoids callsite-interest races
+    // between instrumented and uninstrumented test threads. Filter by owned IDs.
+    tracing::subscriber::set_global_default(subscriber).unwrap();
     async {
         let device = json!({"id":db.source,"facility_id":"trace-test","limits":{"temperature_min":0,"temperature_max":30,"humidity_min":20,"humidity_max":80}});
         assert_eq!(request(&app,"POST","/v1/devices",Some("test-producer"),Some(device)).await.0,201);
@@ -72,6 +92,13 @@ async fn api_context_survives_inbox_and_parents_worker_span() {
         assert_eq!(request(&app,"POST","/v1/readings",Some("test-producer"),Some(reading(&db.source,0))).await.0,200);
         let retained: String = sqlx::query_scalar("SELECT traceparent FROM readings WHERE id=$1").bind(id).fetch_one(&db.pool).await.unwrap();
         assert_eq!(retained,original);
+        let mut invalid = reading(&db.source,10);
+        invalid["temperature"] = json!(999);
+        assert_eq!(request(&app,"POST","/v1/readings",Some("test-producer"),Some(invalid)).await.0,422);
+        let mut unknown = reading("unregistered-log-device",11);
+        assert_eq!(request(&app,"POST","/v1/readings",Some("test-producer"),Some(unknown.clone())).await.0,422);
+        unknown["private_body_marker"] = json!("must-not-appear-in-logs");
+        assert_eq!(request(&app,"POST","/v1/readings",Some("test-producer"),Some(unknown)).await.0,422);
         // A separate pool represents a worker started after API reception.
         let worker = Store { pool: db.repository().pool().unwrap().clone() };
         // Fail after alert insertion and prove the whole batch rolls back.
@@ -102,7 +129,60 @@ async fn api_context_survives_inbox_and_parents_worker_span() {
         worker.process(1000).await.unwrap();
         assert_eq!(store.counters(Some(&db.source)).await.unwrap().pending,0);
         worker.pool.close().await;
-    }.with_subscriber(subscriber).await;
+        let failed = Store { pool: db.repository().pool().unwrap().clone() };
+        failed.pool.close().await;
+        assert!(failed.receive(&serde_json::from_value(reading(&db.source,99)).unwrap()).await.is_err());
+        assert!(failed.reject(Some(&db.source),"invalid_format").await.is_err());
+    }.await;
+    let receipt_ids: Vec<uuid::Uuid> = sqlx::query_scalar("SELECT id FROM reception_receipts")
+        .fetch_all(&db.pool)
+        .await
+        .unwrap();
+    let text = String::from_utf8(logs.lock().unwrap().clone()).unwrap();
+    assert!(!text.contains("must-not-appear-in-logs"));
+    assert!(!text.contains("test-producer"));
+    let records: Vec<Value> = text
+        .lines()
+        .map(|line| serde_json::from_str(line).unwrap())
+        .collect();
+    let receptions: Vec<&Value> = records
+        .iter()
+        .filter(|r| {
+            r["fields"]["message"] == "reading reception committed"
+                && r["fields"]["receipt_id"]
+                    .as_str()
+                    .and_then(|id| uuid::Uuid::parse_str(id).ok())
+                    .is_some_and(|id| receipt_ids.contains(&id))
+        })
+        .collect();
+    assert_eq!(receptions.len(), 7, "{text}"); // accepted + duplicate + 3 rejections + 2 old-context fixtures
+    let accepted = receptions
+        .iter()
+        .find(|r| r["fields"]["trace_id"] == "4bf92f3577b34da6a3ce929d0e0e4736")
+        .unwrap();
+    let id = accepted["fields"]["reading_id"].as_str().unwrap();
+    assert!(
+        receptions
+            .iter()
+            .any(|r| r["fields"]["outcome"] == "duplicate" && r["fields"]["reading_id"] == id)
+    );
+    for reason in ["invalid_fields", "unknown_device", "invalid_format"] {
+        let rejection = receptions
+            .iter()
+            .find(|r| r["fields"]["reason"] == reason)
+            .unwrap();
+        assert_eq!(rejection["fields"]["outcome"], "rejected");
+        assert_eq!(rejection["fields"]["reading_id_present"], false);
+        assert!(rejection["fields"].get("reading_id").is_none());
+        uuid::Uuid::parse_str(rejection["fields"]["receipt_id"].as_str().unwrap()).unwrap();
+    }
+    assert!(
+        records
+            .iter()
+            .any(|r| r["fields"]["message"] == "reading processing committed"
+                && r["fields"]["reading_id"] == id
+                && r["fields"]["trace_id"] == accepted["fields"]["trace_id"])
+    );
     db.cleanup().await;
     sqlx::query(&format!("DROP SCHEMA {schema} CASCADE"))
         .execute(&admin)

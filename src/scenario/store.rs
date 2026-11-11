@@ -1,7 +1,25 @@
 //! PostgreSQL inbox: a reception commits before 202; processing and alerts commit together.
 use super::*;
+use opentelemetry::trace::TraceContextExt;
 use sqlx::PgPool;
 use tracing_opentelemetry::OpenTelemetrySpanExt;
+
+/// Log only durable, server-generated identifiers and bounded outcome/reason categories.
+fn log_reception(receipt: &Receipt) {
+    let context = tracing::Span::current().context();
+    let span = context.span();
+    let trace = span.span_context();
+    tracing::info!(
+        receipt_id = %receipt.id,
+        reading_id = receipt.reading_id.map(|id| id.to_string()).as_deref(),
+        reading_id_present = receipt.reading_id.is_some(),
+        outcome = %receipt.outcome,
+        reason = receipt.reason.as_deref(),
+        trace_id = trace.is_valid().then(|| trace.trace_id().to_string()).as_deref(),
+        span_id = trace.is_valid().then(|| trace.span_id().to_string()).as_deref(),
+        "reading reception committed"
+    );
+}
 
 #[derive(Clone)]
 pub struct Store {
@@ -64,6 +82,7 @@ impl Store {
         .map_err(db)?;
         metrics::counter!("esc3_events_received_total", "outcome" => receipt.outcome.clone())
             .increment(1);
+        log_reception(&receipt);
         Ok(receipt)
     }
     /// Uniqueness arbitrates concurrent retries. Limits are snapshotted at reception.
@@ -125,6 +144,7 @@ impl Store {
         tx.commit().await.map_err(db)?;
         metrics::counter!("esc3_events_received_total", "outcome" => receipt.outcome.clone())
             .increment(1);
+        log_reception(&receipt);
         Ok(receipt)
     }
     /// Retrieve safe durable reception metadata by its verifiable UUID.
@@ -188,7 +208,7 @@ impl Store {
         for (id, traceparent) in rows {
             let span = tracing::info_span!("process_reading", component = "worker", reading_id = %id, batch_size = ids.len(), otel.kind = "consumer", otel.status_code = tracing::field::Empty);
             span.set_parent(crate::telemetry::parent(traceparent.as_deref()));
-            processing_spans.push(span);
+            processing_spans.push((id, span));
         }
         // All reading spans cover the same atomic batch. Keep SQL round trips
         // constant instead of adding two sequential statements per reading.
@@ -200,11 +220,24 @@ impl Store {
             tx.commit().await.map_err(db)?;
             Ok(changed)
         }.await;
-        for span in &processing_spans {
+        for (id, span) in &processing_spans {
             span.record(
                 "otel.status_code",
                 if committed.is_ok() { "OK" } else { "ERROR" },
             );
+            if committed.is_ok() {
+                let context = span.context();
+                let parent = context.span();
+                let trace = parent.span_context();
+                let _entered = span.enter();
+                tracing::info!(
+                    reading_id = %id,
+                    outcome = "processed",
+                    trace_id = trace.is_valid().then(|| trace.trace_id().to_string()).as_deref(),
+                    span_id = trace.is_valid().then(|| trace.span_id().to_string()).as_deref(),
+                    "reading processing committed"
+                );
+            }
         }
         drop(processing_spans);
         let changed = committed?;
