@@ -52,6 +52,12 @@ ruta pública nueva, actualizar esta lista y la prueba del renderer; no restaura
 el prefijo global `/`. Las políticas de `observability/jaeger.yaml` permiten
 OTLP HTTP desde API/worker a Jaeger únicamente por TCP 4318 en desarrollo.
 
+La red de observabilidad también permite Grafana→Prometheus solo por TCP 9090.
+Para comprobar los contratos offline: instalar `PyYAML==6.0.3` y ejecutar
+`python3 scripts/test-observability.py`. CI ejecuta estos contratos y valida los
+esquemas de todos los manifiestos de `observability/`; no sustituye una prueba
+del CNI en el cluster.
+
 ## Entrega y recuperación
 
 La preparación única usa [`k8s-bootstrap.sh`](../scripts/k8s-bootstrap.sh) e [`k8s-ingress.sh`](../scripts/k8s-ingress.sh). Las entregas siguientes usan el workflow **Entrega controlada** ([DEV-05](../docs/evidencia/DEV-05/index.md)). Si hay que hacerlas a mano, se puede seguir el orden siguiente.

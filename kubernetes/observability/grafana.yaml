@@ -84,3 +84,41 @@ spec:
     targetPort: 3000
   selector:
     app: grafana
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: grafana-to-prometheus
+  namespace: eventos-development
+spec:
+  podSelector:
+    matchLabels:
+      app: grafana
+  policyTypes: [Egress]
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: prometheus
+    ports:
+    - protocol: TCP
+      port: 9090
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: prometheus-from-grafana
+  namespace: eventos-development
+spec:
+  podSelector:
+    matchLabels:
+      app: prometheus
+  policyTypes: [Ingress]
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: grafana
+    ports:
+    - protocol: TCP
+      port: 9090

@@ -109,3 +109,47 @@ Rust sin BD: OK; rustdoc: OK. La prueba de métricas confirma que el acceso
 interno sigue usando el recorder global. No se reejecutó aceptación de BD
 local en esta revisión: no cambia SQL ni procesamiento. No se desplegó en cluster;
 la validación estática no demuestra el enforcement de NetworkPolicy/Ingress.
+
+## Ciclo de revisión manual y corrección
+
+La revisión manual de `ca6663f` confirmó tres pendientes: conectividad
+Grafana→Prometheus bloqueada por default-deny, prueba PostgreSQL de métricas
+omitida por CI y YAML de observabilidad fuera del alcance de Kubeconform en CI.
+
+Correcciones:
+
+- Políticas recíprocas Grafana→Prometheus solo TCP 9090, sin abrir otros peers.
+- El job `postgres` ejecuta también el target `metrics` con `--ignored` y guarda
+  `artifacts/metrics.txt`; reutiliza su BD dedicada y falla ante errores.
+- El job `manifests` valida el directorio de observabilidad y el Ingress público
+  renderizado (Issuer excluido por ser CRD). Usa `bash`/`pipefail` explícitos para
+  no ocultar fallos del renderer detrás de las tuberías.
+- `scripts/test-observability.py` añade tres contratos de conectividad y Services
+  con labels reales, casos permitidos/denegados y dependencia PyYAML 6.0.3 fijada
+  en CI. Es un modelo acotado a los selectores usados aquí, no un test de CNI.
+
+Segunda pasada: sin nuevos defectos bloqueantes detectados en el diff revisado.
+Se retiró en memoria cada permiso nuevo por separado y ambos controles negativos
+detectaron el bloqueo, sin editar los manifiestos para realizar esa prueba.
+
+Validación local del ciclo:
+
+- 23/23 pruebas Python existentes y 3/3 contratos nuevos: OK.
+- Comandos exactos del paso de esquemas del workflow: 52/52 recursos válidos,
+  incluidos 15 de observabilidad y 3 de Ingress/NetworkPolicy.
+- Comandos exactos del paso de aceptación PostgreSQL del workflow: 12/12 pruebas
+  PostgreSQL y 1/1 regresión de métricas con BD dedicada: OK.
+- La revisión completa previa ejecutó además las 26 pruebas Rust sin BD,
+  Clippy, rustdoc, OpenAPI, recuperación real, cardinalidad HTTP, trazas reales
+  en Jaeger, pruebas positivas/negativas de alertas e inicialización/privilegios
+  PostgreSQL: OK. El código Rust y el lockfile no cambian en este ciclo.
+- Imagen `localhost/event-service:pr78-manual`: compilación release `--locked`,
+  hardening y `scripts/verify-image.sh`: OK; SBOM generados en `artifacts/image/`.
+  Trivy: 0 HIGH/CRITICAL en crates, 0 CRITICAL en imagen. Reportó una HIGH en
+  `libssl3` de la base distroless heredada de main (CVE-2026-84782); no se declara
+  la imagen libre de vulnerabilidades. Actualizar esa base queda separado de
+  este cambio de métricas; el gate existente bloquea críticas con parche.
+- Gitleaks: 98 commits, sin hallazgos. Formato Rust y `git diff --check`: OK.
+
+No se eluden CodeRabbit, la aprobación humana ni CI. Sigue pendiente comprobar
+el enforcement real de las políticas y el Ingress en el ambiente autorizado.

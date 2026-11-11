@@ -2,10 +2,10 @@ name: Kubernetes manifests
 
 on:
   pull_request:
-    paths: ['kubernetes/**', 'scripts/render-k8s.py', 'scripts/k8s-*.sh', 'scripts/test-postgres-init.py', 'scripts/tests/test_k8s_render.py', '.github/workflows/kubernetes.yml']
+    paths: ['kubernetes/**', 'scripts/render-k8s.py', 'scripts/k8s-*.sh', 'scripts/test-postgres-init.py', 'scripts/test-observability.py', 'scripts/tests/test_k8s_render.py', '.github/workflows/kubernetes.yml']
   push:
     branches: [main]
-    paths: ['kubernetes/**', 'scripts/render-k8s.py', 'scripts/k8s-*.sh', 'scripts/test-postgres-init.py', 'scripts/tests/test_k8s_render.py', '.github/workflows/kubernetes.yml']
+    paths: ['kubernetes/**', 'scripts/render-k8s.py', 'scripts/k8s-*.sh', 'scripts/test-postgres-init.py', 'scripts/test-observability.py', 'scripts/tests/test_k8s_render.py', '.github/workflows/kubernetes.yml']
 
 permissions:
   contents: read
@@ -20,6 +20,10 @@ jobs:
           persist-credentials: false
       - name: Offline deployment contracts (no cluster or credentials)
         run: python3 -m unittest discover -s scripts/tests -p test_k8s_render.py -v
+      - name: Observability network contracts (offline, no cluster)
+        run: |
+          python3 -m pip install 'PyYAML==6.0.3'
+          python3 scripts/test-observability.py
       - name: Shell script syntax
         run: |
           bash -n kubernetes/postgres-init.sh
@@ -30,15 +34,22 @@ jobs:
           echo "9bc2bffbf71f261128533edaf912153948b7ff238f9a531ae6d34466ec287883  $RUNNER_TEMP/kubeconform.tar.gz" | sha256sum --check
           tar -xzf "$RUNNER_TEMP/kubeconform.tar.gz" -C "$RUNNER_TEMP" kubeconform
       - name: Strict Kubernetes 1.35 schemas (fixture digests, never applied)
+        shell: bash
         env:
           FIXTURE_IMAGE: ghcr.io/marchelo23/proyecto-final-metricas-y-devops/event-service@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
           FIXTURE_POSTGRES: docker.io/library/postgres@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
         run: |
+          set -euo pipefail
           for environment in development production; do
             for stage in foundation migration workloads; do
               python3 scripts/render-k8s.py --environment "$environment" --stage "$stage" --image "$FIXTURE_IMAGE" --postgres-image "$FIXTURE_POSTGRES" \
                 | "$RUNNER_TEMP/kubeconform" -strict -summary -kubernetes-version 1.35.0
             done
           done
+          "$RUNNER_TEMP/kubeconform" -strict -summary -kubernetes-version 1.35.0 kubernetes/observability
+          python3 scripts/render-k8s.py --environment production --stage ingress --image "$FIXTURE_IMAGE" --postgres-image "$FIXTURE_POSTGRES" \
+            --public-host eventos-ci.mexicocentral.cloudapp.azure.com \
+            | python3 -c 'import json,sys; d=json.load(sys.stdin); d["items"]=[i for i in d["items"] if i["kind"] != "Issuer"]; json.dump(d,sys.stdout)' \
+            | "$RUNNER_TEMP/kubeconform" -strict -summary -kubernetes-version 1.35.0
       - name: PostgreSQL init and runtime privilege integration (disposable, no network)
         run: python3 scripts/test-postgres-init.py

@@ -67,6 +67,7 @@ jobs:
           mkdir -p artifacts
           set -o pipefail
           cargo test --locked --test postgres -- --ignored --nocapture 2>&1 | tee artifacts/postgres.txt
+          cargo test --locked --test metrics -- --ignored --nocapture 2>&1 | tee artifacts/metrics.txt
       - name: Restart and recovery experiment
         shell: bash
         env:
