@@ -84,3 +84,28 @@ CodeRabbit local: `coderabbit review --agent` no pudo autenticar la sesión o
 el acceso al proveedor Git. No se cuenta como revisión completada.
 Terraform y despliegue Azure/Kubernetes: N/A, no se modifica infraestructura
 Terraform ni se dispone de una ejecución autorizada en el ambiente.
+
+## Segunda revisión del PR 78
+
+Los tres hallazgos seguían vigentes y se corrigieron:
+
+- Añadidas políticas recíprocas de ingreso/egreso para OTLP HTTP, usando los
+  selectores reales de `event-service` y del Service `jaeger-collector`, solo
+  TCP 4318 y en el mismo namespace de desarrollo.
+- El Ingress de producción deja de usar `/` como prefijo global. Solo enruta
+  `/v1` y las rutas exactas de salud, documentación y OpenAPI. `/metrics` queda
+  fuera del Ingress; el Service y el handler interno no cambian. No se añade
+  caché porque el bloqueo se resuelve en el Ingress.
+- OTLP 0.15, `exporter/http/mod.rs`, `resolve_endpoint`, añade `/v1/traces` a la
+  URL base configurada. Se elimina ese sufijo de `with_endpoint`, conservando
+  el host y puerto, para no generar `/v1/traces/v1/traces`.
+
+Validación local: 11/11 contratos del renderer (incluida exclusión pública de
+`/metrics` y preservación de rutas API), 13/13 recursos de observabilidad y
+3/3 recursos de Ingress/NetworkPolicy renderizados válidos con Kubeconform 1.35
+(Issuer excluido por ser CRD). Se verificaron los selectores recíprocos y el
+puerto de ambas políticas contra el Service. Formato y Clippy: OK; 26 pruebas
+Rust sin BD: OK; rustdoc: OK. La prueba de métricas confirma que el acceso
+interno sigue usando el recorder global. No se reejecutó aceptación de BD
+local en esta revisión: no cambia SQL ni procesamiento. No se desplegó en cluster;
+la validación estática no demuestra el enforcement de NetworkPolicy/Ingress.

@@ -45,6 +45,13 @@ Las contraseñas de los DSN deben corresponder a las de los roles del primer Sec
 
 El renderer no produce Secrets. Red denegada por defecto, cuenta de despliegue limitada y qué protege un Secret: [DEV-10](../docs/evidencia/DEV-10/index.md). No se publican Services al exterior; el Ingress/TLS y entrega controlada corresponden a #11.
 
+El Ingress público permite solo `/v1` (prefijo), `/health/live`, `/health/ready`,
+`/docs` y `/openapi.json` (rutas exactas). `/metrics` no tiene ruta pública:
+Prometheus accede directamente al Service `event-service:8000`. Si se añade una
+ruta pública nueva, actualizar esta lista y la prueba del renderer; no restaurar
+el prefijo global `/`. Las políticas de `observability/jaeger.yaml` permiten
+OTLP HTTP desde API/worker a Jaeger únicamente por TCP 4318 en desarrollo.
+
 ## Entrega y recuperación
 
 La preparación única usa [`k8s-bootstrap.sh`](../scripts/k8s-bootstrap.sh) e [`k8s-ingress.sh`](../scripts/k8s-ingress.sh). Las entregas siguientes usan el workflow **Entrega controlada** ([DEV-05](../docs/evidencia/DEV-05/index.md)). Si hay que hacerlas a mano, se puede seguir el orden siguiente.

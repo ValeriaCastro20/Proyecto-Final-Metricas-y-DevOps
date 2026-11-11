@@ -257,23 +257,24 @@ async fn main() -> ExitCode {
     };
 
     // MET-04: Initialize OpenTelemetry for Tracing (export to Jaeger)
-    let tracer = opentelemetry_otlp::new_pipeline()
-        .tracing()
-        .with_exporter(opentelemetry_otlp::new_exporter().http().with_endpoint(
-            "http://jaeger-collector.eventos-development.svc.cluster.local:4318/v1/traces",
-        ))
-        .with_trace_config(opentelemetry_sdk::trace::config().with_resource(
-            opentelemetry_sdk::Resource::new(vec![opentelemetry::KeyValue::new(
-                "service.name",
-                "event-service",
-            )]),
-        ))
-        .install_batch(opentelemetry_sdk::runtime::Tokio)
-        .unwrap_or_else(|_| {
-            opentelemetry_sdk::trace::TracerProvider::builder()
-                .build()
-                .tracer("fallback")
-        });
+    let tracer =
+        opentelemetry_otlp::new_pipeline()
+            .tracing()
+            .with_exporter(opentelemetry_otlp::new_exporter().http().with_endpoint(
+                "http://jaeger-collector.eventos-development.svc.cluster.local:4318",
+            ))
+            .with_trace_config(opentelemetry_sdk::trace::config().with_resource(
+                opentelemetry_sdk::Resource::new(vec![opentelemetry::KeyValue::new(
+                    "service.name",
+                    "event-service",
+                )]),
+            ))
+            .install_batch(opentelemetry_sdk::runtime::Tokio)
+            .unwrap_or_else(|_| {
+                opentelemetry_sdk::trace::TracerProvider::builder()
+                    .build()
+                    .tracer("fallback")
+            });
 
     let telemetry = tracing_opentelemetry::layer().with_tracer(tracer);
     use tracing_subscriber::layer::SubscriberExt;
