@@ -77,9 +77,9 @@ Un fallo leyendo el cuerpo conserva el HTTP ya recibido. Un intento iniciado sin
 
 ### T2 · Armar recuperación antes de degradar
 
-Persistir restore-state.json con run, boot_id, contexto/namespace, UID, réplica original, selector, imagen, ancla del servidor y degraded_mono/deadline_mono. El reloj de seguridad comienza **antes** del primer intento de escala a cero; el plazo máximo es 600 segundos.
+Persistir restore-state.json con run, boot_id, identity (UID/GID Linux del supervisor y watchdog), contexto/namespace, UID, réplica original, selector, imagen, ancla del servidor y degraded_mono/deadline_mono. El reloj de seguridad comienza **antes** del primer intento de escala a cero; el plazo máximo es 600 segundos.
 
-Antes de cambiar réplicas, iniciar y recibir ACK de un watchdog en una unidad systemd remota independiente met07-guard-<run>, con Restart=on-failure. El ACK debe coincidir con run y UID, en el directorio nuevo. Si no confirma arranque, no degradar.
+Antes de cambiar réplicas, iniciar y recibir ACK de un watchdog en una unidad systemd remota independiente met07-guard-<run>, con Restart=on-failure, User/Group iguales al supervisor y UMask=0077. Directorio 0700 y archivos 0600, con propietario/grupo comprobados antes de escalar. El ACK debe coincidir con run y UID, en el directorio nuevo. Si no confirma arranque, no degradar.
 
 La única mutación preparada es un JSON Patch del número de réplicas del Deployment, con pruebas atómicas de UID, resourceVersion y réplica actual. Un resultado incierto de la petición entra igualmente en limpieza. Nunca se sustituye la réplica original por un 1 fijo sin contrastarla: el preflight exige una réplica y guarda ese valor, y la restauración utiliza el valor guardado.
 
@@ -138,3 +138,7 @@ El mecanismo causal se aceptará solo si la evidencia muestra: capacidad cero y 
 ## Validación de esta preparación
 
 Los resultados locales y sus límites se registran en [validation-preparation.md](validation-preparation.md). El snapshot de lectura no modifica el entorno. No hay todavía evidencia real durante/después del incidente ni firing inducido, y no se solicita cerrar #27 u otros issues.
+
+## Correcciones posteriores: identidad y señales
+
+El contrato de identidad privada, las asociaciones exactas por evento y el observador de logs/trazas se describen en [hardening-identity-signals.md](hardening-identity-signals.md). Los snapshots originales y el estado no ejecutado se mantienen. El observador opcional inicia logs antes de la carga futura, conserva los del worker eliminado y consulta trazas después de recuperar capacidad. Sus planes se distinguen de fixtures y observaciones reales; sin observador no se declara cobertura de logs/trazas.

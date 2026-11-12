@@ -9,6 +9,8 @@ import os
 from pathlib import Path
 import re
 import signal
+import stat
+import tempfile
 import subprocess
 import sys
 import threading
@@ -53,29 +55,147 @@ def rule_state(body, namespace):
     return state
 
 
+def actor_identity():
+    require(sys.platform == "linux", "Private IPC requires the reviewed Linux host")
+    require(os.getuid() == os.geteuid() and os.getgid() == os.getegid(), "Mixed real/effective identity")
+    return {"uid": os.geteuid(), "gid": os.getegid()}
+
+
+def private_path(path, identity, directory=False, optional=False):
+    """Check ownership even when root could otherwise bypass another user's permissions."""
+    path = Path(path)
+    require(isinstance(identity, dict) and set(identity) == {"uid", "gid"} and
+            all(type(identity[k]) is int and identity[k] >= 0 for k in identity), "Invalid process identity")
+    try:
+        info = path.lstat()
+    except FileNotFoundError:
+        require(optional, "Required private IPC path missing")
+        return
+    require(not stat.S_ISLNK(info.st_mode), "Symlink forbidden in private IPC")
+    require((info.st_uid, info.st_gid) == (identity["uid"], identity["gid"]), "Private IPC owner/group mismatch")
+    require(stat.S_IMODE(info.st_mode) == (0o700 if directory else 0o600), "Private IPC permissions mismatch")
+    require(stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), "Private IPC type mismatch")
+    if not directory:
+        require(info.st_nlink == 1, "Hard-linked IPC file forbidden")
+
+
+def check_ipc(directory, identity):
+    require(actor_identity() == identity, "Supervisor/watchdog identity mismatch")
+    private_path(directory, identity, directory=True)
+    # Same identity must actually create and read private files; atomic writers verify replacement.
+    with tempfile.TemporaryFile(dir=directory) as probe:
+        probe.write(b"met07-private-probe")
+        probe.flush()
+        probe.seek(0)
+        require(probe.read() == b"met07-private-probe", "Private IPC access probe failed")
+
+
+def read_private(path, identity):
+    private_path(Path(path).parent, identity, directory=True)
+    private_path(path, identity)
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+    with os.fdopen(fd, "r", encoding="utf8") as source:
+        info = os.fstat(source.fileno())
+        require((info.st_uid, info.st_gid, stat.S_IMODE(info.st_mode), info.st_nlink) ==
+                (identity["uid"], identity["gid"], 0o600, 1), "Private IPC changed while opening")
+        return json.load(source)
+
+
+def server_instant(value):
+    require(isinstance(value, str) and re.fullmatch(
+        r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})", value),
+        "Expected timezone-aware server timestamp")
+    try:
+        parsed = dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as error:
+        raise RuntimeError("Invalid server timestamp") from error
+    require(parsed.utcoffset() is not None, "Missing server timezone")
+    return parsed.astimezone(dt.timezone.utc)
+
+
+def attempt_associations(attempts, device, strict=True):
+    starts, results = {}, {}
+    for record in attempts:
+        kind = record.get("kind")
+        if kind not in ("attempt_started", "attempt_result"):
+            continue
+        number = record.get("attempt")
+        require(type(number) is int and number >= 0, "Invalid attempt number")
+        target = starts if kind == "attempt_started" else results
+        require(number not in target, "Duplicate attempt record")
+        target[number] = record
+    require(starts, "No load evidence")
+    require(set(results) <= set(starts), "Result without a started request")
+    associations, events, unresolved = {}, {}, []
+    for number, start in starts.items():
+        require(start.get("device_id") == device and isinstance(start.get("event_id"), str) and
+                bool(start["event_id"]), "Started request identity mismatch")
+        result = results.get(number)
+        if result is None:
+            unresolved.append(number)
+            continue
+        require((result.get("device_id"), result.get("event_id")) == (device, start["event_id"]),
+                "Response/request identity mismatch")
+        if result.get("connection_error") or result.get("http_status") not in (200, 202) or not result.get("reading_id"):
+            unresolved.append(number)
+            continue
+        rid = result["reading_id"]
+        try:
+            require(isinstance(rid, str) and str(uuid.UUID(rid)) == rid, "Invalid reading UUID")
+        except (ValueError, AttributeError) as error:
+            raise RuntimeError("Invalid reading UUID") from error
+        require(not result.get("request_id") or not start.get("request_id") or
+                result["request_id"] == start["request_id"], "Response request_id mismatch")
+        pair = (device, start["event_id"])
+        require(rid not in associations or associations[rid]["pair"] == pair, "UUID reused for another event")
+        require(pair not in events or events[pair] == rid, "Idempotency ID mismatch")
+        request_ids = set(associations.get(rid, {}).get("request_ids", []))
+        request_id = result.get("request_id") or start.get("request_id")
+        if request_id is not None:
+            require(re.fullmatch(r"[A-Za-z0-9._-]{1,128}", request_id), "Invalid request_id")
+            request_ids.add(request_id)
+        associations[rid] = {"pair": pair, "request_ids": sorted(request_ids)}
+        events[pair] = rid
+    if strict:
+        require(not unresolved and len(results) == len(starts), "Failed or unfinished request; outcome uncertain")
+    return associations, unresolved
+
+
 def processed(attempts, rows, device):
-    starts = {a["attempt"] for a in attempts if a["kind"] == "attempt_started"}
-    results = [a for a in attempts if a["kind"] == "attempt_result"]
-    require(len(results) == len(starts) and {a["attempt"] for a in results} == starts,
-            "Unfinished or duplicate attempt; outcome uncertain")
-    require(results, "No load evidence")
-    accepted = set()
-    events = {}
-    for a in results:
-        require(not a["connection_error"] and a["http_status"] in (200, 202),
-                "Ingestion availability failed; do not claim uninterrupted service")
-        require(a.get("reading_id"), "Accepted response missing reading_id")
-        uuid.UUID(a["reading_id"])
-        if a["event_id"] in events:
-            require(events[a["event_id"]] == a["reading_id"], "Idempotency ID mismatch")
-        events[a["event_id"]] = a["reading_id"]
-        accepted.add(a["reading_id"])
-    require(len(set(events.values())) == len(events), "Different events reused a reading UUID")
-    stored = {r["id"]: r for r in rows if r["device_id"] == device}
-    require(len(stored) == len(rows), "Duplicate or foreign historical row")
-    require(set(stored) == accepted, "UUID set mismatch: accepted versus durable rows")
-    require(all(r.get("processed_at") for r in stored.values()), "Unprocessed reading")
-    return sorted(accepted)
+    associations, _ = attempt_associations(attempts, device)
+    stored = {}
+    for row in rows:
+        rid = row.get("id")
+        require(rid in associations and rid not in stored, "Unexpected or duplicate persisted UUID")
+        require((row.get("device_id"), row.get("event_id")) == associations[rid]["pair"],
+                "Persisted UUID/device/event does not match response")
+        received = server_instant(row.get("received_at"))
+        completed = server_instant(row.get("processed_at"))
+        require(completed >= received, "Processing precedes durable reception")
+        stored[rid] = row
+    require(set(stored) == set(associations), "UUID set mismatch: responses versus durable rows")
+    return sorted(stored)
+
+
+
+def signal_manifest(events, rows, device):
+    """Prepared instructions, never observations. All bounds originate in server timestamps."""
+    processed(events, rows, device)
+    boundaries = {e["phase"]: e["server_utc"] for e in events if e.get("kind") == "signal_phase_boundary"}
+    samples = [e["data"]["server_utc"] for e in events if e.get("kind") == "snapshot"]
+    require(set(boundaries) == {"before", "during", "after"} and samples, "Missing server phase boundaries")
+    end = max(samples, key=server_instant)
+    windows = {
+        "before": {"start": boundaries["before"], "end": boundaries["during"]},
+        "during": {"start": boundaries["during"], "end": boundaries["after"]},
+        "after": {"start": boundaries["after"], "end": end},
+    }
+    for window in windows.values():
+        require(server_instant(window["start"]) <= server_instant(window["end"]), "Reversed signal window")
+    return {"material": "PREPARED_COLLECTION_PLAN", "observations_collected": False, "device_id": device,
+            "windows": windows, "trace_margin_seconds": 60,
+            "log_fields": ["server_utc", "reading_id", "trace_id", "span_id", "receipt_id", "request_id", "outcome"],
+            "requires": "Follow API/worker logs before degradation; retain buffers across worker Pod deletion"}
 
 
 def gaps(attempts, start, end, period=0.5):
@@ -89,12 +209,17 @@ def gaps(attempts, start, end, period=0.5):
 
 class Evidence:
     def __init__(self, directory, clock=time.monotonic):
-        self.root = Path(directory).resolve()
-        self.root.mkdir(mode=0o700)  # Exclusive: no historical output is reused.
+        self.root = Path(directory).absolute()
+        self.root.mkdir(mode=0o700)
+        self.identity = actor_identity()
+        check_ipc(self.root, self.identity)
         self.clock = clock
         self.lock = threading.Lock()
         self.records = []
         self.anchor = None
+
+    def check_access(self):
+        check_ipc(self.root, self.identity)
 
     def safe(self, value):
         data = json.dumps(value, ensure_ascii=False, allow_nan=False)
@@ -104,33 +229,46 @@ class Evidence:
         return data
 
     def json(self, name, value):
+        self.check_access()
+        require(Path(name).name == name, "Evidence filename required")
         data = self.safe(value)
-        with open(self.root / name, "x", encoding="utf8") as out:
+        fd = os.open(self.root / name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+        with os.fdopen(fd, "w", encoding="utf8") as out:
             out.write(data + "\n")
             out.flush()
             os.fsync(out.fileno())
+        private_path(self.root / name, self.identity)
 
     def event(self, kind, **fields):
         record = {"kind": kind, "mono": self.clock(), "server_anchor": self.anchor, **fields}
         data = self.safe(record) + "\n"
         with self.lock:
-            with open(self.root / "events.jsonl", "a", encoding="utf8") as out:
+            self.check_access()
+            file = self.root / "events.jsonl"
+            private_path(file, self.identity, optional=True)
+            fd = os.open(file, os.O_WRONLY | os.O_APPEND | os.O_CREAT | os.O_NOFOLLOW, 0o600)
+            with os.fdopen(fd, "w", encoding="utf8") as out:
                 out.write(data)
                 out.flush()
                 os.fsync(out.fileno())
+            private_path(file, self.identity)
             self.records.append(record)
         return record
+
 
 
 class Http:
     def __init__(self, api="http://127.0.0.1:28000", prom="http://127.0.0.1:29090"):
         self.api, self.prom = api, prom
 
-    def request(self, base, method, path, payload=None, role=None):
+    def request(self, base, method, path, payload=None, role=None, request_id=None):
         url = urlsplit(base)
         require(url.scheme == "http" and url.hostname in ("127.0.0.1", "localhost"),
                 "Use an explicitly verified loopback forward")
         headers = {"Content-Type": "application/json"}
+        if request_id:
+            require(re.fullmatch(r"[A-Za-z0-9._-]{1,128}", request_id), "Invalid request_id")
+            headers["X-Request-ID"] = request_id
         if role:
             headers["X-API-Key"] = os.environ["EVENT_" + role.upper() + "_KEY"]
         conn = http.client.HTTPConnection(url.hostname, url.port, timeout=2)
@@ -280,15 +418,25 @@ def boot_id():
     return Path("/proc/sys/kernel/random/boot_id").read_text().strip()
 
 
-def atomic_file(path, value):
+def atomic_file(path, value, identity=None):
     path = Path(path)
+    identity = actor_identity() if identity is None else identity
+    require(actor_identity() == identity, "IPC writer identity mismatch")
+    private_path(path.parent, identity, directory=True)
+    private_path(path, identity, optional=True)
     temp = path.with_suffix(".tmp-" + uuid.uuid4().hex)
-    fd = os.open(temp, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-    with os.fdopen(fd, "w", encoding="utf8") as out:
-        json.dump(value, out)
-        out.flush()
-        os.fsync(out.fileno())
-    os.replace(temp, path)
+    fd = os.open(temp, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+    try:
+        with os.fdopen(fd, "w", encoding="utf8") as out:
+            json.dump(value, out)
+            out.flush()
+            os.fsync(out.fileno())
+        private_path(temp, identity)
+        os.replace(temp, path)
+    finally:
+        if temp.exists():
+            temp.unlink()
+
 
 
 class RemoteGuard:
@@ -298,40 +446,54 @@ class RemoteGuard:
                 "Run only on the reviewed remote systemd host")
         require(boot_id() == state["boot_id"], "Boot changed")
         self.directory = Path(directory)
+        self.identity = state["identity"]
+        check_ipc(self.directory, self.identity)
+        require(read_private(self.directory / "restore-state.json", self.identity) == state, "Restore state mismatch")
+        self.heartbeat()
         unit = "met07-guard-" + state["run"]
         subprocess.run(["sudo", "-n", "systemd-run", "--unit", unit, "--collect",
                         "--property=Restart=on-failure", "--property=RestartSec=1s",
+                        "--property=User=" + str(self.identity["uid"]),
+                        "--property=Group=" + str(self.identity["gid"]), "--property=UMask=0077",
                         "/usr/bin/python3", str(Path(__file__).resolve()), "watchdog",
                         "--state", str(self.directory / "restore-state.json")],
                        timeout=5, check=True, capture_output=True)
         for _ in range(20):
             if (self.directory / "guard-ready.json").exists():
-                ready = json.loads((self.directory / "guard-ready.json").read_text())
+                ready = read_private(self.directory / "guard-ready.json", self.identity)
+                require(ready.get("identity") == self.identity, "Watchdog ACK identity mismatch")
                 require(ready["run"] == state["run"] and ready["uid"] == state["uid"], "Foreign guard ACK")
                 return
             time.sleep(0.25)
         raise RuntimeError("Remote guard did not acknowledge; do not degrade")
 
     def heartbeat(self):
-        atomic_file(self.directory / "heartbeat.json", {"mono": time.monotonic()})
+        atomic_file(self.directory / "heartbeat.json", {"mono": time.monotonic()}, self.identity)
 
     def disarm(self):
         # Only after restoration is verified; watchdog also independently checks replicas.
-        atomic_file(self.directory / "finished.json", {"restored": True})
+        atomic_file(self.directory / "finished.json", {"restored": True}, self.identity)
 
 
 def watchdog(state_file, clock=time.monotonic, sleep=time.sleep, kube=None, boot=None):
     state_file = Path(state_file)
-    state = json.loads(state_file.read_text())
+    identity = actor_identity()
+    check_ipc(state_file.parent, identity)
+    state = read_private(state_file, identity)
+    require(state.get("identity") == identity, "Watchdog process identity mismatch")
+    private_path(state_file, state["identity"])
     require((boot or boot_id()) == state["boot_id"], "Boot changed; manual recovery required")
     require(state["deadline_mono"] - state["degraded_mono"] == LIMIT and state["replicas"] == 1,
             "Invalid restoration deadline/state")
     kube = kube or Kubernetes(state["context"], state["namespace"])
     directory = state_file.parent
-    atomic_file(directory / "guard-ready.json", {"run": state["run"], "uid": state["uid"]})
+    heartbeat_file = directory / "heartbeat.json"
+    if heartbeat_file.exists():
+        read_private(heartbeat_file, identity)
+    atomic_file(directory / "guard-ready.json", {"run": state["run"], "uid": state["uid"], "identity": identity}, identity)
     while True:
         heartbeat = directory / "heartbeat.json"
-        last = json.loads(heartbeat.read_text())["mono"] if heartbeat.exists() else state["degraded_mono"]
+        last = read_private(heartbeat, identity)["mono"] if heartbeat.exists() else state["degraded_mono"]
         reason = ("deadline" if clock() >= state["degraded_mono"] + GUARD_RESTORE else
                   "lost-supervisor" if clock() - last > LEASE else
                   "finished" if (directory / "finished.json").exists() else None)
@@ -352,7 +514,7 @@ def watchdog(state_file, clock=time.monotonic, sleep=time.sleep, kube=None, boot
 
 class Experiment:
     """Dependency-injected supervisor. Invoking this API requires separate incident authorization."""
-    def __init__(self, kube, http, guard, evidence, clock=time.monotonic, sleep=time.sleep):
+    def __init__(self, kube, http, guard, evidence, clock=time.monotonic, sleep=time.sleep, signals_factory=None):
         self.kube, self.http, self.guard, self.evidence = kube, http, guard, evidence
         self.clock, self.sleep = clock, sleep
         self.stop = threading.Event()
@@ -360,6 +522,7 @@ class Experiment:
         self.phase = "before"
         self.load_error = None
         self.load_deadline = float("inf")
+        self.signals_factory, self.signals = signals_factory, None
 
     def sample(self, device=None):
         self.guard.heartbeat() if hasattr(self.guard, "directory") else None
@@ -378,15 +541,16 @@ class Experiment:
                     self.sleep(min(0.05, due - self.clock()))
                     continue
                 event = f"e-{n}"
+                request_id = str(uuid.uuid4())
                 started = self.evidence.event("attempt_started", attempt=n, event_id=event, phase=self.phase,
-                                              scheduled_mono=due, device_id=device)
-                result = {"attempt": n, "event_id": event, "phase": self.phase,
+                                              scheduled_mono=due, device_id=device, request_id=request_id)
+                result = {"attempt": n, "event_id": event, "device_id": device, "request_id": request_id, "phase": self.phase,
                           "http_status": None, "connection_error": None, "reading_id": None,
                           "response_server_date": None, "start_mono": started["mono"]}
                 try:
                     r = self.http.request(self.http.api, "POST", "/v1/readings",
                         {"device_id": device, "event_id": event, "occurred_at": "2040-01-01T00:00:00Z",
-                         "temperature": 20, "humidity": 50, "state": "running"}, "producer")
+                         "temperature": 20, "humidity": 50, "state": "running"}, "producer", request_id=request_id)
                     result.update(http_status=r["status"], response_server_date=r["server_date"],
                                   connection_error=r.get("connection_error"))
                     if isinstance(r["body"], dict):
@@ -429,11 +593,14 @@ class Experiment:
                 authorization.get("isolation_review_ref"), "Explicit authorization and isolation evidence required")
         require(authorization["context"] == self.kube.context and authorization["namespace"] == self.kube.namespace,
                 "Authorization scope mismatch")
+        self.evidence.check_access()
         state = self.kube.preflight(authorization["deployment_uid"])
+        state["identity"] = self.evidence.identity
         before = self.sample()
         require(before["alert_state"] == "inactive" and before["backlog"] == 0, "Baseline must be inactive/zero")
         state.update(isolation_review_ref=authorization["isolation_review_ref"], server_before_utc=before["server_utc"])
         self.evidence.json("context.json", state)
+        self.evidence.event("signal_phase_boundary", phase="before", server_utc=before["server_utc"])
         device = "met07-" + uuid.uuid4().hex
         created = self.http.request(self.http.api, "POST", "/v1/devices",
             {"id": device, "facility_id": "met07-isolated",
@@ -445,6 +612,9 @@ class Experiment:
         thread_started = False
         previous = {}
         try:
+            if self.signals_factory is not None:
+                self.signals = self.signals_factory(self.kube, self.http, state["uid"], device)
+                self.signals.start_follow(before["server_utc"], self.evidence)
             for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
                 previous[sig] = signal.signal(sig, lambda *_: self.stop.set())
             thread.start()
@@ -462,6 +632,7 @@ class Experiment:
             self.guard.arm(state, self.evidence.root)
             self.guard.heartbeat()
             self.check(state)
+            self.evidence.event("signal_phase_boundary", phase="during", server_utc=utc(self.http.server_time()))
             degraded = True  # Even an uncertain scale result must enter restoration.
             self.phase = "during"
             self.evidence.event("degradation_started", state=state)
@@ -488,6 +659,7 @@ class Experiment:
                 self.sleep(1)
             self.check(state)
             self.evidence.event("worker_ready", uid=state["uid"])
+            self.evidence.event("signal_phase_boundary", phase="after", server_utc=utc(self.http.server_time()))
             self.phase = "after"
             self.window_end = self.clock()
             self.evidence.event("degraded_window_ended")
@@ -508,6 +680,11 @@ class Experiment:
                     failure = "restore_failed_watchdog_active"
             if restored:
                 self.guard.disarm()
+            if self.signals is not None:
+                try:
+                    self.signals.stop_follow()
+                except Exception:
+                    success, failure = False, "signal_stream_cleanup_failed"
             for sig, handler in previous.items():
                 signal.signal(sig, handler)
             self.evidence.json("request-free-intervals.json", {
@@ -535,7 +712,8 @@ class Experiment:
             offset += 1000
             require(offset < 10000, "Unexpected volume")
         self.evidence.json("after-readings.json", rows)
-        acceptance = {"passed": False, "device_id": device, "backlog": 0, "alert_state": "inactive"}
+        acceptance = {"passed": False, "device_id": device, "backlog": 0, "alert_state": "inactive",
+                      "scope": "functional_recovery_only", "logs_and_traces_collected": False}
         try:
             during = [a for a in self.evidence.records if a["kind"] == "attempt_started" and
                       state["degraded_mono"] <= a["mono"] <= self.window_end]
@@ -547,6 +725,13 @@ class Experiment:
             acceptance["processed_ids"] = processed(self.evidence.records, rows, device)
             require(sample["counts"]["accepted"] == len(acceptance["processed_ids"]) and
                     sample["counts"]["processed"] == len(acceptance["processed_ids"]), "Ledger/UUID mismatch")
+            plan = signal_manifest(self.evidence.records, rows, device)
+            self.evidence.json("signal-collection-plan.json", plan)
+            if self.signals is not None:
+                for phase, window in plan["windows"].items():
+                    self.signals.collect(phase, window, self.evidence.records, rows, self.evidence)
+                acceptance.update(logs_and_traces_collected=True, signal_provenance=self.signals.mode,
+                                  scope="functional_recovery_with_correlated_signals")
             acceptance["passed"] = True
         finally:
             self.evidence.json("acceptance.json", acceptance)

@@ -31,7 +31,7 @@ class Clock:
 def state():
     return {"context": "fixture", "namespace": "met07-fixture", "uid": "fixture-uid",
             "replicas": 1, "run": "fixture-run", "boot_id": "fixture-boot",
-            "degraded_mono": 0, "deadline_mono": 600, "selector": M.SELECTOR}
+            "degraded_mono": 0, "deadline_mono": 600, "selector": M.SELECTOR, "identity": M.actor_identity()}
 
 
 def rule(status="inactive"):
@@ -124,13 +124,16 @@ class FakeHttp:
         self.device = payload["id"]
         return {"status": 201, "server_date": "Wed, 01 Jan 2020 00:00:00 GMT", "body": {}}
 
+    def server_time(self):
+        return 1577836800 + self.clock()
+
     def snapshot(self, namespace, device=None):
         e = self.experiment
         if device and not e.load_stop.is_set():
             reading_id = f"00000000-0000-4000-8000-{self.n:012d}"
             event_id = f"e-{self.n}"
-            e.evidence.event("attempt_started", attempt=self.n, event_id=event_id, phase=e.phase)
-            e.evidence.event("attempt_result", attempt=self.n, event_id=event_id, phase=e.phase,
+            e.evidence.event("attempt_started", attempt=self.n, event_id=event_id, phase=e.phase, device_id=device, request_id=f"req-{self.n}")
+            e.evidence.event("attempt_result", attempt=self.n, event_id=event_id, phase=e.phase, device_id=device, request_id=f"req-{self.n}",
                              http_status=202, connection_error=None, reading_id=reading_id)
             self.rows.append({"id": reading_id, "event_id": event_id, "device_id": device,
                               "received_at": "2020-01-01T00:00:00Z", "processed_at": "2020-01-01T00:03:00Z"})
@@ -145,7 +148,7 @@ class FakeHttp:
             elif self.mode == "timeout":
                 self.clock.sleep(600)
             elif self.mode == "watchdog":
-                (e.evidence.root / "guard-restored.json").write_text("{}")
+                M.atomic_file(e.evidence.root / "guard-restored.json", {})
             elif self.mode == "http-failure":
                 raise RuntimeError("Fixture HTTP failure")
         return {"server_utc": M.utc(1577836800 + self.clock()), "server_sample_mono": self.clock(),
@@ -240,9 +243,9 @@ class PreparationTests(unittest.TestCase):
             with self.subTest(reason=reason), tempfile.TemporaryDirectory() as folder:
                 saved = state()
                 file = Path(folder) / "restore-state.json"
-                file.write_text(json.dumps(saved))
+                M.atomic_file(file, saved)
                 if heartbeat:
-                    (Path(folder) / "heartbeat.json").write_text(json.dumps({"mono": heartbeat}))
+                    M.atomic_file(Path(folder) / "heartbeat.json", {"mono": heartbeat})
                 kube = FakeKube()
                 kube.replicas = 0
                 M.watchdog(file, Clock(now), lambda _: None, kube, "fixture-boot")
@@ -254,7 +257,7 @@ class PreparationTests(unittest.TestCase):
     def test_watchdog_retries_restore_and_never_claims_unready_success(self):
         with tempfile.TemporaryDirectory() as folder:
             file = Path(folder) / "restore-state.json"
-            file.write_text(json.dumps(state()))
+            M.atomic_file(file, state())
             clock, kube = Clock(541), FakeKube()
             kube.fail_restore = 1
             M.watchdog(file, clock, clock.sleep, kube, "fixture-boot")
@@ -262,7 +265,7 @@ class PreparationTests(unittest.TestCase):
             self.assertTrue((Path(folder) / "guard-failure.json").exists())
         with tempfile.TemporaryDirectory() as folder:
             file = Path(folder) / "restore-state.json"
-            file.write_text(json.dumps(state()))
+            M.atomic_file(file, state())
             kube = FakeKube()
             kube.ready = lambda _: False
             with self.assertRaises(InterruptedError):
@@ -274,7 +277,7 @@ class PreparationTests(unittest.TestCase):
             with tempfile.TemporaryDirectory() as folder:
                 saved = {**state(), **change}
                 file = Path(folder) / "restore-state.json"
-                file.write_text(json.dumps(saved))
+                M.atomic_file(file, saved)
                 with self.assertRaises(RuntimeError):
                     M.watchdog(file, Clock(541), lambda _: None, FakeKube(), "fixture-boot")
 
@@ -288,10 +291,11 @@ class PreparationTests(unittest.TestCase):
 
     def test_uuid_verification_rejects_missing_pending_foreign_or_uncertain(self):
         rid = "00000000-0000-4000-8000-000000000001"
-        attempts = [{"kind": "attempt_started", "attempt": 0}, {
-            "kind": "attempt_result", "attempt": 0, "event_id": "e-0",
+        attempts = [{"kind": "attempt_started", "attempt": 0, "event_id": "e-0", "device_id": "fixture-device"}, {
+            "kind": "attempt_result", "attempt": 0, "event_id": "e-0", "device_id": "fixture-device",
             "http_status": 202, "connection_error": None, "reading_id": rid}]
-        row = {"id": rid, "device_id": "fixture-device", "processed_at": "2020-01-01T00:00:00Z"}
+        row = {"id": rid, "device_id": "fixture-device", "event_id": "e-0",
+               "received_at": "2020-01-01T00:00:00Z", "processed_at": "2020-01-01T00:00:00Z"}
         self.assertEqual(M.processed(attempts, [row], "fixture-device"), [rid])
         for rows in ([], [{**row, "processed_at": None}], [{**row, "device_id": "other"}], [row, row]):
             with self.assertRaises(RuntimeError):
@@ -304,14 +308,14 @@ class PreparationTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             M.processed(attempts[:1], [row], "fixture-device")
 
-    def simulate(self, mode="normal", guard_fail=False, uncertain_scale=False):
+    def simulate(self, mode="normal", guard_fail=False, uncertain_scale=False, signals_factory=None):
         temp = tempfile.TemporaryDirectory()
         self.addCleanup(temp.cleanup)
         evidence = M.Evidence(Path(temp.name) / "run", clock=Clock())
         clock = evidence.clock
         kube, guard, http = FakeKube(), FakeGuard(guard_fail), FakeHttp(clock, mode)
         kube.fail_zero = uncertain_scale
-        experiment = M.Experiment(kube, http, guard, evidence, clock, clock.sleep)
+        experiment = M.Experiment(kube, http, guard, evidence, clock, clock.sleep, signals_factory=signals_factory)
         http.experiment = experiment
         authorization = {"incident_authorized": True, "isolated": True, "isolation_review_ref": "fixture-review",
                          "context": "fixture", "namespace": "met07-fixture", "deployment_uid": "fixture-uid"}
@@ -360,7 +364,7 @@ class PreparationTests(unittest.TestCase):
             class Attempts:
                 api = "fixture"
                 n = 0
-                def request(inner, *args):
+                def request(inner, *args, **kwargs):
                     inner.n += 1
                     if inner.n == 1:
                         raise TimeoutError()
@@ -454,7 +458,7 @@ class PreparationTests(unittest.TestCase):
         class Connection:
             def __init__(inner, *args, **kwargs):
                 pass
-            def request(inner, *args):
+            def request(inner, *args, **kwargs):
                 pass
             def getresponse(inner):
                 return inner
@@ -474,13 +478,14 @@ class PreparationTests(unittest.TestCase):
         for wrong in (False, True):
             with self.subTest(wrong=wrong), tempfile.TemporaryDirectory() as folder:
                 saved, calls = state(), []
+                M.atomic_file(Path(folder) / "restore-state.json", saved)
                 original_exists = Path.exists
                 def exists(path):
                     return True if str(path) == "/run/systemd/system" else original_exists(path)
                 def launch(args, **kwargs):
                     calls.append(args)
-                    (Path(folder) / "guard-ready.json").write_text(json.dumps({
-                        "run": saved["run"], "uid": "foreign" if wrong else saved["uid"]}))
+                    M.atomic_file(Path(folder) / "guard-ready.json", {
+                        "run": saved["run"], "uid": "foreign" if wrong else saved["uid"], "identity": saved["identity"]})
                 guard = M.RemoteGuard()
                 with patch.object(M.sys, "platform", "linux"), patch.object(M, "boot_id", return_value="fixture-boot"), \
                         patch.object(M.subprocess, "run", side_effect=launch), patch.object(Path, "exists", exists):
@@ -494,6 +499,9 @@ class PreparationTests(unittest.TestCase):
                 self.assertNotIn("--user", calls[0])
                 self.assertIn("--property=Restart=on-failure", calls[0])
                 self.assertIn("watchdog", calls[0])
+                self.assertIn("--property=User=" + str(saved["identity"]["uid"]), calls[0])
+                self.assertIn("--property=Group=" + str(saved["identity"]["gid"]), calls[0])
+                self.assertIn("--property=UMask=0077", calls[0])
 
     def test_local_wall_clock_offset_does_not_change_server_anchor(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -506,6 +514,46 @@ class PreparationTests(unittest.TestCase):
                 experiment.sample()
             self.assertEqual(evidence.anchor["server_utc"], "2020-01-01T00:00:00+00:00")
             self.assertEqual(evidence.anchor["source"], "prometheus_time_scalar")
+
+    def test_optional_signals_start_before_load_and_collect_after_restore(self):
+        calls = []
+        class Observer:
+            mode = "fixture"
+            def __init__(inner, kube, http, uid, device):
+                inner.kube = kube
+            def start_follow(inner, start, evidence):
+                calls.append("start")
+                self.assertEqual(inner.kube.scales, [])
+                M.server_instant(start)
+            def stop_follow(inner):
+                calls.append("stop")
+                self.assertEqual(inner.kube.replicas, 1)
+            def collect(inner, phase, window, attempts, rows, evidence):
+                self.assertEqual(inner.kube.replicas, 1)
+                M.server_instant(window["start"])
+                M.processed(attempts, rows, rows[0]["device_id"])
+                calls.append(phase)
+        error, _, _, evidence = self.simulate(signals_factory=Observer)
+        self.assertIsNone(error)
+        self.assertEqual(calls, ["start", "stop", "before", "during", "after"])
+        result = json.loads((evidence.root / "acceptance.json").read_text())
+        self.assertEqual(result["signal_provenance"], "fixture")
+
+    def test_optional_signal_stream_failure_prevents_scaling(self):
+        calls = []
+        class Observer:
+            mode = "fixture"
+            def __init__(inner, *args):
+                pass
+            def start_follow(inner, *args):
+                raise RuntimeError("Fixture stream failed")
+            def stop_follow(inner):
+                calls.append("stopped")
+        error, kube, _, _ = self.simulate(signals_factory=Observer)
+        self.assertIsNotNone(error)
+        self.assertEqual(kube.scales, [])
+        self.assertEqual(calls, ["stopped"])
+
 
 
 if __name__ == "__main__":

@@ -39,3 +39,7 @@ No se recompiló la aplicación ni se repitió aquí clippy, la suite Rust, rust
 Se repitieron 49 pruebas aisladas de scripts y cuatro contratos de observabilidad, más la validación local del snapshot histórico ya guardado. Gitleaks no encontró secretos. La salida separada está en [validation-publication.txt](validation-publication.txt), marcada como validación local: no es una nueva observación de Azure ni prueba de un incidente. El snapshot real preparation-readonly.json y los dos logs originales se conservaron íntegros.
 
 Se ejecutó npm ci, core.hooksPath=.husky/_, cargo fmt --all -- --check y node --check del inspector, sin omitir controles. El commit usa los hooks instalados. No se ejecutó el inspector remoto en esta fase y no se escala, reinicia o genera carga. El PR #94 tiene otra rama de origen; la publicación no la modifica ni crea otro PR.
+
+## Revisión posterior de identidad y señales
+
+Los resultados originales de esta página y sus snapshots se conservan. La validación posterior (72 pruebas y cuatro contratos) y sus límites están en [hardening-identity-signals.md](hardening-identity-signals.md) y [validation-hardening.txt](validation-hardening.txt). Ninguna de estas pruebas ejecutó el incidente ni obtuvo observaciones cloud nuevas.
