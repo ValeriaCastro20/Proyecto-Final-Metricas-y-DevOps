@@ -1,0 +1,5 @@
+ssh -F NUL -o BatchMode=yes -o StrictHostKeyChecking=yes -o UpdateHostKeys=no -o ExitOnForwardFailure=yes -o IdentitiesOnly=yes -i C:/Users/itsis/.ssh/id_ed25519 -L 127.0.0.1:29090:127.0.0.1:29090 azureuser@eventos-b97e31.mexicocentral.cloudapp.azure.com 'sudo -n k3s kubectl --namespace eventos-development port-forward --address 127.0.0.1 service/prometheus 29090:9090'
+
+ssh -F NUL -o BatchMode=yes -o StrictHostKeyChecking=yes -o UpdateHostKeys=no -o ExitOnForwardFailure=yes -o IdentitiesOnly=yes -i C:/Users/itsis/.ssh/id_ed25519 -L 127.0.0.1:23000:127.0.0.1:23000 azureuser@eventos-b97e31.mexicocentral.cloudapp.azure.com 'sudo -n k3s kubectl --namespace eventos-development port-forward --address 127.0.0.1 service/grafana 23000:3000'
+
+ssh -F NUL -o BatchMode=yes -o StrictHostKeyChecking=yes -o UpdateHostKeys=no -o ExitOnForwardFailure=yes -o IdentitiesOnly=yes -i C:/Users/itsis/.ssh/id_ed25519 -L 127.0.0.1:26686:127.0.0.1:26686 azureuser@eventos-b97e31.mexicocentral.cloudapp.azure.com 'sudo -n k3s kubectl --namespace eventos-development port-forward --address 127.0.0.1 service/jaeger-collector 26686:16686'

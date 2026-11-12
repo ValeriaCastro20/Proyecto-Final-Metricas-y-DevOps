@@ -1,0 +1,638 @@
+{
+  "utc": "2026-11-12T04:06:43.109Z",
+  "results": [
+    {
+      "service": "event-service-api",
+      "url": "http://127.0.0.1:26686/api/traces?service=event-service-api&limit=20",
+      "http": 200,
+      "traces": [
+        {
+          "traceID": "934cfdedce347fbdf407b9db2a6b167b",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "e211d95738ad1510",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/metrics"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "af3f0229c7340d3772755de0e3006d5c",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "ebebcec6b8368243",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/ready"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "17c87480f8076131d950c97726681a77",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "5e69e142ab93169a",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/live"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "828b8e7c3bad58f570d22c9474cec696",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "c2e3d003ae2d250f",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/metrics"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "cfccb0b812a69459c10a27e217d05406",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "e77f36fa06672f33",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/ready"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "eb4623bd6ee3e235c1f5d86a6759eb2b",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "3d5fe85722bff391",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/metrics"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "bcb80cb0941d235f96b504e76b765422",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "1c4d9cd3a430d911",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/ready"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "5c8cc52c3a281e5baaf122e47d195c60",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "2c172df501468372",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/live"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "fe40fc2c8bff613f34b55c52b7eba4a2",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "5ad791931a22b40b",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/metrics"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "c1bd92278b32ec7d38e893ace83acd97",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "a444738948d96de2",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/ready"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "9e9430dd59bef7f84562a7d9152554f7",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "45618e699545099d",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/metrics"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "9aea2d183b441f1745034669ea489150",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "d62eed8ed587b451",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/ready"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "0c9bf9e28bb3c746c7d4a89fa1d48855",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "7e450b36f0882525",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/live"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "5cc7f786fca3dea31953f33182ef06dd",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "274ddbb3bcf8347b",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/metrics"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "49a0b294cb661f7409636b6abeb81f27",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "dfb2df658c167991",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/ready"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "3912822e66601da7ad684275c44a8453",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "e444a752e344067d",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/metrics"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "4cc8b32a46543302be7f00724b04c858",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "9408e40bcf96a06d",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/ready"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "00c159893137e693a1bcdc6048db6456",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "d950d2e4aa6761ca",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/live"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "a94dd682ed2a3d10a3d183c9e8958ca6",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "1098aa1990b49b89",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/metrics"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "3fae504bd258136799cc855998877113",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "operation": "http_request",
+              "spanID": "5ed8e51cb1d39b60",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/ready"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "service": "event-service-worker",
+      "url": "http://127.0.0.1:26686/api/traces?service=event-service-worker&limit=20",
+      "http": 200,
+      "traces": []
+    }
+  ]
+}

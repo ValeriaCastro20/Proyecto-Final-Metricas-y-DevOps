@@ -1,0 +1,30 @@
+﻿UTC=2026-11-12T04:00:26.2781381Z
+SCRIPT=docs/evidencia/MET-05/03-deploy.sh
+APPLY=jaeger.yaml
+configmap/event-service-telemetry created
+deployment.apps/jaeger created
+service/jaeger-collector created
+networkpolicy.networking.k8s.io/jaeger-from-event-service created
+networkpolicy.networking.k8s.io/event-service-to-jaeger created
+APPLY=k8-prometheus.yaml
+configmap/prometheus-config created
+deployment.apps/prometheus created
+service/prometheus created
+service/event-service-worker-metrics created
+networkpolicy.networking.k8s.io/prometheus-scrape created
+networkpolicy.networking.k8s.io/event-service-metrics created
+APPLY=grafana-dashboards.yaml
+configmap/grafana-dashboards created
+APPLY=grafana.yaml
+configmap/grafana-datasources created
+deployment.apps/grafana created
+service/grafana created
+networkpolicy.networking.k8s.io/grafana-to-prometheus created
+networkpolicy.networking.k8s.io/prometheus-from-grafana created
+Waiting for deployment "jaeger" rollout to finish: 0 of 1 updated replicas are available...
+deployment "jaeger" successfully rolled out
+Waiting for deployment "prometheus" rollout to finish: 0 of 1 updated replicas are available...
+deployment "prometheus" successfully rolled out
+Waiting for deployment "grafana" rollout to finish: 0 of 1 updated replicas are available...
+deployment "grafana" successfully rolled out
+EXIT_CODE=0

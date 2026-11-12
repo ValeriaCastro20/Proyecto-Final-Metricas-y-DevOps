@@ -1,0 +1,6 @@
+﻿UTC=2026-11-12T04:06:01.1264523Z
+SCRIPT=docs/evidencia/MET-05/07-dashboard-utf8.sh
+configmap/grafana-dashboards configured (dry run)
+configmap/grafana-dashboards configured (server dry run)
+configmap/grafana-dashboards configured
+EXIT_CODE=0

@@ -1,0 +1,1238 @@
+{
+  "utc": "2026-11-12T04:10:50.459Z",
+  "records": [
+    {
+      "name": "prometheus-ready",
+      "url": "http://127.0.0.1:29090/api/v1/status/runtimeinfo",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "startTime": "2026-11-12T04:00:03.440886683Z",
+          "CWD": "/prometheus",
+          "hostname": "prometheus-84687df8df-66knl",
+          "serverTime": "2026-11-12T04:10:28.951039529Z",
+          "reloadConfigSuccess": true,
+          "lastConfigTime": "2026-11-12T04:00:03Z",
+          "corruptionCount": 0,
+          "goroutineCount": 36,
+          "GOMAXPROCS": 1,
+          "GOMEMLIMIT": 483183820,
+          "GOGC": "75",
+          "GODEBUG": "",
+          "storageRetention": "2d"
+        }
+      }
+    },
+    {
+      "name": "targets",
+      "url": "http://127.0.0.1:29090/api/v1/targets",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "activeTargets": [
+            {
+              "discoveredLabels": {
+                "__address__": "event-service.eventos-development.svc.cluster.local:8000",
+                "__metrics_path__": "/metrics",
+                "__scheme__": "http",
+                "__scrape_interval__": "5s",
+                "__scrape_timeout__": "5s",
+                "job": "event-service"
+              },
+              "labels": {
+                "instance": "event-service.eventos-development.svc.cluster.local:8000",
+                "job": "event-service"
+              },
+              "scrapePool": "event-service",
+              "scrapeUrl": "http://event-service.eventos-development.svc.cluster.local:8000/metrics",
+              "globalUrl": "http://event-service.eventos-development.svc.cluster.local:8000/metrics",
+              "lastError": "",
+              "lastScrape": "2026-11-12T04:10:28.579871479Z",
+              "lastScrapeDuration": 0.000703793,
+              "health": "up",
+              "scrapeInterval": "5s",
+              "scrapeTimeout": "5s"
+            },
+            {
+              "discoveredLabels": {
+                "__address__": "event-service-worker-metrics.eventos-development.svc.cluster.local:9000",
+                "__metrics_path__": "/metrics",
+                "__scheme__": "http",
+                "__scrape_interval__": "5s",
+                "__scrape_timeout__": "5s",
+                "job": "event-service-worker"
+              },
+              "labels": {
+                "instance": "event-service-worker-metrics.eventos-development.svc.cluster.local:9000",
+                "job": "event-service-worker"
+              },
+              "scrapePool": "event-service-worker",
+              "scrapeUrl": "http://event-service-worker-metrics.eventos-development.svc.cluster.local:9000/metrics",
+              "globalUrl": "http://event-service-worker-metrics.eventos-development.svc.cluster.local:9000/metrics",
+              "lastError": "",
+              "lastScrape": "2026-11-12T04:10:25.223492021Z",
+              "lastScrapeDuration": 0.000303384,
+              "health": "up",
+              "scrapeInterval": "5s",
+              "scrapeTimeout": "5s"
+            }
+          ],
+          "droppedTargets": [],
+          "droppedTargetCounts": {
+            "event-service": 0,
+            "event-service-worker": 0
+          }
+        }
+      }
+    },
+    {
+      "name": "rules",
+      "url": "http://127.0.0.1:29090/api/v1/rules",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "groups": [
+            {
+              "name": "esc3-alerts",
+              "file": "/etc/prometheus/alerts.yml",
+              "rules": [
+                {
+                  "state": "inactive",
+                  "name": "HighProcessorLatency",
+                  "query": "rate(esc3_processor_duration_seconds_sum[1m]) / rate(esc3_processor_duration_seconds_count[1m]) > 0.5",
+                  "duration": 60,
+                  "keepFiringFor": 0,
+                  "labels": {
+                    "severity": "warning"
+                  },
+                  "annotations": {
+                    "description": "El tiempo medio de procesamiento superó los 0.5s en el último minuto.",
+                    "summary": "Alta latencia en procesamiento de eventos"
+                  },
+                  "alerts": [],
+                  "health": "ok",
+                  "evaluationTime": 0.000188233,
+                  "lastEvaluation": "2026-11-12T04:10:00.91050071Z",
+                  "type": "alerting"
+                },
+                {
+                  "state": "inactive",
+                  "name": "HighEventBacklog",
+                  "query": "esc3_events_backlog_total > 100",
+                  "duration": 120,
+                  "keepFiringFor": 0,
+                  "labels": {
+                    "severity": "critical"
+                  },
+                  "annotations": {
+                    "description": "El inbox transaccional tiene más de 100 eventos sin procesar.",
+                    "summary": "Acumulación crítica de eventos"
+                  },
+                  "alerts": [],
+                  "health": "ok",
+                  "evaluationTime": 0.00006114,
+                  "lastEvaluation": "2026-11-12T04:10:00.910693752Z",
+                  "type": "alerting"
+                }
+              ],
+              "interval": 60,
+              "limit": 0,
+              "evaluationTime": 0.00027556,
+              "lastEvaluation": "2026-11-12T04:10:00.910481033Z"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "grafana-health",
+      "url": "http://127.0.0.1:23000/api/health",
+      "http": 200,
+      "body": {
+        "database": "ok",
+        "version": "11.6.0",
+        "commit": "d2fdff9ee4d75c74bfd3a97c18a0b8e4d029f06e"
+      }
+    },
+    {
+      "name": "datasource",
+      "url": "http://127.0.0.1:23000/api/datasources/uid/event-service-prometheus",
+      "http": 200,
+      "body": {
+        "id": 1,
+        "uid": "event-service-prometheus",
+        "orgId": 1,
+        "name": "Prometheus",
+        "type": "prometheus",
+        "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+        "access": "proxy",
+        "url": "http://prometheus:9090",
+        "user": "",
+        "database": "",
+        "basicAuth": false,
+        "basicAuthUser": "",
+        "withCredentials": false,
+        "isDefault": true,
+        "jsonData": {},
+        "secureJsonFields": {},
+        "version": 1,
+        "readOnly": true,
+        "apiVersion": ""
+      }
+    },
+    {
+      "name": "provisioned-dashboard",
+      "url": "http://127.0.0.1:23000/api/dashboards/uid/event-service-met05",
+      "http": 200,
+      "body": {
+        "meta": {
+          "type": "db",
+          "canSave": false,
+          "canEdit": false,
+          "canAdmin": false,
+          "canStar": false,
+          "canDelete": false,
+          "slug": "esc3-c2b7-observabilidad-met-05",
+          "url": "/d/event-service-met05/esc3-c2b7-observabilidad-met-05",
+          "expires": "0001-01-01T00:00:00Z",
+          "created": "2026-11-12T04:00:28Z",
+          "updated": "2026-11-12T04:06:45Z",
+          "updatedBy": "Anonymous",
+          "createdBy": "Anonymous",
+          "version": 2,
+          "hasAcl": false,
+          "isFolder": false,
+          "folderId": 1,
+          "folderUid": "cg41jh9dg2cjkd",
+          "folderTitle": "ESC3",
+          "folderUrl": "/dashboards/f/cg41jh9dg2cjkd/esc3",
+          "provisioned": true,
+          "provisionedExternalId": "event-service-met05.json",
+          "annotationsPermissions": {
+            "dashboard": {
+              "canAdd": false,
+              "canEdit": false,
+              "canDelete": false
+            },
+            "organization": {
+              "canAdd": false,
+              "canEdit": false,
+              "canDelete": false
+            }
+          }
+        },
+        "dashboard": {
+          "id": 2,
+          "panels": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "event-service-prometheus"
+              },
+              "description": "Series reales; ausencia de datos no se sustituye por cero. Ventana de tasas: 5 minutos.",
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "ops"
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 0
+              },
+              "id": 1,
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+                },
+                "tooltip": {
+                  "mode": "multi"
+                }
+              },
+              "targets": [
+                {
+                  "expr": "sum by (outcome) (rate(esc3_events_received_total{job=\"event-service\"}[5m]))",
+                  "legendFormat": "{{outcome}}",
+                  "refId": "A"
+                }
+              ],
+              "title": "Recepción por resultado",
+              "type": "timeseries"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "event-service-prometheus"
+              },
+              "description": "Series reales; ausencia de datos no se sustituye por cero. Ventana de tasas: 5 minutos.",
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "ops"
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 0
+              },
+              "id": 2,
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+                },
+                "tooltip": {
+                  "mode": "multi"
+                }
+              },
+              "targets": [
+                {
+                  "expr": "sum(rate(esc3_events_processed_total{job=\"event-service-worker\"}[5m]))",
+                  "legendFormat": "procesadas/s",
+                  "refId": "A"
+                }
+              ],
+              "title": "Procesamiento por segundo",
+              "type": "timeseries"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "event-service-prometheus"
+              },
+              "description": "Series reales; ausencia de datos no se sustituye por cero. Ventana de tasas: 5 minutos.",
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short"
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 8
+              },
+              "id": 3,
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+                },
+                "tooltip": {
+                  "mode": "multi"
+                }
+              },
+              "targets": [
+                {
+                  "expr": "esc3_events_backlog_total{job=\"event-service\"}",
+                  "legendFormat": "{{instance}}",
+                  "refId": "A"
+                }
+              ],
+              "title": "Backlog",
+              "type": "timeseries"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "event-service-prometheus"
+              },
+              "description": "Series reales; ausencia de datos no se sustituye por cero. Ventana de tasas: 5 minutos.",
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "s"
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 8
+              },
+              "id": 4,
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+                },
+                "tooltip": {
+                  "mode": "multi"
+                }
+              },
+              "targets": [
+                {
+                  "expr": "histogram_quantile(0.95, sum by (le, route) (rate(http_request_duration_seconds_bucket{job=\"event-service\"}[5m])))",
+                  "legendFormat": "{{route}}",
+                  "refId": "A"
+                }
+              ],
+              "title": "Latencia HTTP p95",
+              "type": "timeseries"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "event-service-prometheus"
+              },
+              "description": "Series reales; ausencia de datos no se sustituye por cero. Ventana de tasas: 5 minutos.",
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "s"
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 16
+              },
+              "id": 5,
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+                },
+                "tooltip": {
+                  "mode": "multi"
+                }
+              },
+              "targets": [
+                {
+                  "expr": "histogram_quantile(0.95, sum by (le) (rate(esc3_processor_duration_seconds_bucket{job=\"event-service-worker\"}[5m])))",
+                  "legendFormat": "p95",
+                  "refId": "A"
+                }
+              ],
+              "title": "Duración de lote p95",
+              "type": "timeseries"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "event-service-prometheus"
+              },
+              "description": "Series reales; ausencia de datos no se sustituye por cero. Ventana de tasas: 5 minutos.",
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "ops"
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 16
+              },
+              "id": 6,
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+                },
+                "tooltip": {
+                  "mode": "multi"
+                }
+              },
+              "targets": [
+                {
+                  "expr": "sum by (status) (rate(http_requests_total{job=\"event-service\"}[5m]))",
+                  "legendFormat": "{{status}}",
+                  "refId": "A"
+                }
+              ],
+              "title": "Estados HTTP",
+              "type": "timeseries"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "event-service-prometheus"
+              },
+              "description": "Series reales; ausencia de datos no se sustituye por cero. Ventana de tasas: 5 minutos.",
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short"
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 24
+              },
+              "id": 7,
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+                },
+                "tooltip": {
+                  "mode": "multi"
+                }
+              },
+              "targets": [
+                {
+                  "expr": "up{job=~\"event-service|event-service-worker\"}",
+                  "legendFormat": "{{job}}",
+                  "refId": "A"
+                }
+              ],
+              "title": "Salud de targets",
+              "type": "timeseries"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "event-service-prometheus"
+              },
+              "description": "Series reales; ausencia de datos no se sustituye por cero. Ventana de tasas: 5 minutos.",
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "s"
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 24
+              },
+              "id": 8,
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+                },
+                "tooltip": {
+                  "mode": "multi"
+                }
+              },
+              "targets": [
+                {
+                  "expr": "sum(rate(esc3_processor_duration_seconds_sum{job=\"event-service-worker\"}[5m])) / sum(rate(esc3_processor_duration_seconds_count{job=\"event-service-worker\"}[5m]))",
+                  "legendFormat": "media",
+                  "refId": "A"
+                }
+              ],
+              "title": "Duración media de lotes",
+              "type": "timeseries"
+            }
+          ],
+          "refresh": "10s",
+          "schemaVersion": 40,
+          "tags": [
+            "MET-05",
+            "ESC3"
+          ],
+          "time": {
+            "from": "now-30m",
+            "to": "now"
+          },
+          "timezone": "browser",
+          "title": "ESC3 · Observabilidad MET-05",
+          "uid": "event-service-met05",
+          "version": 2
+        }
+      }
+    },
+    {
+      "name": "panel-1-prometheus",
+      "url": "http://127.0.0.1:29090/api/v1/query?query=sum%20by%20(outcome)%20(rate(esc3_events_received_total%7Bjob%3D%22event-service%22%7D%5B5m%5D))",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": []
+        }
+      }
+    },
+    {
+      "name": "panel-1-grafana-proxy",
+      "url": "http://127.0.0.1:23000/api/datasources/proxy/uid/event-service-prometheus/api/v1/query?query=sum%20by%20(outcome)%20(rate(esc3_events_received_total%7Bjob%3D%22event-service%22%7D%5B5m%5D))",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": []
+        }
+      }
+    },
+    {
+      "name": "panel-2-prometheus",
+      "url": "http://127.0.0.1:29090/api/v1/query?query=sum(rate(esc3_events_processed_total%7Bjob%3D%22event-service-worker%22%7D%5B5m%5D))",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": [
+            {
+              "metric": {},
+              "value": [
+                1794456630.792,
+                "0"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "panel-2-grafana-proxy",
+      "url": "http://127.0.0.1:23000/api/datasources/proxy/uid/event-service-prometheus/api/v1/query?query=sum(rate(esc3_events_processed_total%7Bjob%3D%22event-service-worker%22%7D%5B5m%5D))",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": [
+            {
+              "metric": {},
+              "value": [
+                1794456631,
+                "0"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "panel-3-prometheus",
+      "url": "http://127.0.0.1:29090/api/v1/query?query=esc3_events_backlog_total%7Bjob%3D%22event-service%22%7D",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": [
+            {
+              "metric": {
+                "__name__": "esc3_events_backlog_total",
+                "instance": "event-service.eventos-development.svc.cluster.local:8000",
+                "job": "event-service"
+              },
+              "value": [
+                1794456631.206,
+                "0"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "panel-3-grafana-proxy",
+      "url": "http://127.0.0.1:23000/api/datasources/proxy/uid/event-service-prometheus/api/v1/query?query=esc3_events_backlog_total%7Bjob%3D%22event-service%22%7D",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": [
+            {
+              "metric": {
+                "__name__": "esc3_events_backlog_total",
+                "instance": "event-service.eventos-development.svc.cluster.local:8000",
+                "job": "event-service"
+              },
+              "value": [
+                1794456631.408,
+                "0"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "panel-4-prometheus",
+      "url": "http://127.0.0.1:29090/api/v1/query?query=histogram_quantile(0.95%2C%20sum%20by%20(le%2C%20route)%20(rate(http_request_duration_seconds_bucket%7Bjob%3D%22event-service%22%7D%5B5m%5D)))",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": [
+            {
+              "metric": {
+                "route": "/health/live"
+              },
+              "value": [
+                1794456631.61,
+                "0.00475"
+              ]
+            },
+            {
+              "metric": {
+                "route": "/health/ready"
+              },
+              "value": [
+                1794456631.61,
+                "0.00475"
+              ]
+            },
+            {
+              "metric": {
+                "route": "/metrics"
+              },
+              "value": [
+                1794456631.61,
+                "0.00475"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "panel-4-grafana-proxy",
+      "url": "http://127.0.0.1:23000/api/datasources/proxy/uid/event-service-prometheus/api/v1/query?query=histogram_quantile(0.95%2C%20sum%20by%20(le%2C%20route)%20(rate(http_request_duration_seconds_bucket%7Bjob%3D%22event-service%22%7D%5B5m%5D)))",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": [
+            {
+              "metric": {
+                "route": "/metrics"
+              },
+              "value": [
+                1794456631.82,
+                "0.00475"
+              ]
+            },
+            {
+              "metric": {
+                "route": "/health/live"
+              },
+              "value": [
+                1794456631.82,
+                "0.00475"
+              ]
+            },
+            {
+              "metric": {
+                "route": "/health/ready"
+              },
+              "value": [
+                1794456631.82,
+                "0.00475"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "panel-5-prometheus",
+      "url": "http://127.0.0.1:29090/api/v1/query?query=histogram_quantile(0.95%2C%20sum%20by%20(le)%20(rate(esc3_processor_duration_seconds_bucket%7Bjob%3D%22event-service-worker%22%7D%5B5m%5D)))",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": []
+        }
+      }
+    },
+    {
+      "name": "panel-5-grafana-proxy",
+      "url": "http://127.0.0.1:23000/api/datasources/proxy/uid/event-service-prometheus/api/v1/query?query=histogram_quantile(0.95%2C%20sum%20by%20(le)%20(rate(esc3_processor_duration_seconds_bucket%7Bjob%3D%22event-service-worker%22%7D%5B5m%5D)))",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": []
+        }
+      }
+    },
+    {
+      "name": "panel-6-prometheus",
+      "url": "http://127.0.0.1:29090/api/v1/query?query=sum%20by%20(status)%20(rate(http_requests_total%7Bjob%3D%22event-service%22%7D%5B5m%5D))",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": [
+            {
+              "metric": {
+                "status": "200"
+              },
+              "value": [
+                1794456632.324,
+                "0.5016949152542373"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "panel-6-grafana-proxy",
+      "url": "http://127.0.0.1:23000/api/datasources/proxy/uid/event-service-prometheus/api/v1/query?query=sum%20by%20(status)%20(rate(http_requests_total%7Bjob%3D%22event-service%22%7D%5B5m%5D))",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": [
+            {
+              "metric": {
+                "status": "200"
+              },
+              "value": [
+                1794456632.541,
+                "0.5016949152542373"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "panel-7-prometheus",
+      "url": "http://127.0.0.1:29090/api/v1/query?query=up%7Bjob%3D~%22event-service%7Cevent-service-worker%22%7D",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": [
+            {
+              "metric": {
+                "__name__": "up",
+                "instance": "event-service.eventos-development.svc.cluster.local:8000",
+                "job": "event-service"
+              },
+              "value": [
+                1794456632.742,
+                "1"
+              ]
+            },
+            {
+              "metric": {
+                "__name__": "up",
+                "instance": "event-service-worker-metrics.eventos-development.svc.cluster.local:9000",
+                "job": "event-service-worker"
+              },
+              "value": [
+                1794456632.742,
+                "1"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "panel-7-grafana-proxy",
+      "url": "http://127.0.0.1:23000/api/datasources/proxy/uid/event-service-prometheus/api/v1/query?query=up%7Bjob%3D~%22event-service%7Cevent-service-worker%22%7D",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": [
+            {
+              "metric": {
+                "__name__": "up",
+                "instance": "event-service.eventos-development.svc.cluster.local:8000",
+                "job": "event-service"
+              },
+              "value": [
+                1794456632.944,
+                "1"
+              ]
+            },
+            {
+              "metric": {
+                "__name__": "up",
+                "instance": "event-service-worker-metrics.eventos-development.svc.cluster.local:9000",
+                "job": "event-service-worker"
+              },
+              "value": [
+                1794456632.944,
+                "1"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "panel-8-prometheus",
+      "url": "http://127.0.0.1:29090/api/v1/query?query=sum(rate(esc3_processor_duration_seconds_sum%7Bjob%3D%22event-service-worker%22%7D%5B5m%5D))%20%2F%20sum(rate(esc3_processor_duration_seconds_count%7Bjob%3D%22event-service-worker%22%7D%5B5m%5D))",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": []
+        }
+      }
+    },
+    {
+      "name": "panel-8-grafana-proxy",
+      "url": "http://127.0.0.1:23000/api/datasources/proxy/uid/event-service-prometheus/api/v1/query?query=sum(rate(esc3_processor_duration_seconds_sum%7Bjob%3D%22event-service-worker%22%7D%5B5m%5D))%20%2F%20sum(rate(esc3_processor_duration_seconds_count%7Bjob%3D%22event-service-worker%22%7D%5B5m%5D))",
+      "http": 200,
+      "body": {
+        "status": "success",
+        "data": {
+          "resultType": "vector",
+          "result": []
+        }
+      }
+    },
+    {
+      "name": "jaeger-services",
+      "url": "http://127.0.0.1:26686/api/services",
+      "http": 200,
+      "body": {
+        "data": [
+          "event-service-api",
+          "jaeger-all-in-one"
+        ],
+        "total": 2,
+        "limit": 0,
+        "offset": 0,
+        "errors": null
+      }
+    },
+    {
+      "name": "jaeger-traces-safe-summary",
+      "http": 200,
+      "traces": [
+        {
+          "traceID": "5841374088925899dee85f8b19b67715",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "spanID": "5dcac5a06ba3f03c",
+              "operationName": "http_request",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/metrics"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "2d80a3dce6fc4025bddf8459d56040cc",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "spanID": "7d7f03ebc25c0600",
+              "operationName": "http_request",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/ready"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "518fe8b541b66f4188ae386d999054ab",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "spanID": "6299483fae0651d1",
+              "operationName": "http_request",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/live"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "ecc2db98e3bfe2a270e74aab0023d875",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "spanID": "b246c6859f806ab3",
+              "operationName": "http_request",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/metrics"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "7595e15db52b4bf9d3ebf6a63797ef00",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "spanID": "d0f073e12945f916",
+              "operationName": "http_request",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/ready"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "b17a9135a3992886d0e4f48fea50bcdf",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "spanID": "ebdc15d9f17fafa4",
+              "operationName": "http_request",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/metrics"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "3fd57eeb3e9b75e92f480719dea4487f",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "spanID": "862e5e552033bdc6",
+              "operationName": "http_request",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/ready"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "e78925b2477297872bfe0e41fb9259c6",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "spanID": "3072bea35e0aea23",
+              "operationName": "http_request",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/live"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "b49f4e47101025225dcdf9c0830d1e0b",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "spanID": "8f9d812ae46bd526",
+              "operationName": "http_request",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/metrics"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "traceID": "3c6810e548b56b14ea7e011869b4d435",
+          "services": [
+            "event-service-api"
+          ],
+          "spans": [
+            {
+              "spanID": "46653b0eaa762f14",
+              "operationName": "http_request",
+              "processID": "p1",
+              "references": [],
+              "tags": [
+                {
+                  "key": "component",
+                  "type": "string",
+                  "value": "api"
+                },
+                {
+                  "key": "route",
+                  "type": "string",
+                  "value": "/health/ready"
+                },
+                {
+                  "key": "status",
+                  "type": "string",
+                  "value": "200"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

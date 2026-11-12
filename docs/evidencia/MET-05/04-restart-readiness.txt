@@ -1,0 +1,29 @@
+﻿UTC=2026-11-12T04:03:30.7142723Z
+SCRIPT=docs/evidencia/MET-05/04-restart-readiness.sh
+Checking /etc/prometheus/prometheus.yml
+  SUCCESS: 1 rule files found
+ SUCCESS: /etc/prometheus/prometheus.yml is valid prometheus config file syntax
+
+Checking /etc/prometheus/alerts.yml
+  SUCCESS: 2 rules found
+
+deployment.apps/event-service-api restarted
+Waiting for deployment "event-service-api" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "event-service-api" rollout to finish: 1 old replicas are pending termination...
+deployment "event-service-api" successfully rolled out
+deployment.apps/event-service-worker restarted
+Waiting for deployment "event-service-worker" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "event-service-worker" rollout to finish: 1 old replicas are pending termination...
+deployment "event-service-worker" successfully rolled out
+pod/event-service-api-57b4978887-rh9jj condition met
+ssh.exe : timed out waiting for the condition on pods/event-service-migrate-17b4e6051228fd27-qzdvf
+At C:\Users\itsis\OneDrive\Desktop\devops y metricas de 
+software\Proyecto\Proyecto-observabilidad-met05\docs\evidencia\MET-05\Invoke-Remote.ps1:5 char:22
++ ...  $encoded | & ssh -F NUL -o BatchMode=yes -o StrictHostKeyChecking=ye ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (timed out waiti...51228fd27-qzdvf:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+timed out waiting for the condition on pods/event-service-worker-676865cbdb-lxzft
+timed out waiting for the condition on pods/event-service-worker-7ffccb7cf6-564dz
+EXIT_CODE=1

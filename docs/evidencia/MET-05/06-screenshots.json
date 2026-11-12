@@ -1,0 +1,59 @@
+[
+  {
+    "name": "grafana-dashboard.png",
+    "url": "http://127.0.0.1:23000/d/event-service-met05?orgId=1&from=now-30m&to=now&kiosk",
+    "command": [
+      "C:/Program Files/Google/Chrome/Application/chrome.exe",
+      "--headless=new",
+      "--disable-gpu",
+      "--no-first-run",
+      "--no-default-browser-check",
+      "--user-data-dir=C:\\Users\\itsis\\AppData\\Local\\Temp\\met05-chrome-9xlIt0",
+      "--window-size=1600,1600",
+      "--virtual-time-budget=15000",
+      "--screenshot=C:\\Users\\itsis\\OneDrive\\Desktop\\devops y metricas de software\\Proyecto\\Proyecto-observabilidad-met05\\docs\\evidencia\\MET-05\\grafana-dashboard.png",
+      "http://127.0.0.1:23000/d/event-service-met05?orgId=1&from=now-30m&to=now&kiosk"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": "97994 bytes written to file C:\\Users\\itsis\\OneDrive\\Desktop\\devops y metricas de software\\Proyecto\\Proyecto-observabilidad-met05\\docs\\evidencia\\MET-05\\grafana-dashboard.png\r\n"
+  },
+  {
+    "name": "prometheus-targets.png",
+    "url": "http://127.0.0.1:29090/targets",
+    "command": [
+      "C:/Program Files/Google/Chrome/Application/chrome.exe",
+      "--headless=new",
+      "--disable-gpu",
+      "--no-first-run",
+      "--no-default-browser-check",
+      "--user-data-dir=C:\\Users\\itsis\\AppData\\Local\\Temp\\met05-chrome-Lfb73V",
+      "--window-size=1600,1600",
+      "--virtual-time-budget=15000",
+      "--screenshot=C:\\Users\\itsis\\OneDrive\\Desktop\\devops y metricas de software\\Proyecto\\Proyecto-observabilidad-met05\\docs\\evidencia\\MET-05\\prometheus-targets.png",
+      "http://127.0.0.1:29090/targets"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": "51433 bytes written to file C:\\Users\\itsis\\OneDrive\\Desktop\\devops y metricas de software\\Proyecto\\Proyecto-observabilidad-met05\\docs\\evidencia\\MET-05\\prometheus-targets.png\r\n"
+  },
+  {
+    "name": "jaeger-traces.png",
+    "url": "http://127.0.0.1:26686/search?service=event-service-api&limit=20&lookback=1h",
+    "command": [
+      "C:/Program Files/Google/Chrome/Application/chrome.exe",
+      "--headless=new",
+      "--disable-gpu",
+      "--no-first-run",
+      "--no-default-browser-check",
+      "--user-data-dir=C:\\Users\\itsis\\AppData\\Local\\Temp\\met05-chrome-du2STh",
+      "--window-size=1600,1600",
+      "--virtual-time-budget=15000",
+      "--screenshot=C:\\Users\\itsis\\OneDrive\\Desktop\\devops y metricas de software\\Proyecto\\Proyecto-observabilidad-met05\\docs\\evidencia\\MET-05\\jaeger-traces.png",
+      "http://127.0.0.1:26686/search?service=event-service-api&limit=20&lookback=1h"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": "119672 bytes written to file C:\\Users\\itsis\\OneDrive\\Desktop\\devops y metricas de software\\Proyecto\\Proyecto-observabilidad-met05\\docs\\evidencia\\MET-05\\jaeger-traces.png\r\n"
+  }
+]

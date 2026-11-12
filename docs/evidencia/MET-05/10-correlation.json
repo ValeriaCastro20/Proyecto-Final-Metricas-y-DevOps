@@ -1,0 +1,668 @@
+{
+  "utc": "2026-11-12T05:16:30.353Z",
+  "source": "09-functional.json",
+  "device_id": "load-met05-20261112051300975-8c6a5f",
+  "originalFailure": "API to worker parent correlation",
+  "note": "Local and Azure clocks differ; bounded query uses durable server received_at/processed_at plus 60-second margin, then matches reading UUIDs. No additional writes.",
+  "query": {
+    "start": 1794460308059000,
+    "end": 1794460437140000
+  },
+  "traces": [
+    {
+      "traceID": "7e1f6ff684f5fa3f72b938fc7b223799",
+      "processes": {
+        "p1": {
+          "serviceName": "event-service-worker"
+        },
+        "p2": {
+          "serviceName": "event-service-api"
+        }
+      },
+      "spans": [
+        {
+          "spanID": "478b3fac830a1273",
+          "operationName": "process_reading",
+          "processID": "p1",
+          "startTime": 1794460375097659,
+          "duration": 2426,
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "7e1f6ff684f5fa3f72b938fc7b223799",
+              "spanID": "e45ebabf6eb5f66f"
+            }
+          ],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "worker"
+            },
+            {
+              "key": "reading_id",
+              "type": "string",
+              "value": "967d3bc1-e8df-4c96-9e0f-5ca186e956af"
+            }
+          ]
+        },
+        {
+          "spanID": "e45ebabf6eb5f66f",
+          "operationName": "http_request",
+          "processID": "p2",
+          "startTime": 1794460375063851,
+          "duration": 8751,
+          "references": [],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "api"
+            },
+            {
+              "key": "route",
+              "type": "string",
+              "value": "/v1/readings"
+            },
+            {
+              "key": "status",
+              "type": "string",
+              "value": "202"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "traceID": "187baf275c25bd849696e2deebebcdc0",
+      "processes": {
+        "p1": {
+          "serviceName": "event-service-worker"
+        },
+        "p2": {
+          "serviceName": "event-service-api"
+        }
+      },
+      "spans": [
+        {
+          "spanID": "245e782a435aa32b",
+          "operationName": "process_reading",
+          "processID": "p1",
+          "startTime": 1794460369166859,
+          "duration": 2537,
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "187baf275c25bd849696e2deebebcdc0",
+              "spanID": "ec3970c831ae23eb"
+            }
+          ],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "worker"
+            },
+            {
+              "key": "reading_id",
+              "type": "string",
+              "value": "ee9bb51d-a6c2-462b-afa9-82bf984ef334"
+            }
+          ]
+        },
+        {
+          "spanID": "ec3970c831ae23eb",
+          "operationName": "http_request",
+          "processID": "p2",
+          "startTime": 1794460369064096,
+          "duration": 9840,
+          "references": [],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "api"
+            },
+            {
+              "key": "route",
+              "type": "string",
+              "value": "/v1/readings"
+            },
+            {
+              "key": "status",
+              "type": "string",
+              "value": "202"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "traceID": "d2217c69229a23d7ab1a3ff40f3bafaa",
+      "processes": {
+        "p1": {
+          "serviceName": "event-service-worker"
+        },
+        "p2": {
+          "serviceName": "event-service-api"
+        }
+      },
+      "spans": [
+        {
+          "spanID": "f4e50e3938eed3a6",
+          "operationName": "process_reading",
+          "processID": "p1",
+          "startTime": 1794460372130214,
+          "duration": 2660,
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "d2217c69229a23d7ab1a3ff40f3bafaa",
+              "spanID": "22f7e9659c69928e"
+            }
+          ],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "worker"
+            },
+            {
+              "key": "reading_id",
+              "type": "string",
+              "value": "77f20071-0202-4dcf-9106-9211426ad4ea"
+            }
+          ]
+        },
+        {
+          "spanID": "22f7e9659c69928e",
+          "operationName": "http_request",
+          "processID": "p2",
+          "startTime": 1794460372061560,
+          "duration": 12162,
+          "references": [],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "api"
+            },
+            {
+              "key": "route",
+              "type": "string",
+              "value": "/v1/readings"
+            },
+            {
+              "key": "status",
+              "type": "string",
+              "value": "202"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "traceID": "323e7c5323ce51c77c6c381ea7a0ce58",
+      "processes": {
+        "p1": {
+          "serviceName": "event-service-worker"
+        },
+        "p2": {
+          "serviceName": "event-service-api"
+        }
+      },
+      "spans": [
+        {
+          "spanID": "ff5876ca674bc36f",
+          "operationName": "process_reading",
+          "processID": "p1",
+          "startTime": 1794460368144032,
+          "duration": 2491,
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "323e7c5323ce51c77c6c381ea7a0ce58",
+              "spanID": "754647659a5f2f70"
+            }
+          ],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "worker"
+            },
+            {
+              "key": "reading_id",
+              "type": "string",
+              "value": "7f1d258d-79d2-4c41-871f-6c6499e47124"
+            }
+          ]
+        },
+        {
+          "spanID": "754647659a5f2f70",
+          "operationName": "http_request",
+          "processID": "p2",
+          "startTime": 1794460368058226,
+          "duration": 12351,
+          "references": [],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "api"
+            },
+            {
+              "key": "route",
+              "type": "string",
+              "value": "/v1/readings"
+            },
+            {
+              "key": "status",
+              "type": "string",
+              "value": "202"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "traceID": "ad33bfb037eafe39a500aef478a85a6e",
+      "processes": {
+        "p1": {
+          "serviceName": "event-service-worker"
+        },
+        "p2": {
+          "serviceName": "event-service-api"
+        }
+      },
+      "spans": [
+        {
+          "spanID": "1e206ebdf0cc02bb",
+          "operationName": "process_reading",
+          "processID": "p1",
+          "startTime": 1794460370087105,
+          "duration": 2358,
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "ad33bfb037eafe39a500aef478a85a6e",
+              "spanID": "01a3f71b3a7ecf0c"
+            }
+          ],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "worker"
+            },
+            {
+              "key": "reading_id",
+              "type": "string",
+              "value": "c4380f26-e604-4002-96d8-cf911cd8dc39"
+            }
+          ]
+        },
+        {
+          "spanID": "01a3f71b3a7ecf0c",
+          "operationName": "http_request",
+          "processID": "p2",
+          "startTime": 1794460370066700,
+          "duration": 8921,
+          "references": [],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "api"
+            },
+            {
+              "key": "route",
+              "type": "string",
+              "value": "/v1/readings"
+            },
+            {
+              "key": "status",
+              "type": "string",
+              "value": "202"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "traceID": "1522f9497521b1f1eaeb45c628750892",
+      "processes": {
+        "p1": {
+          "serviceName": "event-service-worker"
+        },
+        "p2": {
+          "serviceName": "event-service-api"
+        }
+      },
+      "spans": [
+        {
+          "spanID": "1d49d225aa3e0328",
+          "operationName": "process_reading",
+          "processID": "p1",
+          "startTime": 1794460371110295,
+          "duration": 2705,
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "1522f9497521b1f1eaeb45c628750892",
+              "spanID": "b0a26c71b305a1a2"
+            }
+          ],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "worker"
+            },
+            {
+              "key": "reading_id",
+              "type": "string",
+              "value": "f41e90bb-47ef-47d1-8031-e2fcacad21c8"
+            }
+          ]
+        },
+        {
+          "spanID": "b0a26c71b305a1a2",
+          "operationName": "http_request",
+          "processID": "p2",
+          "startTime": 1794460371062258,
+          "duration": 7374,
+          "references": [],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "api"
+            },
+            {
+              "key": "route",
+              "type": "string",
+              "value": "/v1/readings"
+            },
+            {
+              "key": "status",
+              "type": "string",
+              "value": "202"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "traceID": "6728a686ad0ccab4413e194b0eeacaa5",
+      "processes": {
+        "p1": {
+          "serviceName": "event-service-worker"
+        },
+        "p2": {
+          "serviceName": "event-service-api"
+        }
+      },
+      "spans": [
+        {
+          "spanID": "6c4151775a24f550",
+          "operationName": "process_reading",
+          "processID": "p1",
+          "startTime": 1794460377139895,
+          "duration": 2570,
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "6728a686ad0ccab4413e194b0eeacaa5",
+              "spanID": "87c3812c66ab3117"
+            }
+          ],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "worker"
+            },
+            {
+              "key": "reading_id",
+              "type": "string",
+              "value": "1fa58e44-0712-4322-8580-4d6beb21d2b8"
+            }
+          ]
+        },
+        {
+          "spanID": "87c3812c66ab3117",
+          "operationName": "http_request",
+          "processID": "p2",
+          "startTime": 1794460377062242,
+          "duration": 8644,
+          "references": [],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "api"
+            },
+            {
+              "key": "route",
+              "type": "string",
+              "value": "/v1/readings"
+            },
+            {
+              "key": "status",
+              "type": "string",
+              "value": "202"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "traceID": "6f5b0c5076f811eb46b7337c71bfa61f",
+      "processes": {
+        "p1": {
+          "serviceName": "event-service-worker"
+        },
+        "p2": {
+          "serviceName": "event-service-api"
+        }
+      },
+      "spans": [
+        {
+          "spanID": "aa87be40d17c106f",
+          "operationName": "process_reading",
+          "processID": "p1",
+          "startTime": 1794460373152873,
+          "duration": 2316,
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "6f5b0c5076f811eb46b7337c71bfa61f",
+              "spanID": "7c62fcfffe4f29af"
+            }
+          ],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "worker"
+            },
+            {
+              "key": "reading_id",
+              "type": "string",
+              "value": "1bb3b1a5-4418-4819-a501-f3139a081e12"
+            }
+          ]
+        },
+        {
+          "spanID": "7c62fcfffe4f29af",
+          "operationName": "http_request",
+          "processID": "p2",
+          "startTime": 1794460373085468,
+          "duration": 8478,
+          "references": [],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "api"
+            },
+            {
+              "key": "route",
+              "type": "string",
+              "value": "/v1/readings"
+            },
+            {
+              "key": "status",
+              "type": "string",
+              "value": "202"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "traceID": "cf3db3cb2c0f5de91f9be60c014639c2",
+      "processes": {
+        "p1": {
+          "serviceName": "event-service-worker"
+        },
+        "p2": {
+          "serviceName": "event-service-api"
+        }
+      },
+      "spans": [
+        {
+          "spanID": "8529e26c9a3e4424",
+          "operationName": "process_reading",
+          "processID": "p1",
+          "startTime": 1794460376118425,
+          "duration": 2151,
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "cf3db3cb2c0f5de91f9be60c014639c2",
+              "spanID": "e5fa52409fbfacbf"
+            }
+          ],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "worker"
+            },
+            {
+              "key": "reading_id",
+              "type": "string",
+              "value": "938c17d7-db3f-47b5-ad3a-18dc8bd18f0e"
+            }
+          ]
+        },
+        {
+          "spanID": "e5fa52409fbfacbf",
+          "operationName": "http_request",
+          "processID": "p2",
+          "startTime": 1794460376107852,
+          "duration": 9139,
+          "references": [],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "api"
+            },
+            {
+              "key": "route",
+              "type": "string",
+              "value": "/v1/readings"
+            },
+            {
+              "key": "status",
+              "type": "string",
+              "value": "202"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "traceID": "d6f7bf765a64d3018deb7a10319f5ffb",
+      "processes": {
+        "p1": {
+          "serviceName": "event-service-worker"
+        },
+        "p2": {
+          "serviceName": "event-service-api"
+        }
+      },
+      "spans": [
+        {
+          "spanID": "3b7e96fab8ba4c63",
+          "operationName": "process_reading",
+          "processID": "p1",
+          "startTime": 1794460374177057,
+          "duration": 2572,
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "d6f7bf765a64d3018deb7a10319f5ffb",
+              "spanID": "a0bb24eb138bc014"
+            }
+          ],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "worker"
+            },
+            {
+              "key": "reading_id",
+              "type": "string",
+              "value": "26eb41d9-515d-446c-b213-12630abc22de"
+            }
+          ]
+        },
+        {
+          "spanID": "a0bb24eb138bc014",
+          "operationName": "http_request",
+          "processID": "p2",
+          "startTime": 1794460374068101,
+          "duration": 8258,
+          "references": [],
+          "tags": [
+            {
+              "key": "component",
+              "type": "string",
+              "value": "api"
+            },
+            {
+              "key": "route",
+              "type": "string",
+              "value": "/v1/readings"
+            },
+            {
+              "key": "status",
+              "type": "string",
+              "value": "202"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "url": "http://127.0.0.1:26686/api/traces?service=event-service-worker&operation=process_reading&limit=100&start=1794460308059000&end=1794460437140000",
+  "http": 200,
+  "coveredReadings": [
+    "967d3bc1-e8df-4c96-9e0f-5ca186e956af",
+    "ee9bb51d-a6c2-462b-afa9-82bf984ef334",
+    "77f20071-0202-4dcf-9106-9211426ad4ea",
+    "7f1d258d-79d2-4c41-871f-6c6499e47124",
+    "c4380f26-e604-4002-96d8-cf911cd8dc39",
+    "f41e90bb-47ef-47d1-8031-e2fcacad21c8",
+    "1fa58e44-0712-4322-8580-4d6beb21d2b8",
+    "1bb3b1a5-4418-4819-a501-f3139a081e12",
+    "938c17d7-db3f-47b5-ad3a-18dc8bd18f0e",
+    "26eb41d9-515d-446c-b213-12630abc22de"
+  ],
+  "passed": true
+}

@@ -1,0 +1,20 @@
+﻿UTC=2026-11-12T03:58:05.8509812Z
+SCRIPT=docs/evidencia/MET-05/01-capacity.sh
+allocatable={'cpu': '2', 'ephemeral-storage': '62173523510', 'hugepages-1Gi': '0', 'hugepages-2Mi': '0', 'memory': '8121964Ki', 'pods': '110'}
+conditions=[('MemoryPressure', 'False'), ('DiskPressure', 'False'), ('PIDPressure', 'False'), ('Ready', 'True')]
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests      Limits
+  --------           --------      ------
+  cpu                1100m (55%)   4 (200%)
+  memory             1164Mi (14%)  3242Mi (40%)
+  ephemeral-storage  0 (0%)        0 (0%)
+  hugepages-1Gi      0 (0%)        0 (0%)
+  hugepages-2Mi      0 (0%)        0 (0%)
+Events:              <none>
+               total        used        free      shared  buff/cache   available
+Mem:            7931        1507        5003          34        1716        6424
+Swap:              0           0           0
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root        61G  4.4G   57G   8% /
+EXIT_CODE=0

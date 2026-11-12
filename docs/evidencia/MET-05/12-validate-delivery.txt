@@ -1,0 +1,17 @@
+﻿UTC=2026-11-12T05:34:37.9807371Z
+gitleaks_8.28.0_linux_x64.tar.gz: OK
+kubeconform.tar.gz: OK
+wsl.exe : [90m11:34PM[0m [32mINF[0m [1mscanned ~12511 bytes (12.51 KB) in 30.7ms[0m
+At line:23 char:11
++ $result = & wsl --exec bash docs/evidencia/MET-05/12-validate-deliver ...
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([90m11:34PM[0...) in 30.7ms[0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[90m11:34PM[0m [32mINF[0m [1mno leaks found[0m
+[90m11:34PM[0m [32mINF[0m [1mscanned ~302631 bytes (302.63 KB) in 128ms[0m
+[90m11:34PM[0m [32mINF[0m [1mno leaks found[0m
+[90m11:34PM[0m [32mINF[0m [1mscanned ~18661 bytes (18.66 KB) in 41ms[0m
+[90m11:34PM[0m [32mINF[0m [1mno leaks found[0m
+Summary: 17 resources found in 4 files - Valid: 17, Invalid: 0, Errors: 0, Skipped: 0
+EXIT_CODE=0

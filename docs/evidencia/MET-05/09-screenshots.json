@@ -1,0 +1,16 @@
+[
+  {
+    "name": "09-grafana-functional.png",
+    "url": "http://127.0.0.1:23000/d/event-service-met05?orgId=1&from=1794460319103&to=1794460483670&kiosk",
+    "utc": "2026-11-12T05:17:14.016Z",
+    "exit": 0,
+    "exists": true
+  },
+  {
+    "name": "09-jaeger-correlated.png",
+    "url": "http://127.0.0.1:26686/trace/7e1f6ff684f5fa3f72b938fc7b223799",
+    "utc": "2026-11-12T05:17:24.838Z",
+    "exit": 0,
+    "exists": true
+  }
+]

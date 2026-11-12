@@ -1,0 +1,26 @@
+﻿LOCAL_UTC=2026-11-12T05:17:43.7004995Z
+Thu Nov 12 05:17:27 UTC 2026
+NAME                                   READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS   IMAGES                                                                                                                                      SELECTOR
+deployment.apps/event-service-api      1/1     1            1           2d3h   api          ghcr.io/marchelo23/proyecto-final-metricas-y-devops/event-service@sha256:17b4e6051228fd27df63471a3fff003bd8f2cb7ca916ef8e29d96a29835597e9   app.kubernetes.io/component=api,app.kubernetes.io/name=event-service
+deployment.apps/event-service-worker   1/1     1            1           2d3h   worker       ghcr.io/marchelo23/proyecto-final-metricas-y-devops/event-service@sha256:17b4e6051228fd27df63471a3fff003bd8f2cb7ca916ef8e29d96a29835597e9   app.kubernetes.io/component=worker,app.kubernetes.io/name=event-service
+deployment.apps/grafana                1/1     1            1           77m    grafana      grafana/grafana:11.6.0                                                                                                                      app=grafana
+deployment.apps/jaeger                 1/1     1            1           77m    jaeger       jaegertracing/all-in-one:1.68.0                                                                                                             app=jaeger
+deployment.apps/prometheus             1/1     1            1           77m    prometheus   prom/prometheus:v3.2.1                                                                                                                      app=prometheus
+
+NAME                                               READY   STATUS      RESTARTS      AGE     IP            NODE          NOMINATED NODE   READINESS GATES
+pod/event-service-api-57b4978887-rh9jj             1/1     Running     0             76m     10.42.0.121   k3s-eventos   <none>           <none>
+pod/event-service-migrate-17b4e6051228fd27-qzdvf   0/1     Completed   0             6h24m   10.42.0.112   k3s-eventos   <none>           <none>
+pod/event-service-worker-676865cbdb-lxzft          1/1     Running     0             76m     10.42.0.122   k3s-eventos   <none>           <none>
+pod/grafana-6966ff6799-qtr7s                       1/1     Running     0             77m     10.42.0.120   k3s-eventos   <none>           <none>
+pod/jaeger-6675bd9bb9-wczxp                        1/1     Running     0             77m     10.42.0.118   k3s-eventos   <none>           <none>
+pod/postgres-0                                     1/1     Running     1 (39h ago)   2d2h    10.42.0.111   k3s-eventos   <none>           <none>
+pod/prometheus-84687df8df-66knl                    1/1     Running     0             77m     10.42.0.119   k3s-eventos   <none>           <none>
+
+NAME                                   TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)              AGE    SELECTOR
+service/event-service                  ClusterIP   10.43.118.234   <none>        8000/TCP             2d3h   app.kubernetes.io/component=api,app.kubernetes.io/name=event-service
+service/event-service-worker-metrics   ClusterIP   10.43.205.154   <none>        9000/TCP             77m    app.kubernetes.io/component=worker,app.kubernetes.io/name=event-service
+service/grafana                        ClusterIP   10.43.51.88     <none>        3000/TCP             77m    app=grafana
+service/jaeger-collector               ClusterIP   10.43.212.160   <none>        16686/TCP,4318/TCP   77m    app=jaeger
+service/postgres                       ClusterIP   None            <none>        5432/TCP             2d3h   app.kubernetes.io/name=postgres
+service/prometheus                     ClusterIP   10.43.108.252   <none>        9090/TCP             77m    app=prometheus
+EXIT_CODE=0
