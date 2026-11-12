@@ -99,3 +99,6 @@ La pila reutilizada utiliza `emptyDir` para Prometheus/Grafana y Jaeger all-in-o
 Antes de los scripts finales hubo errores de transporte local: JSONPath perdió comillas (`unclosed action`), Bash recibió finales de línea incompatibles (`unexpected end of file`) y un comando SSH superó el límite de Windows (`The filename or extension is too long`). Ninguno modificó recursos; se sustituyó el transporte por base64 en stdin. El timeout de readiness sí se conserva como salida original en 04. Un intento local de detectar PyYAML falló por comillas; no se instalaron herramientas. La validación Kubernetes y promtool posterior sí se completó.
 
 MET-07 permanece bloqueado y no forma parte de la aceptación de MET-05. El clúster es compartido; no se presume aislamiento.
+## Revisión posterior de verificadores (PR #93)
+
+Las correcciones y las 24 pruebas negativas aisladas se describen en [16-review-fixes.md](16-review-fixes.md). Las salidas originales se conservan intactas; los scripts revisados exigen destinos nuevos y no se ejecutaron contra Azure en esta fase. Las invocaciones anteriores son históricas; consultar la nueva interfaz antes de reutilizarlas.

@@ -1,1 +1,11 @@
-const fs=require('fs'),path=require('path'),os=require('os'),cp=require('child_process');const dir=__dirname;const browser='C:/Program Files/Google/Chrome/Application/chrome.exe';const shots=[['grafana-dashboard.png','http://127.0.0.1:23000/d/event-service-met05?orgId=1&from=now-30m&to=now&kiosk'],['prometheus-targets.png','http://127.0.0.1:29090/targets'],['jaeger-traces.png','http://127.0.0.1:26686/search?service=event-service-api&limit=20&lookback=1h']];const log=[];for(const [name,url] of shots){const profile=fs.mkdtempSync(path.join(os.tmpdir(),'met05-chrome-'));const args=['--headless=new','--disable-gpu','--no-first-run','--no-default-browser-check','--user-data-dir='+profile,'--window-size=1600,1600','--virtual-time-budget=15000','--screenshot='+path.join(dir,name),url];const r=cp.spawnSync(browser,args,{encoding:'utf8',timeout:55000,windowsHide:true});const entry={name,url,command:[browser,...args],exit:r.status,error:r.error?.message,stdout:r.stdout,stderr:r.stderr};log.push(entry);console.log(name+' EXIT='+r.status+' EXISTS='+fs.existsSync(path.join(dir,name)));fs.writeFileSync(path.join(dir,'06-screenshots.json'),JSON.stringify(log,null,2)+'\n');}
+const v = require('./verification.cjs');
+async function run(options, dependencies) {
+  const dir = v.newDirectory(options.output);
+  v.captures([
+    ['grafana-dashboard.png', 'http://127.0.0.1:23000/d/event-service-met05?orgId=1&from=now-30m&to=now&kiosk'],
+    ['prometheus-targets.png', 'http://127.0.0.1:29090/targets'],
+    ['jaeger-traces.png', 'http://127.0.0.1:26686/search?service=event-service-api&limit=20&lookback=1h'],
+  ], dir, dependencies);
+}
+module.exports = { run };
+v.cli({ filename: __filename, run });
