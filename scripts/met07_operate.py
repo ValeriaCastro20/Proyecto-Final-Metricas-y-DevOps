@@ -82,17 +82,22 @@ def power_check(external, now, reader=read_url, run=subprocess.run):
     # Do not retain arbitrary cron lines or environment values.
     cron_read = cron.returncode == 0 or (cron.returncode == 1 and "no crontab" in cron.stderr)
     result["root_cron_empty"] = cron_read and not cron.stdout.strip()
+    result["timer_units"] = None
     try:
         timer_rows = json.loads(timers.stdout)
-        result["timer_units"] = [r.get("unit") for r in timer_rows]
+        if isinstance(timer_rows, list) and all(
+                isinstance(row, dict) and isinstance(row.get("unit"), str) and row["unit"].strip()
+                for row in timer_rows):
+            result["timer_units"] = [row["unit"] for row in timer_rows]
     except ValueError:
-        result["timer_units"] = None
+        pass
     checked = core.server_instant(external.get("checked_server_utc"))
     fresh = 0 <= now - checked.timestamp() < 300
     next_stop = core.server_instant(external.get("next_stop_utc"))
     result["passed"] = (scheduled["http_status"] == 200 and events == [] and
         compute["http_status"] == 200 and compute.get("body", {}).get("name") == "vm-eventos-b97e31-k3s" and
         not result["local_shutdown_pending"] and result["root_cron_empty"] and timers.returncode == 0 and
+        result["timer_units"] is not None and
         not any(any(word in (unit or "").lower() for word in ("shutdown", "reboot", "poweroff"))
                 for unit in result.get("timer_units") or []) and
         fresh and next_stop.timestamp() - now > 1200 and external.get("azure_schedules_verified") is True and

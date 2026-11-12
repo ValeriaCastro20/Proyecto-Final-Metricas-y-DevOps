@@ -1,0 +1,33 @@
+{
+  "npm_ci": {
+    "exit": 0,
+    "prepare": "husky",
+    "audit_vulnerabilities": 0
+  },
+  "checks": [
+    {
+      "check": "format",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "Husky real",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "hooksPath",
+      "exit": 0,
+      "stdout": ".husky/_\n",
+      "stderr": ""
+    },
+    {
+      "check": "diff check",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "warning: in the working copy of 'scripts/met07_operate.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'scripts/tests/test_met07_operate.py', LF will be replaced by CRLF the next time Git touches it\n"
+    }
+  ]
+}

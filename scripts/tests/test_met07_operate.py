@@ -41,7 +41,7 @@ class OperationalTests(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertTrue(all(r["http_status"] is None and r["connection_error"] for r in result["results"].values()))
 
-    def power(self, **changes):
+    def power(self, timer_output="[]", **changes):
         external = {"checked_server_utc": "2026-11-12T14:00:00Z", "next_stop_utc": "2026-11-13T05:00:00Z",
                     "azure_schedules_verified": True, "active_power_workflows": 0}
         external.update(changes)
@@ -49,11 +49,47 @@ class OperationalTests(unittest.TestCase):
             return {"http_status": 200, "body": {"Events": []} if "scheduledevents" in url else
                     {"name": "vm-eventos-b97e31-k3s"}}
         def run(args, **kwargs):
-            return subprocess.CompletedProcess(args, 0, "[]" if "systemctl" in args else "", "")
+            return subprocess.CompletedProcess(args, 0, timer_output if "systemctl" in args else "", "")
         return op.power_check(external, core.server_instant("2026-11-12T14:00:01Z").timestamp(), reader, run)
 
     def test_fixture_positive_power_preconditions(self):
         self.assertTrue(self.power()["passed"])
+
+    def test_invalid_timer_json_fails_closed(self):
+        for output in ("", "not json", "[", '[{"unit": "safe.timer"},]'):
+            with self.subTest(output=output):
+                result = self.power(timer_output=output)
+                self.assertIsNone(result["timer_units"])
+                self.assertFalse(result["passed"])
+
+    def test_timer_inventory_requires_array_of_objects(self):
+        for value in (None, {}, {"unit": "safe.timer"}, "text", 1, True,
+                      [None], ["safe.timer"], [1], [True], [[]]):
+            with self.subTest(value=value):
+                result = self.power(timer_output=json.dumps(value))
+                self.assertIsNone(result["timer_units"])
+                self.assertFalse(result["passed"])
+
+    def test_missing_or_invalid_timer_unit_fails_closed(self):
+        for row in ({}, {"other": "safe.timer"}, *({"unit": unit} for unit in
+                    (None, "", "   ", "\t\n", 0, 1, True, [], {}))):
+            with self.subTest(row=row):
+                # An invalid row must invalidate the whole otherwise valid inventory.
+                result = self.power(timer_output=json.dumps([{"unit": "safe.timer"}, row]))
+                self.assertIsNone(result["timer_units"])
+                self.assertFalse(result["passed"])
+
+    def test_empty_and_valid_timer_inventories_are_preserved(self):
+        for rows in ([], [{"unit": "apt-daily.timer", "next": 123}]):
+            with self.subTest(rows=rows):
+                result = self.power(timer_output=json.dumps(rows))
+                self.assertEqual(result["timer_units"], [row["unit"] for row in rows])
+                self.assertTrue(result["passed"])
+
+    def test_valid_shutdown_timer_still_blocks_power_check(self):
+        result = self.power(timer_output='[{"unit": "scheduled-shutdown.timer"}]')
+        self.assertEqual(result["timer_units"], ["scheduled-shutdown.timer"])
+        self.assertFalse(result["passed"])
 
     def test_unverified_cloud_schedule_fails_closed(self):
         self.assertFalse(self.power(azure_schedules_verified=False)["passed"])
