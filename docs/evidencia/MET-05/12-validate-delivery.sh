@@ -3,6 +3,7 @@
 set -euo pipefail
 repo="$PWD"
 tools_dir=$(mktemp -d /tmp/met05-validation.XXXXXX)
+trap 'rm -rf -- "$tools_dir"' EXIT
 cd "$tools_dir"
 curl -fsSL https://github.com/gitleaks/gitleaks/releases/download/v8.28.0/gitleaks_8.28.0_linux_x64.tar.gz -o gitleaks_8.28.0_linux_x64.tar.gz
 curl -fsSL https://github.com/gitleaks/gitleaks/releases/download/v8.28.0/gitleaks_8.28.0_checksums.txt -o checksums.txt

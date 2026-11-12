@@ -33,8 +33,12 @@ async function getJson(name, url, { records = [], prometheus = false, headers = 
   const response = await fetcher(url, { redirect: 'error', headers, signal: AbortSignal.timeout(15000) });
   const record = { name, url, http: response.status, utc: new Date().toISOString() };
   records.push(record);
-  record.body = await response.json();
+  if (response.status !== 200) {
+    try { record.body = await response.json(); }
+    catch (error) { record.bodyError = error.message; }
+  }
   assert.equal(response.status, 200, name + ' HTTP');
+  record.body = await response.json();
   if (prometheus) assert.equal(record.body.status, 'success', name + ' Prometheus status');
   return record.body;
 }
@@ -61,6 +65,9 @@ function provisioned(live, expected, datasource) {
     assert(actual, 'Missing panel ' + panel.id);
     assert.equal(actual.datasource?.uid, 'event-service-prometheus', 'Panel datasource');
     assert.deepEqual(actual.targets, panel.targets, 'Panel queries differ');
+    assert.equal(actual.type, panel.type, 'Panel type differs');
+    assert.equal(actual.title, panel.title, 'Panel title differs');
+    assert.equal(actual.fieldConfig?.defaults?.unit, panel.fieldConfig?.defaults?.unit, 'Panel unit differs');
   }
 }
 function queryResult(body, requireData = false) {
@@ -166,6 +173,32 @@ function sameRun(source, correlation, sourceBytes) {
   }
   return { rows, trace: correlation.traces[0].traceID };
 }
+function renderedPage(url, dom) {
+  const requested = new URL(url);
+  // Ignore scripts/styles: bootstrap data alone does not prove the UI rendered.
+  const rendered = dom.replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, '');
+  const visible = rendered.replace(/<[^>]*>/g, ' ').replace(/&nbsp;|&#160;/g, ' ').replace(/\s+/g, ' ');
+  assert(!/chrome-error:\/\/|chromewebdata|ERR_CONNECTION|ERR_NAME_NOT_RESOLVED/i.test(dom), 'Browser error page');
+  assert(!/sign in|log in|unauthorized|access denied|not found|no data|no traces|error loading|failed to (fetch|load)|unexpected error/i.test(visible),
+    'Page shows a login, error or empty state');
+  const contains = text => assert(visible.includes(text), 'Missing rendered content: ' + text);
+  if (requested.pathname === '/d/event-service-met05') {
+    const dashboard = require('../../../dashboards/event-service-met05.json');
+    contains(dashboard.title);
+    for (const panel of dashboard.panels) contains(panel.title);
+  } else if (requested.pathname === '/targets') {
+    for (const job of jobs) contains(job);
+    assert(/\bUP\b/.test(visible) && !/\bDOWN\b/.test(visible), 'Targets must be UP');
+  } else if (/^\/trace\/[a-f0-9]+$/i.test(requested.pathname)) {
+    const trace = requested.pathname.split('/').pop();
+    assert(rendered.includes(trace), 'Requested trace identity missing');
+    for (const text of ['event-service-api', 'event-service-worker', 'http_request', 'process_reading']) contains(text);
+  } else if (requested.pathname === '/search' && requested.searchParams.get('service') === 'event-service-api') {
+    contains('event-service-api');
+    contains('http_request');
+    assert(/href=["'][^"']*\/trace\/[a-f0-9]+/i.test(rendered), 'Missing trace results');
+  } else { assert.fail('Unsupported screenshot page'); }
+}
 function capture(name, url, output, { spawn = cp.spawnSync, browser = 'C:/Program Files/Google/Chrome/Application/chrome.exe' } = {}) {
   assert.equal(path.basename(name), name, 'Invalid screenshot name');
   assert(!fs.existsSync(path.join(output, name)), 'Existing screenshot rejected');
@@ -173,7 +206,7 @@ function capture(name, url, output, { spawn = cp.spawnSync, browser = 'C:/Progra
   const file = path.join(temp, name), started = Date.now();
   const args = ['--headless=new', '--disable-gpu', '--no-first-run', '--no-default-browser-check',
     '--user-data-dir=' + path.join(temp, 'profile'), '--window-size=1800,1800',
-    '--virtual-time-budget=15000', '--screenshot=' + file, url];
+    '--virtual-time-budget=15000', '--dump-dom', '--screenshot=' + file, url];
   const r = spawn(browser, args, { encoding: 'utf8', timeout: 55000, windowsHide: true });
   const entry = { name, url, utc: new Date().toISOString(), exit: r.status, error: r.error?.code, fresh: false };
   try {
@@ -181,9 +214,11 @@ function capture(name, url, output, { spawn = cp.spawnSync, browser = 'C:/Progra
     assert(fs.existsSync(file), 'Browser did not create a new screenshot');
     assert(fs.statSync(file).mtimeMs >= started - 1000, 'Stale screenshot');
     assert(fs.readFileSync(file).subarray(0, 8).equals(Buffer.from('89504e470d0a1a0a', 'hex')), 'Invalid PNG');
+    renderedPage(url, r.stdout || '');
     fs.copyFileSync(file, path.join(output, name), fs.constants.COPYFILE_EXCL);
     entry.fresh = true;
   } catch (error) { entry.failure = error.message; }
+  finally { fs.rmSync(temp, { recursive: true, force: true }); }
   return entry;
 }
 function captures(shots, output, dependencies) {

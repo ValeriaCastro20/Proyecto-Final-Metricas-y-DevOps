@@ -35,6 +35,16 @@ test('HTTP and Prometheus errors fail after recording the response', async () =>
     assert.deepEqual(records[0].body, data);
   }
 });
+test('non-JSON HTTP errors preserve status; invalid successful JSON still fails', async () => {
+  for (const status of [404, 500, 200]) {
+    const records = [];
+    await assert.rejects(v.getJson('fixture', 'http://fixture.invalid', {
+      records, fetcher: async () => ({ status, json: async () => { throw SyntaxError('HTML response'); } }),
+    }), status === 200 ? /HTML response/ : error => error.actual === status && /fixture HTTP/.test(error.message));
+    assert.equal(records[0].http, status);
+    if (status !== 200) assert.equal(records[0].bodyError, 'HTML response');
+  }
+});
 test('05 accepts the captured provisioned configuration with isolated responses', async () => {
   const output = destination();
   assert.equal((await verify.run({ output }, { fetcher: fakeFetch() })).passed, true);
@@ -49,6 +59,9 @@ for (const [name, mutate] of [
   ['wrong provisioned query', (url, r) => {
     if (url.includes('/api/dashboards/')) r.data.dashboard.panels[0].targets[0].expr = 'up';
   }],
+  ['wrong panel type', (url, r) => { if (url.includes('/api/dashboards/')) r.data.dashboard.panels[0].type = 'stat'; }],
+  ['wrong panel title', (url, r) => { if (url.includes('/api/dashboards/')) r.data.dashboard.panels[0].title = 'Other'; }],
+  ['wrong panel unit', (url, r) => { if (url.includes('/api/dashboards/')) r.data.dashboard.panels[0].fieldConfig.defaults.unit = 'bytes'; }],
 ]) test('05 rejects ' + name + ' and preserves failure details in a NEW directory', async () => {
   const output = destination();
   await assert.rejects(verify.run({ output }, { fetcher: fakeFetch(mutate) }));
@@ -168,11 +181,40 @@ test('captures reject old files, missing browser, timeout, missing output and ol
     return { status: 0 };
   } });
   assert.equal(stale.fresh, false);
-  const success = v.capture('fresh.png', 'http://fixture.invalid', output, { spawn: (browser, args) => {
+  const dashboard = require('../../../../dashboards/event-service-met05.json');
+  const content = '<main>' + [dashboard.title, ...dashboard.panels.map(p => p.title)].join('<h2>') + '</main>';
+  const render = stdout => (browser, args) => {
+    assert(args.includes('--dump-dom'));
     fs.writeFileSync(args.find(a => a.startsWith('--screenshot=')).slice(13), Buffer.from('89504e470d0a1a0a', 'hex'));
-    return { status: 0 };
-  } });
+    return { status: 0, stdout };
+  };
+  const url = 'http://127.0.0.1:23000/d/event-service-met05';
+  const success = v.capture('fresh.png', url, output, { spawn: render(content) });
   assert.equal(success.fresh, true);
+  for (const [i, dom] of ['', '<h1>Sign in</h1>', '<h1>Dashboard not found</h1>',
+    '<script>' + content + '</script>', content.replace('Backlog', 'Different panel'),
+    content + '<p>Error loading data</p>', content + '<p>No data</p>'].entries()) {
+    const name = 'invalid-' + i + '.png';
+    assert.equal(v.capture(name, url, output, { spawn: render(dom) }).fresh, false);
+    assert(!fs.existsSync(path.join(output, name)));
+  }
+  const trace = '0123456789abcdef';
+  const traceContent = '<main>' + trace + ' event-service-api event-service-worker http_request process_reading</main>';
+  for (const [i, dom] of [traceContent, traceContent.replace(trace, 'another'),
+    traceContent.replace('process_reading', 'other'), traceContent + ' No traces found'].entries()) {
+    assert.equal(v.capture('trace-' + i + '.png', 'http://127.0.0.1:26686/trace/' + trace,
+      output, { spawn: render(dom) }).fresh, i === 0);
+  }
+  for (const [i, dom] of ['<main>event-service event-service-worker UP</main>',
+    '<main>event-service event-service-worker DOWN</main>'].entries()) {
+    assert.equal(v.capture('targets-' + i + '.png', 'http://127.0.0.1:29090/targets',
+      output, { spawn: render(dom) }).fresh, i === 0);
+  }
+  const search = '<main>event-service-api http_request <a href="/trace/' + trace + '">Trace</a></main>';
+  for (const [i, dom] of [search, search.replace('/trace/', '/other/')].entries()) {
+    assert.equal(v.capture('search-' + i + '.png', 'http://127.0.0.1:26686/search?service=event-service-api',
+      output, { spawn: render(dom) }).fresh, i === 0);
+  }
 });
 test('CLI failures have nonzero exit and save failure evidence, without network/browser', () => {
   const temp = temporary(), preload = path.join(temp, 'offline.cjs');
@@ -243,7 +285,7 @@ test('Invoke-Remote propagates SSH failure and refuses an existing output direct
   const output = path.join(temp, 'new-run');
   fs.writeFileSync(fixture, 'exit 0\n');
   const quote = s => "'" + s.replaceAll("'", "''") + "'";
-  fs.writeFileSync(wrapper, "function ssh { if ($args[-1] -notlike '*bash -o pipefail*') { throw 'pipefail missing' }; $global:LASTEXITCODE=23; Write-Output 'fixture decoder failure' }\n& " +
+  fs.writeFileSync(wrapper, "function ssh { if ($args[-1] -notlike '*bash -o pipefail*') { throw 'pipefail missing' }; Set-Variable -Name LASTEXITCODE -Value 23 -Scope 1; Write-Output 'fixture decoder failure' }\n& " +
     quote(path.join(root, 'Invoke-Remote.ps1')) + ' -ScriptFile ' + quote(fixture) +
     ' -LogName failed.txt -OutputDirectory ' + quote(output) + '\nexit $LASTEXITCODE\n');
   const shell = process.platform === 'win32' ? 'powershell.exe' : 'pwsh';
@@ -254,4 +296,44 @@ test('Invoke-Remote propagates SSH failure and refuses an existing output direct
   const second = cp.spawnSync(shell, ['-NoProfile', '-File', wrapper], { encoding: 'utf8', timeout: 55000 });
   assert.notEqual(second.status, 0);
   assert(fs.readFileSync(path.join(output, 'failed.txt')).equals(log));
+});
+test('Invoke-Remote rejects startup failures and missing exit codes instead of using stale success', () => {
+  const shell = process.platform === 'win32' ? 'powershell.exe' : 'pwsh';
+  const quote = s => "'" + s.replaceAll("'", "''") + "'";
+  for (const stub of ["function ssh { throw 'cannot start SSH' }", "function ssh { Write-Output 'no process exit code' }",
+    "function Get-Command { throw 'ssh not found' }"]) {
+    const temp = temporary(), fixture = path.join(temp, 'harmless.sh'), wrapper = path.join(temp, 'remote.ps1');
+    const output = path.join(temp, 'new-run');
+    fs.writeFileSync(fixture, 'exit 0\n');
+    fs.writeFileSync(wrapper, stub + '\n$global:LASTEXITCODE=0\n& ' + quote(path.join(root, 'Invoke-Remote.ps1')) +
+      ' -ScriptFile ' + quote(fixture) + ' -LogName failed.txt -OutputDirectory ' + quote(output) + '\nexit $LASTEXITCODE\n');
+    const result = cp.spawnSync(shell, ['-NoProfile', '-File', wrapper], { encoding: 'utf8', timeout: 55000 });
+    assert.equal(result.status, 1, result.stdout + result.stderr);
+    const log = fs.readFileSync(path.join(output, 'failed.txt'));
+    assert(log.toString('utf8').includes('EXIT_CODE=1') || log.toString('utf16le').includes('EXIT_CODE=1'));
+  }
+});
+test('delivery validation removes its temporary tools on success and early failure', () => {
+  for (const fail of ['0', '7']) {
+    const temp = temporary();
+    const script = `
+mktemp() { command mktemp -d "$TOOLS_TEST_ROOT/tools.XXXXXX"; }
+curl() { return "$TOOLS_TEST_FAIL"; }
+sha256sum() { cat >/dev/null; }
+tar() {
+  local tool=gitleaks
+  [[ "$*" == *kubeconform* ]] && tool=kubeconform
+  printf '#!/usr/bin/env bash\\nexit 0\\n' > "$tool"
+  chmod +x "$tool"
+}
+export -f mktemp curl sha256sum tar
+bash "$TOOLS_TEST_SCRIPT"
+`;
+    const result = cp.spawnSync('bash', ['-c', script], { encoding: 'utf8', env: {
+      ...process.env, TOOLS_TEST_ROOT: temp, TOOLS_TEST_FAIL: fail,
+      TOOLS_TEST_SCRIPT: path.join(root, '12-validate-delivery.sh'),
+    } });
+    assert.equal(result.status, Number(fail), result.stdout + result.stderr);
+    assert.deepEqual(fs.readdirSync(temp), []);
+  }
 });
