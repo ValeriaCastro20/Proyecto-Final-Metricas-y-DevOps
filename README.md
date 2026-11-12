@@ -5,9 +5,9 @@ Plataforma de **ingesta y análisis de eventos (Escenario 3, COM-01…06)** impl
 - Repositorio: <https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps>
 - **Escenario 3 específico:** dispositivos por instalación, lecturas tipadas, rechazos auditables, alertas configurables, contadores consistentes, backlog y generador reproducible. [Contrato, pruebas y comandos](docs/escenario.md).
 - La API genérica `/v1/events` se conserva por compatibilidad y no alimenta el procesamiento ni los contadores ESC3. Para el escenario usar `/v1/readings` y `/v1/devices`.
-- Ingesta individual y en lotes atómicos de 1–100 eventos; deduplicación `(source, external_id)`.
-- Consulta por UUID, listado paginado con filtros y ventanas UTC semiabiertas `[from, to)`.
-- Conteos por tipo/fuente, series `minute|hour|day` y estadísticas sobre campos numéricos JSONB.
+- ESC3: aceptación durable 202, duplicado válido 200 con reading_id original y rechazo registrado 422; el worker procesa por separado.
+- Históricos por generación UTC `[from,to)`, estadísticas de procesadas y límites de negocio por dispositivo.
+- Compatibilidad genérica adicional: lotes atómicos de 1–100 `/v1/events`, deduplicación `(source,external_id)` y análisis de JSONB; **no son lecturas ESC3**.
 - API keys con RBAC (`producer`, `analyst`), restricciones por fuente, errores seguros y `X-Request-ID`.
 - Pool asíncrono acotado, timeouts, reintentos de lectura y apagado ordenado SIGINT/SIGTERM.
 
@@ -46,12 +46,18 @@ API en `http://127.0.0.1:8000`. Para Podman, sustituir `docker compose` por el p
 curl -i http://127.0.0.1:8000/health/live
 curl -i http://127.0.0.1:8000/health/ready
 curl -i -H "X-API-Key: $EVENT_PRODUCER_KEY" -H 'Content-Type: application/json' \
-  -d '{"source":"sensor-a","external_id":"e-001","type":"temperature","occurred_at":"2026-10-21T12:00:00Z","payload":{"value":23.5}}' \
-  http://127.0.0.1:8000/v1/events
+  -d '{"id":"sensor-demo","facility_id":"instalacion-demo","limits":{"temperature_min":0,"temperature_max":30,"humidity_min":20,"humidity_max":80}}' \
+  http://127.0.0.1:8000/v1/devices
+curl -i -H "X-API-Key: $EVENT_PRODUCER_KEY" -H 'Content-Type: application/json' \
+  -d '{"device_id":"sensor-demo","event_id":"e-001","occurred_at":"2026-11-11T12:00:00Z","temperature":35,"humidity":45,"state":"running"}' \
+  http://127.0.0.1:8000/v1/readings
 curl -G -H "X-API-Key: $EVENT_ANALYST_KEY" \
-  --data-urlencode 'from=2026-10-21T00:00:00Z' --data-urlencode 'to=2026-10-22T00:00:00Z' \
-  --data-urlencode 'group_by=type' http://127.0.0.1:8000/v1/analysis/counts
+  --data-urlencode 'device_id=sensor-demo' http://127.0.0.1:8000/v1/reception/counts
 ```
+
+Datos ficticios: repetir el alta devuelve 409; repetir la lectura válida devuelve
+200 y su reading_id original. Sin worker la lectura queda pendiente. Ejemplos de
+históricos, estadísticas, alertas y API genérica en la [guía API](docs/api.md).
 
 ## API y documentación del código
 
@@ -62,6 +68,7 @@ curl -G -H "X-API-Key: $EVENT_ANALYST_KEY" \
 - `cargo doc --locked --no-deps --open`: documentación Rust de módulos y contratos.
 - [Arquitectura y guía de contribución](docs/desarrollo.md), [matriz regla → prueba](docs/escenario.md).
 - [Runbook operativo y controles de entrega](docs/operaciones.md).
+- [Flujo DevOps actual: PR → CI → GHCR → aprobación → K3s](docs/devops.md), además de Terraform, drift y operación de VM.
 
 ## Calidad y pruebas
 
@@ -74,6 +81,7 @@ RUSTDOCFLAGS='-D warnings' cargo doc --locked --no-deps
 # Obligatorio para aceptación: PostgreSQL activo y TEST_DATABASE_URL definido.
 # Debe nombrar una BD test_* o *_test; DATABASE_URL, si existe, debe coincidir.
 cargo test --locked --test postgres -- --ignored --nocapture
+cargo test --locked --test metrics -- --ignored --nocapture
 ```
 
 Las pruebas PostgreSQL están marcadas `ignored` para separar unitarias de integración, **no para omitirlas en CI**: el job `postgres` las ejecuta explícitamente y falla si falta la base. Cada prueba usa fuentes únicas; no se truncan tablas ni se elimina información ajena.
@@ -114,8 +122,17 @@ Imagen multi-stage sobre distroless, sin shell, con usuario no root, puerto 8000
 | `DB_READ_MAX_RETRIES` | 1; rango 0–5; nunca reintenta escrituras |
 | `DB_READ_RETRY_BACKOFF_MS` | 50; rango 0–2000; backoff exponencial asíncrono |
 | `RUST_LOG` | `event_service=info,sqlx=off`; no activar logs de SQL en entornos con datos sensibles |
+| `PROCESSOR_BATCH_SIZE` | 100; rango 1–1000, para process/drain |
+| `PROCESSOR_POLL_MS` | 100; rango 1–60000, espera entre lotes; process reintenta DB transitoria con backoff acotado |
+| `WORKER_METRICS_ADDR` | `0.0.0.0:9000`; listener `/metrics` de process, no de drain |
+| `WORKER_HEALTH_DIR` | Opcional en local; directorio escribible de heartbeats para las probes exec en K3s |
+| `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` | Sin valor: no exporta trazas. URL completa explícita por ambiente/proceso; no basta el endpoint genérico OTLP |
 
-Las opciones numéricas inválidas usan su valor predeterminado; las claves ambiguas o mal formadas **fallan cerrado**. La configuración se lee al iniciar: para rotar secretos hay que reiniciar el proceso. Cuerpo HTTP máximo: 4 MiB; payload de cada evento: 16 KiB serializado en UTF-8.
+Las opciones numéricas inválidas de DB usan su predeterminado; los valores inválidos
+de batch/poll del procesador terminan con error. Las claves ambiguas o mal formadas
+**fallan cerrado**. La configuración se lee al iniciar: para rotar secretos hay que
+reiniciar el proceso. Cuerpo HTTP máximo: 4 MiB; el límite de payload de 16 KiB es
+del contrato genérico, no un campo de las lecturas ESC3.
 
 ## Migración desde la versión Python
 
@@ -123,12 +140,14 @@ Ver [ADR-0004](docs/adr/0004-rust.md) y [persistencia](docs/arquitectura/persist
 
 ## Backlog del curso
 
-Se conservan los **27 issues** y tres milestones. Una migración de lenguaje no cierra automáticamente requisitos DevOps ni de observabilidad.
+Los **27 requisitos comunes** se siguen en sus issues originales, junto con los
+issues específicos ESC3 y tareas operativas. Una migración de lenguaje no cierra
+automáticamente requisitos DevOps ni de observabilidad.
 
 | Grupo | Requisitos e issues |
 |---|---|
 | **3.1 Aplicación y arquitectura** | COM-01 funciones [#1](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/issues/1), COM-02 límites [#2](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/issues/2), COM-03 persistencia [#3](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/issues/3), COM-04 errores [#4](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/issues/4), COM-05 acceso [#5](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/issues/5), COM-06 trade-offs [#6](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/issues/6) |
-| **3.2 DevOps** | DEV-01 versionamiento #7; DEV-02 contenedores #8; DEV-03 CI #9; DEV-04 publicación #10; DEV-05 entrega controlada #11; DEV-06 Terraform Azure #12; DEV-07 estado remoto #13; DEV-08 validación Terraform #14; DEV-09 K3s #15; DEV-10 secretos #16; DEV-11 probes/recursos #17; DEV-12 rollback #18; DEV-13 reconstrucción #19; DEV-14 presupuesto < US$100 #20 |
+| **3.2 DevOps** | DEV-01 versionamiento #7; DEV-02 contenedores #8; DEV-03 CI #9; DEV-04 publicación #10; DEV-05 entrega controlada #11; DEV-06 Terraform Azure #12; DEV-07 estado remoto #13; DEV-08 validación Terraform #14; DEV-09 K3s #15; DEV-10 secretos #16; DEV-11 probes/recursos #17; DEV-12 rollback #18; DEV-13 reconstrucción #19; DEV-14 máximo US$100 acumulados #20 |
 | **3.3 Métricas y observabilidad** | MET-01 indicadores #21; MET-02 logs #22; MET-03 métricas #23; MET-04 OpenTelemetry #24; MET-05 dashboards #25; MET-06 alertas #26; MET-07 degradación inducida #27 |
 
 Consultar cada issue en el [backlog canónico](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/issues). [Evidencias COM](docs/evidencia/README.md) · [contexto](docs/arquitectura/contexto.md) · [módulos](docs/arquitectura/contenedores.md) · [despliegue](docs/arquitectura/despliegue.md) · [errores](docs/arquitectura/errores.md) · [acceso](docs/arquitectura/acceso.md) · [trade-offs](docs/arquitectura/tradeoffs.md).

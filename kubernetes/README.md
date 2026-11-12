@@ -125,7 +125,13 @@ kubectl -n "$NS" port-forward service/event-service 18000:8000 --address 127.0.0
 
 **No pegar todo como un script sin control de errores.** Si un paso falla, detenerse y diagnosticar; no aplicar workloads tras una migración fallida. Los Jobs por digest conservan el resultado por 24 h; un Job completo existente indica que ese digest ya migró esa DB. No borrar Jobs para ocultar errores ni reusar un resultado después de restaurar/cambiar la DB. Un fallo requiere revisión, no reintentos ciegos.
 
-La promoción al otro namespace reutiliza **el mismo `IMAGE`**, no reconstruye. El workflow con aprobación y smoke obligatorio todavía debe implementarse/probarse en #11. Migraciones nuevas deben ser compatibles con los procesos que sigan activos durante un rollout; no se ejecutan downgrades automáticos.
+La promoción al otro namespace reutiliza **el mismo `IMAGE`**, no reconstruye.
+El workflow `deliver.yml` ya implementa development → smoke → aprobación de
+production → smoke; aplica migración antes de los dos Deployments. Ver
+[flujo DevOps](../docs/devops.md#4-entrega-controlada) y
+[evidencia DEV-05](../docs/evidencia/DEV-05/index.md). Es una entrega manual desde
+main, no un CD automático tras cada merge. Migraciones nuevas deben ser compatibles
+con los procesos que sigan activos durante rollout; no hay downgrade automático.
 
 ## Verificación funcional y evidencia pendiente
 
@@ -141,4 +147,11 @@ El generador es de carga/aceptación de A; verificar además histórico/estadís
 
 Guardar commit del repositorio, workflow de publicación, digest, versión K3s, nodo `Ready`, estado de Pods/PVC, resultado del Job y smoke funcional en `docs/evidencia/DEV-09/`. No adjuntar `kubectl get secret`, kubeconfig, archivos `.env` ni contraseñas. Revisar la salida y redactar IPs/IDs antes de publicarla.
 
-**Persistencia no equivale a backup:** el PVC sobrevive al Pod, pero `local-path` no sobrevive a perder la VM/disco. `Retain` del StatefulSet no protege de borrar el namespace/PVC ni reemplaza restauración probada. No cambiar cloud-init, disco o VM para probar este PR. Rollback probado (#18), recursos medidos/probes del worker (#17) y observabilidad (#21–#27) siguen pendientes.
+**Persistencia no equivale a backup:** el PVC sobrevive al Pod, pero `local-path`
+no sobrevive a perder la VM/disco. `Retain` del StatefulSet no protege de borrar
+namespace/PVC ni reemplaza restauración probada. No cambiar cloud-init, disco o VM
+para demostrarlo. Consultar la evidencia específica de
+[rollback](../docs/evidencia/DEV-12/index.md),
+[salud/recursos](../docs/evidencia/DEV-11/index.md) y
+[observabilidad](../docs/evidencia/MET-03/index.md): un manifiesto válido o una
+entrega exitosa no acredita por sí solo capacidad, alertas ni experimento MET-07.
