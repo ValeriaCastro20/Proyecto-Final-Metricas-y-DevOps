@@ -7,13 +7,18 @@ disponible, ni inspecciona el clúster en vivo.
 
 ## Hallazgos contrastados
 
+**Corrección documental:** las filas MET-07 siguientes se recontrastaron con el
+[plan en main `eb8fa8f`](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/blob/eb8fa8f/docs/evidencia/MET-07/index.md).
+Se retiran afirmaciones que le atribuían instrucciones inexistentes. Los pendientes
+indicados no son cambios ya aplicados al plan ni resultados de un experimento.
+
 | Hallazgo recibido | Estado comprobado / decisión |
 |---|---|
-| MET-07: distinguir implementación de despliegue | Ya corregido en `docs/evidencia/MET-07/index.md`; no duplicar cambio. Gauge en `src/api.rs`, prueba ignorada en `tests/metrics.rs`, regla en `kubernetes/observability/k8-prometheus.yaml`. |
-| MET-07: carga hasta finalizar T4 e intervalos sin solicitudes | Ya documentado en T1/T4; el generador Python instrumentado sigue **pendiente**, no se presenta como disponible. |
-| MET-07: intentos, errores de conexión y reading_id separados | T1 ya exige JSONL por intento y aclara que `scenario_load` no basta; falta implementar/validar ese generador. |
-| MET-07: timeout y restauración en todos los caminos | T4 ya fija 10 min desde T2, limpieza ante fallo/cancelación y réplicas originales con namespace/UID. Es un procedimiento, no una ejecución comprobada. |
-| MET-07: esperar firing antes de recuperar normalmente | Ya explícito en T4; al vencer plazo o fallar se recupera por seguridad sin declarar éxito. |
+| MET-07: distinguir implementación de despliegue | El gauge está en `src/api.rs`, su prueba ignorada en `tests/metrics.rs` y la regla en `kubernetes/observability/k8-prometheus.yaml`. Sin embargo, T3 del plan todavía los describe como pendientes de integración en main: falta corregir esa descripción y verificar disponibilidad/funcionamiento en el entorno por separado. |
+| MET-07: carga hasta finalizar T4 e intervalos sin solicitudes | T1 solo establece carga durante dos minutos; no exige mantenerla hasta terminar T4 ni registrar intervalos sin solicitudes. Ambos puntos siguen pendientes de documentar. |
+| MET-07: intentos, errores de conexión y reading_id separados | T1 sí pide separar intentos, estados (incluidos fallos de conexión) y reading_id. No identifica un generador ni exige JSONL, horas por intento o una exportación concreta; tampoco menciona las limitaciones de `scenario_load`. Falta identificar y validar la herramienta y sus registros. |
+| MET-07: timeout y restauración en todos los caminos | T0 guarda `spec.replicas` en `ORIG_REPLICAS` y T4 lo restaura en el namespace verificado tras cumplir el umbral. No fija diez minutos desde T2 ni limpieza ante error/cancelación, restauración al vencer un plazo o comprobación de UID. Los 60 s de T2 solo limitan la espera de eliminación del Pod. Esas salvaguardas siguen pendientes. |
+| MET-07: esperar firing antes de recuperar normalmente | T4 solo espera más de 100 pendientes durante dos minutos antes de restaurar; no exige consultar y acreditar el estado firing. Esa comprobación y la recuperación de seguridad ante fallo/plazo siguen pendientes. |
 | Traza API → worker | Válido: main solo instrumentaba HTTP. PR #81 añade contexto durable y spans consumidores; prueba real SDK/PostgreSQL. Falta traza consultable en defensa. |
 | Logs de recepción con IDs | Válido: main no registraba cada recibo. PR #82 añade logs post-COMMIT con receipt_id y reading_id cuando existe; rechazos sin lectura no pueden tener reading_id. Depende de #81. |
 | Diagramas y “no hay cola/202”, “Azure pendiente” | Válido: este cambio COM-02 actualiza contexto, módulos, despliegue y ADR. Se distingue despliegue histórico DEV-09 del estado actual no observado. |
