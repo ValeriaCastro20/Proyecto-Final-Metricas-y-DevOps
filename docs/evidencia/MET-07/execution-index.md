@@ -22,7 +22,7 @@ Este es el índice vigente de la ejecución. El [index.md original](index.md) y 
 | Verificaciones de publicación y escaneo | [Checks](execution-publication-09dd66bd-ca18-4ec2-9106-8bcd9561ab03/publication-checks.json), [Gitleaks](execution-publication-09dd66bd-ca18-4ec2-9106-8bcd9561ab03/secret-scan.json) |
 | Lista exacta publicada | [Archivos](execution-publication-09dd66bd-ca18-4ec2-9106-8bcd9561ab03/published-files.txt) |
 
-P3-5 recibe evidencia cuantitativa de **esta** carga reducida. **P3-2 y P3-4 no se acreditan automáticamente**; el texto literal de §5.11/§5.13/P3-4 no está disponible y el estado de conformidad literal sigue pendiente. El issue #27 y sus requisitos de revisión/defensa no se cierran con esta publicación.
+El [contraste con el PDF oficial](contraste-pdf-revision.md) incorpora el texto y la evaluación del revisor que consultó el documento: §5.11 (p. 6) y P3-5 (p. 10) cuentan con evidencia suficiente según esa revisión; §5.13 (p. 7) recibe evidencia de su componente de diagnóstico. La sección completa incluye otras pruebas. **P3-2 y P3-4 no se acreditan automáticamente**. El issue #27 y sus requisitos de revisión/defensa no se cierran con esta revisión documental.
 
 Reproducción segura: python -B scripts/audit_met07_execution.py <directorio execution guardado> <archivo JSON nuevo>. Ese auditor solo lee archivos locales y crea una salida nueva. **No ejecutar los lanzadores operativos, el worker ni los despachadores SSH para revisar o publicar estos artefactos.**
 
