@@ -51,6 +51,8 @@ flowchart LR
   ConfigMap OTLP opcional son de development; no se infiere exportación desde
   production ni instalación de un Collector separado. Verificar reglas, scrape,
   red y trazas en el entorno, no solo la existencia de YAML.
+  El [procedimiento reproducible](../../kubernetes/observability/README.md) detalla
+  aplicación, acceso, validación y límites de persistencia.
 
 ## Ejecución local
 
