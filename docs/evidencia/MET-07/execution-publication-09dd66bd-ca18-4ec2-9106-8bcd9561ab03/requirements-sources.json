@@ -1,0 +1,22 @@
+{
+  "source_kind": "read_only_connected_github_issues_plus_local_evidence",
+  "issues": [
+    {
+      "number": 27,
+      "url": "https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/issues/27",
+      "criteria": "Controlled reversible degradation/recovery; causal diagnosis, signals and comparison; P3-5 input/processing rate and delay/backlog under reduced capacity."
+    },
+    {
+      "number": 50,
+      "url": "https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/issues/50",
+      "criteria": "P3-2 requires 2400 unique readings at 20/s for 120 seconds; independent of this run."
+    }
+  ],
+  "unavailable_literal_sections": [
+    "5.11",
+    "5.13",
+    "P3-4"
+  ],
+  "user_clarification_requested": true,
+  "no_automatic_compliance_claim": true
+}

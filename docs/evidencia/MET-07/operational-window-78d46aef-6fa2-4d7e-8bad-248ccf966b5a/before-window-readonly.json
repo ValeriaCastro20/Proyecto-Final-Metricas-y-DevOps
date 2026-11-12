@@ -1,0 +1,23 @@
+{
+  "material": "REAL_READ_ONLY_BEFORE_WINDOW",
+  "server_utc": "2026-11-12T20:36:36.086220+00:00",
+  "incident_claimed": false,
+  "guard_probe_created": false,
+  "incident_directory_created": false,
+  "worker": {
+    "uid": "f1c9cafa-7fe9-4495-b806-94776f8a8326",
+    "replicas": 1,
+    "ready": 1,
+    "available": 1
+  },
+  "source_sha256": {
+    "met07_operate.py": "5472f28d8dc3ad17d612c253a797765ab13ece8f8f2e6f2766194eb9e4b98fb5",
+    "met07_signals.py": "63dd80fe3251420e63e0deb6b0517560b9958634192eff699c8adb8a00dd6bd1",
+    "met07_launch.py": "13a5d90cd01fd44a3ceb805b5a11c06d74345bb2c0b673961e3c90ad8d232a81",
+    "met07.py": "e08ba624bc645f01c62a30f8b4088f6bc96dc803563ccaaa17916d57361c0434"
+  },
+  "identity": {
+    "uid": 1000,
+    "gid": 1000
+  }
+}

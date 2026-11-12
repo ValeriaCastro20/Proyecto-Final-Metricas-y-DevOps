@@ -1,0 +1,12 @@
+{
+  "source": "explicit_user_request_after_preserved_abort",
+  "prior_abort": "operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a",
+  "workflow_endpoint": "https://api.github.com/repos/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/workflows/411281561/runs",
+  "window_start": "2026-11-12T21:00:00Z",
+  "window_end": "2026-11-12T23:00:00Z",
+  "minimum_remaining_seconds_exclusive": 1200,
+  "namespace": "eventos-development",
+  "single_incident_authorized": true,
+  "automatic_retry": false,
+  "pr_actions_authorized": false
+}

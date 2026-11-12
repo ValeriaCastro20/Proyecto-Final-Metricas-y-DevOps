@@ -1,0 +1,154 @@
+{
+  "material": "INDEPENDENT_VALIDATION_OF_REAL_INCIDENT_ARTIFACTS",
+  "passed": true,
+  "incident_attempts": 1,
+  "automatic_retry": false,
+  "device_id": "met07-70bd26e202c046d4b6b5a3f9afa70bb8",
+  "attempts": 472,
+  "http_202": 472,
+  "connection_errors": 0,
+  "unique_uuids": 472,
+  "processed_uuids": 472,
+  "load_coverage": {
+    "during_attempts": 451,
+    "missed_schedule_intervals": 0,
+    "maximum_request_free_seconds": 0.5012013759987894
+  },
+  "baseline": {
+    "server_utc": "2026-11-12T21:30:34.250000+00:00",
+    "backlog": 0,
+    "alert_state": "inactive"
+  },
+  "degradation_boundary_utc": "2026-11-12T21:31:23.430000+00:00",
+  "firing_utc": "2026-11-12T21:35:03.799000+00:00",
+  "worker_after_boundary_utc": "2026-11-12T21:35:07.582000+00:00",
+  "first_zero_after_restore_utc": "2026-11-12T21:35:09.794000+00:00",
+  "resolved_utc": "2026-11-12T21:36:01.403000+00:00",
+  "maximum_observed_backlog": 437,
+  "restore_request_to_ready_seconds": 3.4819753549963934,
+  "degradation_event_to_ready_seconds": 224.14132846299617,
+  "guard_probe_lease_seconds": 30.32212775500375,
+  "guard_probe_reason": "lost-supervisor",
+  "incident_guard_result": "finished",
+  "transitions": [
+    {
+      "server_utc": "2026-11-12T21:31:10.801000+00:00",
+      "alert_state": "inactive",
+      "backlog": 0
+    },
+    {
+      "server_utc": "2026-11-12T21:33:05.125000+00:00",
+      "alert_state": "pending",
+      "backlog": 197
+    },
+    {
+      "server_utc": "2026-11-12T21:35:03.799000+00:00",
+      "alert_state": "firing",
+      "backlog": 437
+    },
+    {
+      "server_utc": "2026-11-12T21:36:01.403000+00:00",
+      "alert_state": "inactive",
+      "backlog": 0
+    }
+  ],
+  "preflight_checks": 4,
+  "power_workflow_runs": [
+    6,
+    6,
+    6,
+    6
+  ],
+  "forwards_verified_before_through_final_verification": true,
+  "final_worker": {
+    "server_utc": "2026-11-12T21:36:08.121707+00:00",
+    "uid": "f1c9cafa-7fe9-4495-b806-94776f8a8326",
+    "replicas": 1,
+    "ready": 1,
+    "available": 1
+  },
+  "signals": [
+    {
+      "phase": "before",
+      "passed": true,
+      "coverage": {
+        "scope": "accepted_reading_lifecycle_not_continuous_phase_coverage",
+        "accepted_uuid_count": 472,
+        "linked_uuid_count": 144,
+        "complete": false,
+        "truncated_streams": 0
+      },
+      "traces": 144,
+      "logs": 315,
+      "queries": [
+        {
+          "service": "event-service-api",
+          "http": 200,
+          "connection_error": false,
+          "limit_reached": false
+        },
+        {
+          "service": "event-service-worker",
+          "http": 200,
+          "connection_error": false,
+          "limit_reached": false
+        }
+      ]
+    },
+    {
+      "phase": "during",
+      "passed": true,
+      "coverage": {
+        "scope": "accepted_reading_lifecycle_not_continuous_phase_coverage",
+        "accepted_uuid_count": 472,
+        "linked_uuid_count": 472,
+        "complete": true,
+        "truncated_streams": 0
+      },
+      "traces": 472,
+      "logs": 2333,
+      "queries": [
+        {
+          "service": "event-service-api",
+          "http": 200,
+          "connection_error": false,
+          "limit_reached": false
+        },
+        {
+          "service": "event-service-worker",
+          "http": 200,
+          "connection_error": false,
+          "limit_reached": false
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "passed": true,
+      "coverage": {
+        "scope": "accepted_reading_lifecycle_not_continuous_phase_coverage",
+        "accepted_uuid_count": 472,
+        "linked_uuid_count": 472,
+        "complete": true,
+        "truncated_streams": 0
+      },
+      "traces": 472,
+      "logs": 3250,
+      "queries": [
+        {
+          "service": "event-service-api",
+          "http": 200,
+          "connection_error": false,
+          "limit_reached": false
+        },
+        {
+          "service": "event-service-worker",
+          "http": 200,
+          "connection_error": false,
+          "limit_reached": false
+        }
+      ]
+    }
+  ],
+  "original_hashes_verified": 102
+}

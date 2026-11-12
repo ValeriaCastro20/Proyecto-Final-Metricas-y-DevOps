@@ -1,0 +1,85 @@
+{
+  "material": "REAL_OPERATIONAL_PREFLIGHT_ABORTED_BEFORE_INCIDENT",
+  "window": {
+    "server_utc": "2026-11-12T21:00:00.621994+00:00",
+    "start": "2026-11-12T21:00:00Z",
+    "end": "2026-11-12T23:00:00Z",
+    "remaining_seconds": 7199.378005504608
+  },
+  "preflight_server_utc": "2026-11-12T21:00:04.349752+00:00",
+  "administrator_evidence_source": "user_relayed_administrator",
+  "arm_query_performed": false,
+  "azure_schedules_verified": false,
+  "active_repository_workflows": [
+    {
+      "id": 43098085841,
+      "name": "Rust quality and acceptance",
+      "status": "queued",
+      "event": "pull_request",
+      "head_branch": "fix/MET-02-reading-logs",
+      "created_at": "2026-11-11T20:47:10Z"
+    },
+    {
+      "id": 43097963040,
+      "name": "Rust quality and acceptance",
+      "status": "queued",
+      "event": "pull_request",
+      "head_branch": "fix/MET-04-worker-trace",
+      "created_at": "2026-11-11T20:45:48Z"
+    },
+    {
+      "id": 43097642459,
+      "name": "Rust quality and acceptance",
+      "status": "queued",
+      "event": "pull_request",
+      "head_branch": "docs/COM-02-esc3-current",
+      "created_at": "2026-11-11T20:42:38Z"
+    },
+    {
+      "id": 43097214164,
+      "name": "Rust quality and acceptance",
+      "status": "queued",
+      "event": "pull_request",
+      "head_branch": "fix/MET-02-reading-logs",
+      "created_at": "2026-11-11T20:38:01Z"
+    },
+    {
+      "id": 43096797723,
+      "name": "Rust quality and acceptance",
+      "status": "queued",
+      "event": "pull_request",
+      "head_branch": "fix/MET-04-worker-trace",
+      "created_at": "2026-11-11T20:33:54Z"
+    }
+  ],
+  "admission_counter_used_as_active_power_workflows": 5,
+  "classification_defect": "Launcher used total active repository workflows as active_power_workflows. All five observed entries were queued Rust quality PR runs; this is not evidence of five power workflows.",
+  "endpoint_preflight_passed": true,
+  "scheduled_events_http": 200,
+  "scheduled_event_count": 0,
+  "incident_entered": false,
+  "degradation_executed": false,
+  "load_attempts": 0,
+  "device_writes": 0,
+  "scale_mutations": 0,
+  "operational_guard_verified": false,
+  "guard_probe_reached": false,
+  "followers_reached": false,
+  "incident_firing": "not_observed_no_incident",
+  "uuid_processing_acceptance": "not_applicable_no_incident_uuids",
+  "restoration": "not_required_worker_remained_one",
+  "final_worker": {
+    "server_utc": "2026-11-12T21:00:04.764116+00:00",
+    "uid": "f1c9cafa-7fe9-4495-b806-94776f8a8326",
+    "replicas": 1,
+    "ready": 1,
+    "available": 1
+  },
+  "final_readonly_observation": {
+    "server_utc": "2026-11-12T21:00:04.770000+00:00",
+    "backlog": 0,
+    "alert_state": "inactive"
+  },
+  "automatic_retry": false,
+  "original_hashes_verified": 81
+}

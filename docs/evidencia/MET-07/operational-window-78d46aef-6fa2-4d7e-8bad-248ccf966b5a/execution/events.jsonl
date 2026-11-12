@@ -1,0 +1,2 @@
+{"kind": "four_vm_forwards_started", "mono": 79724.179943776, "server_anchor": null, "services": [{"service": "event-service", "port": 28000, "pid": 2036538}, {"service": "prometheus", "port": 29090, "pid": 2036539}, {"service": "jaeger-collector", "port": 26686, "pid": 2036540}, {"service": "grafana", "port": 23000, "pid": 2036541}]}
+{"kind": "four_vm_forwards_stopped", "mono": 79728.393049703, "server_anchor": null, "all_stopped": true}

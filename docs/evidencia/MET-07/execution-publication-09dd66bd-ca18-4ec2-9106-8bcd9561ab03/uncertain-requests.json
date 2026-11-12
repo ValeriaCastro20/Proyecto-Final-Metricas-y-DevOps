@@ -1,0 +1,14 @@
+{
+  "material": "OFFLINE_RECONCILIATION_OF_REAL_READING_REQUESTS",
+  "scope": "472 POST /v1/readings; device registration HTTP 201 and monitoring GET requests are separate",
+  "passed": true,
+  "uncertain_requests": [],
+  "started": 472,
+  "results": 472,
+  "http_202": 472,
+  "http_200": 0,
+  "unique_response_uuids": 472,
+  "matched_processed_uuids": 472,
+  "duplicate_response_uuids": 0,
+  "connection_errors": 0
+}

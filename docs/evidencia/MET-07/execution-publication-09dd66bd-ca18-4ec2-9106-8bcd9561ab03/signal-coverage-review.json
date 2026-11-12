@@ -1,0 +1,72 @@
+{
+  "material": "OFFLINE_RECHECK_OF_CAPTURED_REAL_LOGS_AND_TRACES",
+  "phases": [
+    {
+      "phase": "before",
+      "global_coverage": {
+        "scope": "accepted_reading_lifecycle_not_continuous_phase_coverage",
+        "accepted_uuid_count": 472,
+        "linked_uuid_count": 144,
+        "complete": false,
+        "truncated_streams": 0
+      },
+      "trace_linked_uuid_count": 144,
+      "log_and_trace_correlated_uuid_count": 27,
+      "baseline_received_before_degradation_uuid_count": 24,
+      "baseline_uuids_fully_correlated_in_this_query": 24,
+      "query_window": {
+        "start": "2026-11-12T21:30:10.801000+00:00",
+        "end": "2026-11-12T21:32:23.430000+00:00"
+      },
+      "requested_window": {
+        "start": "2026-11-12T21:31:10.801000+00:00",
+        "end": "2026-11-12T21:31:23.430000+00:00"
+      }
+    },
+    {
+      "phase": "during",
+      "global_coverage": {
+        "scope": "accepted_reading_lifecycle_not_continuous_phase_coverage",
+        "accepted_uuid_count": 472,
+        "linked_uuid_count": 472,
+        "complete": true,
+        "truncated_streams": 0
+      },
+      "trace_linked_uuid_count": 472,
+      "log_and_trace_correlated_uuid_count": 472,
+      "baseline_received_before_degradation_uuid_count": 24,
+      "baseline_uuids_fully_correlated_in_this_query": 24,
+      "query_window": {
+        "start": "2026-11-12T21:30:23.430000+00:00",
+        "end": "2026-11-12T21:36:07.582000+00:00"
+      },
+      "requested_window": {
+        "start": "2026-11-12T21:31:23.430000+00:00",
+        "end": "2026-11-12T21:35:07.582000+00:00"
+      }
+    },
+    {
+      "phase": "after",
+      "global_coverage": {
+        "scope": "accepted_reading_lifecycle_not_continuous_phase_coverage",
+        "accepted_uuid_count": 472,
+        "linked_uuid_count": 472,
+        "complete": true,
+        "truncated_streams": 0
+      },
+      "trace_linked_uuid_count": 472,
+      "log_and_trace_correlated_uuid_count": 472,
+      "baseline_received_before_degradation_uuid_count": 24,
+      "baseline_uuids_fully_correlated_in_this_query": 24,
+      "query_window": {
+        "start": "2026-11-12T21:30:11.867340+00:00",
+        "end": "2026-11-12T21:37:01.403000+00:00"
+      },
+      "requested_window": {
+        "start": "2026-11-12T21:35:07.582000+00:00",
+        "end": "2026-11-12T21:36:01.403000+00:00"
+      }
+    }
+  ],
+  "note": "Global UUID reference set is 472 in every query. Before query expands its bounds and returns whole traces; it is not 144 requests sent in the before phase. The 24 actually received before degradation are fully correlated."
+}

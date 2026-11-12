@@ -1,0 +1,1011 @@
+{
+  "original_102_verified": true,
+  "original_102": [
+    {
+      "sha256": "9e919c4c8bc128b7c2b176852b71725ebb300215f3546a2727dda74f08f313a5",
+      "path": "docs\\evidencia\\MET-07\\continuation-review-2026-11-12.md"
+    },
+    {
+      "sha256": "116bb602e6e9c81215aef5154b526bf410d696395abbfe551275ba889875452c",
+      "path": "docs\\evidencia\\MET-07\\hardening-identity-signals.md"
+    },
+    {
+      "sha256": "e36883848363ed4159de0eb84aafd4a2852f608c3b3c2337be683853cf8100c8",
+      "path": "docs\\evidencia\\MET-07\\index.md"
+    },
+    {
+      "sha256": "a797a5cbc6b35e5c5dfca2bd85dda06acb778d577e6caaf31063adb24a9072ae",
+      "path": "docs\\evidencia\\MET-07\\inspect-final-state.cjs"
+    },
+    {
+      "sha256": "6ccab8d5f416c0f9d3f9d54be126fc795565f42c7c7a122aa1d969260865894a",
+      "path": "docs\\evidencia\\MET-07\\inspect-operational.cjs"
+    },
+    {
+      "sha256": "9415fac3b72707146606cc64a31eda62893085f7c27174ef387f63059093a429",
+      "path": "docs\\evidencia\\MET-07\\inspect-readonly.cjs"
+    },
+    {
+      "sha256": "c49cc307fff5e396c864a23b9a9c435bb00d0e9780bbf86c0c910b12c014e01f",
+      "path": "docs\\evidencia\\MET-07\\operational-preflight-2026-11-12.md"
+    },
+    {
+      "sha256": "564f95f7d63301fecc2f4cce3a652cf0413adc08191a4c74ced68be2c694ff8e",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-review-2026-11-12.md"
+    },
+    {
+      "sha256": "6d7e424008fc2415ac3307e7119778339c8315e5f673f9b748c8db36f67ab0b3",
+      "path": "docs\\evidencia\\MET-07\\preflight-os-watchdog-decision-2026-11-12.json"
+    },
+    {
+      "sha256": "dc9932eaa5bf930d0a27d09f174ecd11d79d8e3d4cb3e7546e48e8d22c2a968d",
+      "path": "docs\\evidencia\\MET-07\\preparation-readonly.json"
+    },
+    {
+      "sha256": "8297f117d568a6f37ef2b81c62793a772d71f7c5caa37ceeb7b62c1171e5f2d8",
+      "path": "docs\\evidencia\\MET-07\\publication-current-path.txt"
+    },
+    {
+      "sha256": "4351f21191228bca7f3802c1069c4908fbb0a045c2947bcdefd7cafb92d350f5",
+      "path": "docs\\evidencia\\MET-07\\validate-preparation.sh"
+    },
+    {
+      "sha256": "b78bc7f4b9cf881c8b97cf3fd71a9e266ec8f5a7cd564bdbfa706a84cc687018",
+      "path": "docs\\evidencia\\MET-07\\validation-hardening.txt"
+    },
+    {
+      "sha256": "87ccc101040e38770266bf235fe2fe825b835cc31f547afd1539d04f03db8411",
+      "path": "docs\\evidencia\\MET-07\\validation-preparation-final.txt"
+    },
+    {
+      "sha256": "d63064d3c8ba193c93886e2abfe50163fa56123db961da4a4f870167bb4e9ebe",
+      "path": "docs\\evidencia\\MET-07\\validation-preparation.md"
+    },
+    {
+      "sha256": "f46d84cb8bbf6cf767c74d2dcc6dce49f6753998811cecf07aa8e05d74b8b6e0",
+      "path": "docs\\evidencia\\MET-07\\validation-preparation.txt"
+    },
+    {
+      "sha256": "9224f74914eecfea0a68046a8da56f43d7240df3300a9a49037dd709616fe950",
+      "path": "docs\\evidencia\\MET-07\\validation-publication.txt"
+    },
+    {
+      "sha256": "e052999f1e16792f92cfb13a6415e69fa621e419ac7acaa870caf73e8150f5d8",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\authorization.json"
+    },
+    {
+      "sha256": "a2bb95f92cd3fb42880746811d1f50173f6e7d57749fc43e6ce7779f34b41ad0",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\baseline.json"
+    },
+    {
+      "sha256": "8fc94624a4a4e4b7163bf689f2bca5ea7b8afbbebb2dec57ccabe143d9425896",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\decision.json"
+    },
+    {
+      "sha256": "faddb7fe387cc1505a5919329a195a9b05190cde3820d182186d619789056dc8",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\endpoint-preflight.json"
+    },
+    {
+      "sha256": "d02c5b20452c105b3395afe9e4576f680a7a51f025f30385755a555dbd1081cc",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\events.jsonl"
+    },
+    {
+      "sha256": "709eedc0069b44b5a86305809a90284ae02dfe03d3ed0bfe9a78dede1acf0bbf",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\final-state.json"
+    },
+    {
+      "sha256": "3392f8901910ce88696ddaca8fc95e32c42c23e1b6973f576048e9b7b7e0eb5c",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\fixture-validation.json"
+    },
+    {
+      "sha256": "d94799f96a516930a766b8af68ec694fe3a18eb11516707ff9a0eb39b3d27014",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\forward-transports.json"
+    },
+    {
+      "sha256": "9a06c41a45a91aeeb8dc5680e63a9accc72d6753715520e01486917145bd7fe4",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\power-preflight.json"
+    },
+    {
+      "sha256": "286c75cd71e6d8056f443eb40a2c8c549940d1912a978e9fa7f3650b1997e24e",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\source-sha256.json"
+    },
+    {
+      "sha256": "26726c6b17cbf048f010adb3c76a837fa2bfb9562da74bafda1909a40b40f460",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\worker-preflight.json"
+    },
+    {
+      "sha256": "e052999f1e16792f92cfb13a6415e69fa621e419ac7acaa870caf73e8150f5d8",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\authorization.json"
+    },
+    {
+      "sha256": "fd4b913ab94057343a1e1d91b364273251d9ad4c22a88f45fa2dd63cfdf31ce0",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\baseline.json"
+    },
+    {
+      "sha256": "37020a159f46b394873542720d36213795d8247bf9d81bb76ec52c4a306bdebd",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\decision.json"
+    },
+    {
+      "sha256": "61a7a05986a171278fa5779e386b73739649979145d056d6fcbfeb158d917074",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\endpoint-preflight.json"
+    },
+    {
+      "sha256": "875992f057740584d1a049defa40445b6cda5dbfe5558824b55dc142c16d1bd9",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\events.jsonl"
+    },
+    {
+      "sha256": "939a004de74b9577a66ce5e54c4251f1a12c75328b3f921540dec60e9cc106ab",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\final-state.json"
+    },
+    {
+      "sha256": "c1ce4b5f8bb43259b4624c440756f2c82d59f356e3924417ceecbb3e125745b6",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\fixture-validation.json"
+    },
+    {
+      "sha256": "b8c341254ceb76975d3c5c23a59818b28cb4ea634986a04433944aa5b640860d",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\forward-transports.json"
+    },
+    {
+      "sha256": "98d416edb867707bf2e1dfd744f251a0a115d577824efc0507ce88b004b297ab",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\power-preflight.json"
+    },
+    {
+      "sha256": "ad103c31291c1770a17c8c2c816dd6063344379d44a59940a21344797805c49b",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\source-sha256.json"
+    },
+    {
+      "sha256": "26726c6b17cbf048f010adb3c76a837fa2bfb9562da74bafda1909a40b40f460",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\worker-preflight.json"
+    },
+    {
+      "sha256": "b9be45f134eec5799090e044c0719e2f77414659349bb94ef32357dcb23b931e",
+      "path": "docs\\evidencia\\MET-07\\fixtures-2036b99d-5cc3-483d-9f1b-e9a15bbf8315\\fixture-validation.json"
+    },
+    {
+      "sha256": "52ee2f33dbeb82791948380db840992af2832e060acf5baa72b71d4599ec1018",
+      "path": "docs\\evidencia\\MET-07\\fixtures-705f22ca-ca8d-4894-be05-4694216ef3a9\\fixture-validation.json"
+    },
+    {
+      "sha256": "dda50c93f8b7d0790ca962c5595858084ad6549a7f904590e5e4e63be62159b0",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\administrator-confirmation-verbatim.json"
+    },
+    {
+      "sha256": "304c3648db18c9ec903754cf661ecceebceb2f47e56feb7770a3cfc0bdf949ae",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\administrator-confirmation.json"
+    },
+    {
+      "sha256": "be09f1a4a73a8dd127fe625287cdaa60a4d757ad60e2f967754d5dd5253e5367",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\before-window-readonly.json"
+    },
+    {
+      "sha256": "2ab5579743c9a112b730efa6d72dcf0b944871b9595a638e2edb5851d370bc47",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\dispatch-result.json"
+    },
+    {
+      "sha256": "0cfd187ae9a821f2637be6df323bec6512c860b93c4ffa6a586b3d4b63c85adc",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\dispatch-start.json"
+    },
+    {
+      "sha256": "f006819072be8ab179ca7a300ac461c316a1d28cb1fc2f88c3403f3297a5162b",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\launch-preparation.md"
+    },
+    {
+      "sha256": "71e21d4b5c6e842864ab8d245fce9086d1e5b4b30a6b42535ea153395233ed3a",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\launcher-final-suite.json"
+    },
+    {
+      "sha256": "fbcf1264365e367ddf6d6284038554ce4bc6426fab1ab6a57be645187a5ead37",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\launcher-secret-scan.json"
+    },
+    {
+      "sha256": "8e63b7418ba996bc3136eb0e6c62e87dcb589f1d953d350380f0c8f447e7cf6c",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\launcher-suite-results.json"
+    },
+    {
+      "sha256": "3f488732fc92f843527909b1e27f8bf0e3df9299611e7a3db007eba44c94e524",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\launcher-transport-safety-suite.json"
+    },
+    {
+      "sha256": "d004149ba0be81a52af6aa06b81d33d261bef5bc13a9e67d74b97486e5941fa4",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\operational-result.json"
+    },
+    {
+      "sha256": "49fe2581a51d8dca2fdc3f553e727efa58357f77d10fdf02355f492824efc9f6",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\operational-review.md"
+    },
+    {
+      "sha256": "f833194be6ad0ef38bfcb31ffba88c860eb3f131b7e7706a4f2f68be7f35972e",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\original-evidence-sha256.json"
+    },
+    {
+      "sha256": "9c86308974fc8290d83ae7e409563d05017599f20e35a59af63998169002103d",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\validation-addendum.md"
+    },
+    {
+      "sha256": "8a0f43ea5612fa11fd881de9753b340ddb724942e0bcb04eb676a720d7d58aaa",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\execution\\administrator-confirmation.json"
+    },
+    {
+      "sha256": "2bb07257320e1ff83a4f33fe3a5913de2fbd1dd2bce1161a6ffe893315f4c842",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\execution\\events.jsonl"
+    },
+    {
+      "sha256": "59d40f1d7f00854d26cb64ac4ccfa6a39c9678d399a6a39343c3ab186bfd86a6",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\execution\\final-snapshot.json"
+    },
+    {
+      "sha256": "06fdf26031b4f103ca2cab36dec44f5bc86dc9fbe629ce1a249faf19ea1d35e8",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\execution\\final-worker.json"
+    },
+    {
+      "sha256": "4ce5c25f002a4d84d0ed3335713b9b5966e6cfa2d7e29d7f241630dd556a8e7a",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\execution\\invocation.json"
+    },
+    {
+      "sha256": "93aeb0d7ea378ccd05878814b04148a473348d5fbfe86b96fcc373bdeae998c6",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\execution\\launch-failure.json"
+    },
+    {
+      "sha256": "3f31476de23349c5d66d0fc9c2299f87b299a06f530bd5e60a8e35b5bb4cb569",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\execution\\preflight-1.json"
+    },
+    {
+      "sha256": "e46503821262b43aa481e5c962e8ab055d6f10410734ddacd2016f20b2a6b107",
+      "path": "docs\\evidencia\\MET-07\\os-details-c1af5d73-b3dc-4f06-b831-6b5a0ce4aed0\\os-details.json"
+    },
+    {
+      "sha256": "e14cb406ee9bd9c06067181be8ac0065bbbfc33ec7f000eb7dd4664822a788dd",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\final-state.json"
+    },
+    {
+      "sha256": "5c8bde376952c64b60f96d0456a6b87be64616250e1c30a441c76fe9bf38e6c0",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\independent-validation.json"
+    },
+    {
+      "sha256": "7cbbff58bf1f38add2867d405d9f009f9fb47cb6d27e454daeb30bfc929457b4",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\original-evidence-sha256.json"
+    },
+    {
+      "sha256": "4f137bb4dc9a8d110aaa377bbdd6485c2deefe92113f7ca2a6cf231278e49246",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\os-power-audit.json"
+    },
+    {
+      "sha256": "91b14420b4028006ebe854b65d57261829a3f8998c61e8b452bd6d26aaa70326",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\source-sha256.json"
+    },
+    {
+      "sha256": "26726c6b17cbf048f010adb3c76a837fa2bfb9562da74bafda1909a40b40f460",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\worker-preflight.json"
+    },
+    {
+      "sha256": "5f5051856801b858f2c251420b2fe55fb8307507798e5bf13192ac9a0d216f7e",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\guard-ready.json"
+    },
+    {
+      "sha256": "32257e23c487c409985bbfb9e8faf7954d9f00a0f69d380fa4bc1450f93be36c",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\guard-restored.json"
+    },
+    {
+      "sha256": "67594b4f9f19914a7675f0dd51c77d301e53a0808a3a2493183ab90748fa5fc3",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\heartbeat.json"
+    },
+    {
+      "sha256": "5c9a7d7d4ba9d20fd96df4c6f41ef8ffb15fc8defe90438cd9227f83e780cf47",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\independent-unit.json"
+    },
+    {
+      "sha256": "d2113af6fd51b6c90ea6c0929839eff2c0562ebfcb7f83c60a79336c995c2ad6",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\launch.json"
+    },
+    {
+      "sha256": "3fc6354203adb89c46fa589b2c07de47d01e2d94a39faff2823e3a1cab3e3061",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\readonly-noop-observed.json"
+    },
+    {
+      "sha256": "18fb7a2b803d095360d6fe0afb39350888471ef5c327435adeb0862d17dfc604",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\restore-state.json"
+    },
+    {
+      "sha256": "5c8bde376952c64b60f96d0456a6b87be64616250e1c30a441c76fe9bf38e6c0",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\validation.json"
+    },
+    {
+      "sha256": "891bc56ef5820cfdfd60f54827fb2b5e50d8e69956094a95bf94c7d9115dd32a",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\adapter-failure.json"
+    },
+    {
+      "sha256": "9bceca9c68e563dd5e84ec053342d8d0652020fd15872b263434d65392297dff",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\dispatch-result.json"
+    },
+    {
+      "sha256": "2c2c0c079b9e6a7ff98089e560e0540a331c92b2ac6e201892f058ec45ae8e2b",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\final-readonly-state.json"
+    },
+    {
+      "sha256": "b15cc3b4d4bb37fb5ac60e7622ee7b4082545e256c673bf0bb9d8519f570d543",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\integrity.json"
+    },
+    {
+      "sha256": "adb44aa07cc0c3782ffcf016f9f6fd69ca3ff8da0e46be727bbf41f155365c1d",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\invocation.json"
+    },
+    {
+      "sha256": "5e1246df764b51f7d61b723b2f1cd5f0e51b804c08e3398b81e16be413e59999",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\validation-local.txt"
+    },
+    {
+      "sha256": "e1f6d03f691c3a493c454bf3d98db068dcce8d0955cc474227d8f41060694f18",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\diagnostics\\endpoint-preflight.json"
+    },
+    {
+      "sha256": "52ecafdfabbdb02258d2b9b0cef747a63f0477ea3a031f47230b6024cadbac53",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\diagnostics\\power-preflight.json"
+    },
+    {
+      "sha256": "731146e89f4a6239894ea08713010d391b3e0928913c23b0c61a5ae0b03d6f8b",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\diagnostics\\worker-selection.json"
+    },
+    {
+      "sha256": "91dae7590af98dd703dc073838ea9e56e2785b9857632fa390f0562f7089e261",
+      "path": "docs\\evidencia\\MET-07\\publication-36a5e857-11d7-4e44-9d68-5ccff2335cdc\\original-evidence-sha256.json"
+    },
+    {
+      "sha256": "8f3c0bc23df8e0e3a0fe487e5793950a38199bd297b8dbc97ddc0350c2a8cf01",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\hardening-root-result.json"
+    },
+    {
+      "sha256": "8e5dc7853d981e168f11506b6650bc95493a6d23dfe79172de93514d9525411b",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\history-scan-corrected.json"
+    },
+    {
+      "sha256": "9d56cbd59766de9c4397125e468e083b43f397568304956813ed918ac3a317f1",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\local-checks.json"
+    },
+    {
+      "sha256": "35ca2465fc6750fff5cc78de12131d299ee3f3ce95a2b822bb0892360be0e026",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\original-evidence-sha256.json"
+    },
+    {
+      "sha256": "cd5771233bc83c152fcb676455972c65b2aa765fb8fb662dd3b19a16850e6196",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\publication-review.md"
+    },
+    {
+      "sha256": "a212511daa92570a1f431945efe973fa4ed4d4212a918f6aa63441a597765417",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\published-files.txt"
+    },
+    {
+      "sha256": "d6a4608f89d60f9bfa0282b6f8bdc5a6a4384bc395887287a517d4335917bb2a",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\secret-scan-final.json"
+    },
+    {
+      "sha256": "80607de99c419811a659312d858571ef6d0f2b6d2925e5cb48e43897e647c6f8",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\secret-scan-results.json"
+    },
+    {
+      "sha256": "89cb40b97447770a10b1f29b13a7de59fe7f26fb9c56a46534697c35772e3e14",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\sensitive-material-review.json"
+    },
+    {
+      "sha256": "c6e98a4ee6c3664a31da963f3878030264bab6fd44d4ac2112f69b1c15c0ad90",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\suite-results.json"
+    },
+    {
+      "sha256": "bf9b3c772b9d4093d55d89915081ea6a670cb37786457718fd375c4e89fca536",
+      "path": "docs\\evidencia\\MET-07\\timer-validation-51c5da67-5e02-49d5-8b14-256fc1954c1d\\local-checks.json"
+    },
+    {
+      "sha256": "883199b453c7307440006b149895be5f4d95d15245db882fae7b3976e28b2576",
+      "path": "docs\\evidencia\\MET-07\\timer-validation-51c5da67-5e02-49d5-8b14-256fc1954c1d\\original-evidence-sha256.json"
+    },
+    {
+      "sha256": "33ca6ac7fefcbe9fbfa37608d946096259a40d39bdc1076b05e7a9f9899cfd1d",
+      "path": "docs\\evidencia\\MET-07\\timer-validation-51c5da67-5e02-49d5-8b14-256fc1954c1d\\review.md"
+    },
+    {
+      "sha256": "a0485c4cdd6d578be1acd9081a8188bfc665809565fbe757ad818a0127393232",
+      "path": "docs\\evidencia\\MET-07\\timer-validation-51c5da67-5e02-49d5-8b14-256fc1954c1d\\secret-scan.json"
+    },
+    {
+      "sha256": "7fe86b33de29deae3710844e2c06b9b0371ee5a7e8ad6d2ce0a2ef734e64094a",
+      "path": "docs\\evidencia\\MET-07\\timer-validation-51c5da67-5e02-49d5-8b14-256fc1954c1d\\suite-results.json"
+    }
+  ],
+  "all_prepublication_files": [
+    {
+      "sha256": "9e919c4c8bc128b7c2b176852b71725ebb300215f3546a2727dda74f08f313a5",
+      "path": "docs\\evidencia\\MET-07\\continuation-review-2026-11-12.md"
+    },
+    {
+      "sha256": "116bb602e6e9c81215aef5154b526bf410d696395abbfe551275ba889875452c",
+      "path": "docs\\evidencia\\MET-07\\hardening-identity-signals.md"
+    },
+    {
+      "sha256": "e36883848363ed4159de0eb84aafd4a2852f608c3b3c2337be683853cf8100c8",
+      "path": "docs\\evidencia\\MET-07\\index.md"
+    },
+    {
+      "sha256": "a797a5cbc6b35e5c5dfca2bd85dda06acb778d577e6caaf31063adb24a9072ae",
+      "path": "docs\\evidencia\\MET-07\\inspect-final-state.cjs"
+    },
+    {
+      "sha256": "6ccab8d5f416c0f9d3f9d54be126fc795565f42c7c7a122aa1d969260865894a",
+      "path": "docs\\evidencia\\MET-07\\inspect-operational.cjs"
+    },
+    {
+      "sha256": "9415fac3b72707146606cc64a31eda62893085f7c27174ef387f63059093a429",
+      "path": "docs\\evidencia\\MET-07\\inspect-readonly.cjs"
+    },
+    {
+      "sha256": "c49cc307fff5e396c864a23b9a9c435bb00d0e9780bbf86c0c910b12c014e01f",
+      "path": "docs\\evidencia\\MET-07\\operational-preflight-2026-11-12.md"
+    },
+    {
+      "sha256": "564f95f7d63301fecc2f4cce3a652cf0413adc08191a4c74ced68be2c694ff8e",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-review-2026-11-12.md"
+    },
+    {
+      "sha256": "6d7e424008fc2415ac3307e7119778339c8315e5f673f9b748c8db36f67ab0b3",
+      "path": "docs\\evidencia\\MET-07\\preflight-os-watchdog-decision-2026-11-12.json"
+    },
+    {
+      "sha256": "dc9932eaa5bf930d0a27d09f174ecd11d79d8e3d4cb3e7546e48e8d22c2a968d",
+      "path": "docs\\evidencia\\MET-07\\preparation-readonly.json"
+    },
+    {
+      "sha256": "8297f117d568a6f37ef2b81c62793a772d71f7c5caa37ceeb7b62c1171e5f2d8",
+      "path": "docs\\evidencia\\MET-07\\publication-current-path.txt"
+    },
+    {
+      "sha256": "4351f21191228bca7f3802c1069c4908fbb0a045c2947bcdefd7cafb92d350f5",
+      "path": "docs\\evidencia\\MET-07\\validate-preparation.sh"
+    },
+    {
+      "sha256": "b78bc7f4b9cf881c8b97cf3fd71a9e266ec8f5a7cd564bdbfa706a84cc687018",
+      "path": "docs\\evidencia\\MET-07\\validation-hardening.txt"
+    },
+    {
+      "sha256": "87ccc101040e38770266bf235fe2fe825b835cc31f547afd1539d04f03db8411",
+      "path": "docs\\evidencia\\MET-07\\validation-preparation-final.txt"
+    },
+    {
+      "sha256": "d63064d3c8ba193c93886e2abfe50163fa56123db961da4a4f870167bb4e9ebe",
+      "path": "docs\\evidencia\\MET-07\\validation-preparation.md"
+    },
+    {
+      "sha256": "f46d84cb8bbf6cf767c74d2dcc6dce49f6753998811cecf07aa8e05d74b8b6e0",
+      "path": "docs\\evidencia\\MET-07\\validation-preparation.txt"
+    },
+    {
+      "sha256": "9224f74914eecfea0a68046a8da56f43d7240df3300a9a49037dd709616fe950",
+      "path": "docs\\evidencia\\MET-07\\validation-publication.txt"
+    },
+    {
+      "sha256": "e052999f1e16792f92cfb13a6415e69fa621e419ac7acaa870caf73e8150f5d8",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\authorization.json"
+    },
+    {
+      "sha256": "a2bb95f92cd3fb42880746811d1f50173f6e7d57749fc43e6ce7779f34b41ad0",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\baseline.json"
+    },
+    {
+      "sha256": "8fc94624a4a4e4b7163bf689f2bca5ea7b8afbbebb2dec57ccabe143d9425896",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\decision.json"
+    },
+    {
+      "sha256": "faddb7fe387cc1505a5919329a195a9b05190cde3820d182186d619789056dc8",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\endpoint-preflight.json"
+    },
+    {
+      "sha256": "d02c5b20452c105b3395afe9e4576f680a7a51f025f30385755a555dbd1081cc",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\events.jsonl"
+    },
+    {
+      "sha256": "709eedc0069b44b5a86305809a90284ae02dfe03d3ed0bfe9a78dede1acf0bbf",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\final-state.json"
+    },
+    {
+      "sha256": "3392f8901910ce88696ddaca8fc95e32c42c23e1b6973f576048e9b7b7e0eb5c",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\fixture-validation.json"
+    },
+    {
+      "sha256": "d94799f96a516930a766b8af68ec694fe3a18eb11516707ff9a0eb39b3d27014",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\forward-transports.json"
+    },
+    {
+      "sha256": "9a06c41a45a91aeeb8dc5680e63a9accc72d6753715520e01486917145bd7fe4",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\power-preflight.json"
+    },
+    {
+      "sha256": "286c75cd71e6d8056f443eb40a2c8c549940d1912a978e9fa7f3650b1997e24e",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\source-sha256.json"
+    },
+    {
+      "sha256": "26726c6b17cbf048f010adb3c76a837fa2bfb9562da74bafda1909a40b40f460",
+      "path": "docs\\evidencia\\MET-07\\continuation-3d2f8a57-2f4a-49b5-96f2-2dc846750157\\worker-preflight.json"
+    },
+    {
+      "sha256": "e052999f1e16792f92cfb13a6415e69fa621e419ac7acaa870caf73e8150f5d8",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\authorization.json"
+    },
+    {
+      "sha256": "fd4b913ab94057343a1e1d91b364273251d9ad4c22a88f45fa2dd63cfdf31ce0",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\baseline.json"
+    },
+    {
+      "sha256": "37020a159f46b394873542720d36213795d8247bf9d81bb76ec52c4a306bdebd",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\decision.json"
+    },
+    {
+      "sha256": "61a7a05986a171278fa5779e386b73739649979145d056d6fcbfeb158d917074",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\endpoint-preflight.json"
+    },
+    {
+      "sha256": "875992f057740584d1a049defa40445b6cda5dbfe5558824b55dc142c16d1bd9",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\events.jsonl"
+    },
+    {
+      "sha256": "939a004de74b9577a66ce5e54c4251f1a12c75328b3f921540dec60e9cc106ab",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\final-state.json"
+    },
+    {
+      "sha256": "c1ce4b5f8bb43259b4624c440756f2c82d59f356e3924417ceecbb3e125745b6",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\fixture-validation.json"
+    },
+    {
+      "sha256": "b8c341254ceb76975d3c5c23a59818b28cb4ea634986a04433944aa5b640860d",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\forward-transports.json"
+    },
+    {
+      "sha256": "98d416edb867707bf2e1dfd744f251a0a115d577824efc0507ce88b004b297ab",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\power-preflight.json"
+    },
+    {
+      "sha256": "ad103c31291c1770a17c8c2c816dd6063344379d44a59940a21344797805c49b",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\source-sha256.json"
+    },
+    {
+      "sha256": "26726c6b17cbf048f010adb3c76a837fa2bfb9562da74bafda1909a40b40f460",
+      "path": "docs\\evidencia\\MET-07\\continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2\\worker-preflight.json"
+    },
+    {
+      "sha256": "b9be45f134eec5799090e044c0719e2f77414659349bb94ef32357dcb23b931e",
+      "path": "docs\\evidencia\\MET-07\\fixtures-2036b99d-5cc3-483d-9f1b-e9a15bbf8315\\fixture-validation.json"
+    },
+    {
+      "sha256": "52ee2f33dbeb82791948380db840992af2832e060acf5baa72b71d4599ec1018",
+      "path": "docs\\evidencia\\MET-07\\fixtures-705f22ca-ca8d-4894-be05-4694216ef3a9\\fixture-validation.json"
+    },
+    {
+      "sha256": "dda50c93f8b7d0790ca962c5595858084ad6549a7f904590e5e4e63be62159b0",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\administrator-confirmation-verbatim.json"
+    },
+    {
+      "sha256": "304c3648db18c9ec903754cf661ecceebceb2f47e56feb7770a3cfc0bdf949ae",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\administrator-confirmation.json"
+    },
+    {
+      "sha256": "be09f1a4a73a8dd127fe625287cdaa60a4d757ad60e2f967754d5dd5253e5367",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\before-window-readonly.json"
+    },
+    {
+      "sha256": "2ab5579743c9a112b730efa6d72dcf0b944871b9595a638e2edb5851d370bc47",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\dispatch-result.json"
+    },
+    {
+      "sha256": "0cfd187ae9a821f2637be6df323bec6512c860b93c4ffa6a586b3d4b63c85adc",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\dispatch-start.json"
+    },
+    {
+      "sha256": "f006819072be8ab179ca7a300ac461c316a1d28cb1fc2f88c3403f3297a5162b",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\launch-preparation.md"
+    },
+    {
+      "sha256": "71e21d4b5c6e842864ab8d245fce9086d1e5b4b30a6b42535ea153395233ed3a",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\launcher-final-suite.json"
+    },
+    {
+      "sha256": "fbcf1264365e367ddf6d6284038554ce4bc6426fab1ab6a57be645187a5ead37",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\launcher-secret-scan.json"
+    },
+    {
+      "sha256": "8e63b7418ba996bc3136eb0e6c62e87dcb589f1d953d350380f0c8f447e7cf6c",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\launcher-suite-results.json"
+    },
+    {
+      "sha256": "3f488732fc92f843527909b1e27f8bf0e3df9299611e7a3db007eba44c94e524",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\launcher-transport-safety-suite.json"
+    },
+    {
+      "sha256": "d004149ba0be81a52af6aa06b81d33d261bef5bc13a9e67d74b97486e5941fa4",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\operational-result.json"
+    },
+    {
+      "sha256": "49fe2581a51d8dca2fdc3f553e727efa58357f77d10fdf02355f492824efc9f6",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\operational-review.md"
+    },
+    {
+      "sha256": "f833194be6ad0ef38bfcb31ffba88c860eb3f131b7e7706a4f2f68be7f35972e",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\original-evidence-sha256.json"
+    },
+    {
+      "sha256": "9c86308974fc8290d83ae7e409563d05017599f20e35a59af63998169002103d",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\validation-addendum.md"
+    },
+    {
+      "sha256": "8a0f43ea5612fa11fd881de9753b340ddb724942e0bcb04eb676a720d7d58aaa",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\execution\\administrator-confirmation.json"
+    },
+    {
+      "sha256": "2bb07257320e1ff83a4f33fe3a5913de2fbd1dd2bce1161a6ffe893315f4c842",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\execution\\events.jsonl"
+    },
+    {
+      "sha256": "59d40f1d7f00854d26cb64ac4ccfa6a39c9678d399a6a39343c3ab186bfd86a6",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\execution\\final-snapshot.json"
+    },
+    {
+      "sha256": "06fdf26031b4f103ca2cab36dec44f5bc86dc9fbe629ce1a249faf19ea1d35e8",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\execution\\final-worker.json"
+    },
+    {
+      "sha256": "4ce5c25f002a4d84d0ed3335713b9b5966e6cfa2d7e29d7f241630dd556a8e7a",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\execution\\invocation.json"
+    },
+    {
+      "sha256": "93aeb0d7ea378ccd05878814b04148a473348d5fbfe86b96fcc373bdeae998c6",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\execution\\launch-failure.json"
+    },
+    {
+      "sha256": "3f31476de23349c5d66d0fc9c2299f87b299a06f530bd5e60a8e35b5bb4cb569",
+      "path": "docs\\evidencia\\MET-07\\operational-window-78d46aef-6fa2-4d7e-8bad-248ccf966b5a\\execution\\preflight-1.json"
+    },
+    {
+      "sha256": "e46503821262b43aa481e5c962e8ab055d6f10410734ddacd2016f20b2a6b107",
+      "path": "docs\\evidencia\\MET-07\\os-details-c1af5d73-b3dc-4f06-b831-6b5a0ce4aed0\\os-details.json"
+    },
+    {
+      "sha256": "e14cb406ee9bd9c06067181be8ac0065bbbfc33ec7f000eb7dd4664822a788dd",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\final-state.json"
+    },
+    {
+      "sha256": "5c8bde376952c64b60f96d0456a6b87be64616250e1c30a441c76fe9bf38e6c0",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\independent-validation.json"
+    },
+    {
+      "sha256": "7cbbff58bf1f38add2867d405d9f009f9fb47cb6d27e454daeb30bfc929457b4",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\original-evidence-sha256.json"
+    },
+    {
+      "sha256": "4f137bb4dc9a8d110aaa377bbdd6485c2deefe92113f7ca2a6cf231278e49246",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\os-power-audit.json"
+    },
+    {
+      "sha256": "91b14420b4028006ebe854b65d57261829a3f8998c61e8b452bd6d26aaa70326",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\source-sha256.json"
+    },
+    {
+      "sha256": "26726c6b17cbf048f010adb3c76a837fa2bfb9562da74bafda1909a40b40f460",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\worker-preflight.json"
+    },
+    {
+      "sha256": "5f5051856801b858f2c251420b2fe55fb8307507798e5bf13192ac9a0d216f7e",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\guard-ready.json"
+    },
+    {
+      "sha256": "32257e23c487c409985bbfb9e8faf7954d9f00a0f69d380fa4bc1450f93be36c",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\guard-restored.json"
+    },
+    {
+      "sha256": "67594b4f9f19914a7675f0dd51c77d301e53a0808a3a2493183ab90748fa5fc3",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\heartbeat.json"
+    },
+    {
+      "sha256": "5c9a7d7d4ba9d20fd96df4c6f41ef8ffb15fc8defe90438cd9227f83e780cf47",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\independent-unit.json"
+    },
+    {
+      "sha256": "d2113af6fd51b6c90ea6c0929839eff2c0562ebfcb7f83c60a79336c995c2ad6",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\launch.json"
+    },
+    {
+      "sha256": "3fc6354203adb89c46fa589b2c07de47d01e2d94a39faff2823e3a1cab3e3061",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\readonly-noop-observed.json"
+    },
+    {
+      "sha256": "18fb7a2b803d095360d6fe0afb39350888471ef5c327435adeb0862d17dfc604",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\restore-state.json"
+    },
+    {
+      "sha256": "5c8bde376952c64b60f96d0456a6b87be64616250e1c30a441c76fe9bf38e6c0",
+      "path": "docs\\evidencia\\MET-07\\os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d\\watchdog-readonly-probe\\validation.json"
+    },
+    {
+      "sha256": "dda50c93f8b7d0790ca962c5595858084ad6549a7f904590e5e4e63be62159b0",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\administrator-confirmation.json"
+    },
+    {
+      "sha256": "c8399b3bd7f19d95fc6dab1d55ac12a2bd1905d9ffa009150c8bc94fd90be492",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\correction-review.md"
+    },
+    {
+      "sha256": "5963d37d3c804e82a8b13b7340b7b8e5606b1539d6f1a82b596009f84ed66075",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\dispatch-result.json"
+    },
+    {
+      "sha256": "459986a575905d9f357f7bf5fb332f96194427cdd28f5ed9ac23298be8265246",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\dispatch-start.json"
+    },
+    {
+      "sha256": "836d7a0f361dfdbeb266cf2dd879feb724f73d33a6270fa8a1ed3bb778129a7c",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\incident-review.md"
+    },
+    {
+      "sha256": "89de5c8ed50e4f42a3c3e1cd883eb1525f0e70ff50538437f52c11bc4eaf344f",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\launcher-final-suite.json"
+    },
+    {
+      "sha256": "ff9d773c3e631b1bd1ad36babb495fde1bcf432c53e45d591d390e96a9dd27ee",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\load-window-analysis.json"
+    },
+    {
+      "sha256": "49626383580f99b7f273ed1679354f99c778d3cb58b50b662ac07f850399590c",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\measured-timeline.json"
+    },
+    {
+      "sha256": "23375d4d3262531d7bec54b34bb3f49356b42f6048cf8f91f3d14c533cd632f6",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\new-preflight-authorization.json"
+    },
+    {
+      "sha256": "ca4506be515e5a2a81414a33cac7250349569573c025888d6fdf40fe4328ad4b",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\original-evidence-sha256.json"
+    },
+    {
+      "sha256": "a019759173af80d1ed7dbd58ae17f34c7571a41eca22d5e62c2927c21aa153cf",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\progress-8b6ddfc2-3f63-4798-a3e7-a252ed264c8e.json"
+    },
+    {
+      "sha256": "0324661ee11bcc58a45b75dc357d9f5a87d81e7cbc993edd0a135fb7671ed66c",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\real-incident-validation.json"
+    },
+    {
+      "sha256": "91b7df57b80cb4c545611a6904fbde86cdbd3019c9aa6341f3b89d86eb35873d",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\secret-scan.json"
+    },
+    {
+      "sha256": "e6d61a76a667f4b96d2eb62831b9934af35bb57f1fca2b787582a8becc2db999",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\suite-results.json"
+    },
+    {
+      "sha256": "cb09abf6575666df493aba92faea09d2ddbd06bf11ffa9fa883750270a0084f6",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\administrator-confirmation.json"
+    },
+    {
+      "sha256": "17e0faf329b725faca284026c8b64a7eb9a7860b4a06f75ecf57c2aa2627e5f8",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\baseline.json"
+    },
+    {
+      "sha256": "8c06982dd4975d0337c6bc3511bb181b2b8cf164f6e57bc9e518905a39c840c2",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\events.jsonl"
+    },
+    {
+      "sha256": "fd7c2e08e6471a0ede3f570c5347d7691ec155ea7bbcf28ec10b853aab64d344",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\final-snapshot.json"
+    },
+    {
+      "sha256": "b42be0b183f56f22c29e80e70ff6e1f425e863fc6f6c8d166e121464ad203ffe",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\final-worker.json"
+    },
+    {
+      "sha256": "289c222810033c978a0c27d064c7c5205888d42b7d97c88f1a1b62770796382d",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\invocation.json"
+    },
+    {
+      "sha256": "02dc33556073c706dbdef00d4e9fafd1217a9ef0eeb6a445c9e4e616cfdd6a32",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\post-guard-baseline.json"
+    },
+    {
+      "sha256": "89d9606ff2338172bc3caef4ce90f58675b0fe9506c904d6a8fb1e8139fd4a91",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\preflight-1.json"
+    },
+    {
+      "sha256": "dd69643b5cafbd92481de5d6828ba9537731c9361390c405850e97d4bf3ea244",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\preflight-2.json"
+    },
+    {
+      "sha256": "757ead18eff0679e07bc5c4bcfc13b230b3672805b61cb655204df15444ed880",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\preflight-3.json"
+    },
+    {
+      "sha256": "2bc33b5621ead40a23cbe7dd734af116d6b2e74967e07c5db31c039494a0ee5f",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\preflight-4.json"
+    },
+    {
+      "sha256": "5ba5773fa168fa600adea706c35fb0e9c970f559d886c094a8fa8826ee35dd18",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\recovery-state.json"
+    },
+    {
+      "sha256": "3474f28cafd7a3854b4d661f677b1b626edf5ef2c94e1d2b3260b6c11d4e028f",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\result.json"
+    },
+    {
+      "sha256": "bed00bd63a6cf3334612a86a5c8f90e00ff91743998721c6f360d9e34ddc6158",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\incident\\acceptance.json"
+    },
+    {
+      "sha256": "c5c59f6eeffda268c7cd77fa85b75c534eb6f07e1cab171c34c15450a0460015",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\incident\\after-readings.json"
+    },
+    {
+      "sha256": "4da92f0ec7b66a09536339b82a0cd84d96778529330b63448a4ecbc2e60180f1",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\incident\\context.json"
+    },
+    {
+      "sha256": "1b7515aa96391b64235382698df864962b9b395868bece8eae252aa85ca364c8",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\incident\\control-result.json"
+    },
+    {
+      "sha256": "bd36b0c9565802a3be4bec633c47d44c258c69dea23093a6763013b2f65e9e97",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\incident\\events.jsonl"
+    },
+    {
+      "sha256": "4e19a602bed1805756ca65b6168d92292cb98daa6c72f7784aed1d7a61203296",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\incident\\finished.json"
+    },
+    {
+      "sha256": "e92a0a5158a8699b97aa4e620e58b8d87337fcab5f61797bde1b215b3d6d48d5",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\incident\\guard-ready.json"
+    },
+    {
+      "sha256": "e34ace047171cade5573768ee39627f01330f309bebd60739ed6e155b0bb52f7",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\incident\\guard-restored.json"
+    },
+    {
+      "sha256": "88917a385a90ffb5b1beea8e88c035b77e76098050555e39a298b9ae4ce2c45f",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\incident\\heartbeat.json"
+    },
+    {
+      "sha256": "3d29e09fe345ab782dbbe4d6c83894ea1629b6f786e817ed60ce51a637943b4b",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\incident\\request-free-intervals.json"
+    },
+    {
+      "sha256": "352ca91abd1b45d54ff6cec56dc9db2869101613f7adb03702daedd676a25256",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\incident\\restore-state.json"
+    },
+    {
+      "sha256": "cf111fbbc91a8d3f278127c28d1c579b0c5706418b06eb1589ad83337140987b",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\incident\\signal-collection-plan.json"
+    },
+    {
+      "sha256": "4628b198748aefbf36dcd9a179eb57a9dc3a9e0273c1a61e7e4866b862a6ea55",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\incident\\signals-after.json"
+    },
+    {
+      "sha256": "834afa05f7e3b588afae7f7b375885a84cbf7297aaeb8f98413b223febf64613",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\incident\\signals-before.json"
+    },
+    {
+      "sha256": "64b26d9d15550d487e22baa3abe50a9869da5d502686fabde72738a4479308ff",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\incident\\signals-during.json"
+    },
+    {
+      "sha256": "d110cbb6afafe7d437de851e519cb355d7a9c72cb4a9d60f2ac76f7ca87f86e8",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\watchdog-probe\\events.jsonl"
+    },
+    {
+      "sha256": "201f81520524c11f604efcefdf27735f54d4b74a1e3d67f14c600bc29d6fb4c7",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\watchdog-probe\\guard-ready.json"
+    },
+    {
+      "sha256": "d519df7f3d4543d3f515894ab993eed2032fa107bbe3e490b70b575e3c323b74",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\watchdog-probe\\guard-restored.json"
+    },
+    {
+      "sha256": "8d0f7a83b57c8b57629e8154f779e8da4dd793c611bf26f1d3b5ff4ffca2bc35",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\watchdog-probe\\heartbeat.json"
+    },
+    {
+      "sha256": "a456533f6fc344696a6c30a9776e6af19db62dfc20d4354c974008e66344bf9b",
+      "path": "docs\\evidencia\\MET-07\\power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351\\execution\\watchdog-probe\\restore-state.json"
+    },
+    {
+      "sha256": "891bc56ef5820cfdfd60f54827fb2b5e50d8e69956094a95bf94c7d9115dd32a",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\adapter-failure.json"
+    },
+    {
+      "sha256": "9bceca9c68e563dd5e84ec053342d8d0652020fd15872b263434d65392297dff",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\dispatch-result.json"
+    },
+    {
+      "sha256": "2c2c0c079b9e6a7ff98089e560e0540a331c92b2ac6e201892f058ec45ae8e2b",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\final-readonly-state.json"
+    },
+    {
+      "sha256": "b15cc3b4d4bb37fb5ac60e7622ee7b4082545e256c673bf0bb9d8519f570d543",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\integrity.json"
+    },
+    {
+      "sha256": "adb44aa07cc0c3782ffcf016f9f6fd69ca3ff8da0e46be727bbf41f155365c1d",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\invocation.json"
+    },
+    {
+      "sha256": "5e1246df764b51f7d61b723b2f1cd5f0e51b804c08e3398b81e16be413e59999",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\validation-local.txt"
+    },
+    {
+      "sha256": "e1f6d03f691c3a493c454bf3d98db068dcce8d0955cc474227d8f41060694f18",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\diagnostics\\endpoint-preflight.json"
+    },
+    {
+      "sha256": "52ecafdfabbdb02258d2b9b0cef747a63f0477ea3a031f47230b6024cadbac53",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\diagnostics\\power-preflight.json"
+    },
+    {
+      "sha256": "731146e89f4a6239894ea08713010d391b3e0928913c23b0c61a5ae0b03d6f8b",
+      "path": "docs\\evidencia\\MET-07\\preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a\\diagnostics\\worker-selection.json"
+    },
+    {
+      "sha256": "91dae7590af98dd703dc073838ea9e56e2785b9857632fa390f0562f7089e261",
+      "path": "docs\\evidencia\\MET-07\\publication-36a5e857-11d7-4e44-9d68-5ccff2335cdc\\original-evidence-sha256.json"
+    },
+    {
+      "sha256": "8f3c0bc23df8e0e3a0fe487e5793950a38199bd297b8dbc97ddc0350c2a8cf01",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\hardening-root-result.json"
+    },
+    {
+      "sha256": "8e5dc7853d981e168f11506b6650bc95493a6d23dfe79172de93514d9525411b",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\history-scan-corrected.json"
+    },
+    {
+      "sha256": "9d56cbd59766de9c4397125e468e083b43f397568304956813ed918ac3a317f1",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\local-checks.json"
+    },
+    {
+      "sha256": "35ca2465fc6750fff5cc78de12131d299ee3f3ce95a2b822bb0892360be0e026",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\original-evidence-sha256.json"
+    },
+    {
+      "sha256": "cd5771233bc83c152fcb676455972c65b2aa765fb8fb662dd3b19a16850e6196",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\publication-review.md"
+    },
+    {
+      "sha256": "a212511daa92570a1f431945efe973fa4ed4d4212a918f6aa63441a597765417",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\published-files.txt"
+    },
+    {
+      "sha256": "d6a4608f89d60f9bfa0282b6f8bdc5a6a4384bc395887287a517d4335917bb2a",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\secret-scan-final.json"
+    },
+    {
+      "sha256": "80607de99c419811a659312d858571ef6d0f2b6d2925e5cb48e43897e647c6f8",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\secret-scan-results.json"
+    },
+    {
+      "sha256": "89cb40b97447770a10b1f29b13a7de59fe7f26fb9c56a46534697c35772e3e14",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\sensitive-material-review.json"
+    },
+    {
+      "sha256": "c6e98a4ee6c3664a31da963f3878030264bab6fd44d4ac2112f69b1c15c0ad90",
+      "path": "docs\\evidencia\\MET-07\\publication-6ebcb091-77bc-4bf2-bbc7-98dcc8a7bc8a\\suite-results.json"
+    },
+    {
+      "sha256": "bf9b3c772b9d4093d55d89915081ea6a670cb37786457718fd375c4e89fca536",
+      "path": "docs\\evidencia\\MET-07\\timer-validation-51c5da67-5e02-49d5-8b14-256fc1954c1d\\local-checks.json"
+    },
+    {
+      "sha256": "883199b453c7307440006b149895be5f4d95d15245db882fae7b3976e28b2576",
+      "path": "docs\\evidencia\\MET-07\\timer-validation-51c5da67-5e02-49d5-8b14-256fc1954c1d\\original-evidence-sha256.json"
+    },
+    {
+      "sha256": "33ca6ac7fefcbe9fbfa37608d946096259a40d39bdc1076b05e7a9f9899cfd1d",
+      "path": "docs\\evidencia\\MET-07\\timer-validation-51c5da67-5e02-49d5-8b14-256fc1954c1d\\review.md"
+    },
+    {
+      "sha256": "a0485c4cdd6d578be1acd9081a8188bfc665809565fbe757ad818a0127393232",
+      "path": "docs\\evidencia\\MET-07\\timer-validation-51c5da67-5e02-49d5-8b14-256fc1954c1d\\secret-scan.json"
+    },
+    {
+      "sha256": "7fe86b33de29deae3710844e2c06b9b0371ee5a7e8ad6d2ce0a2ef734e64094a",
+      "path": "docs\\evidencia\\MET-07\\timer-validation-51c5da67-5e02-49d5-8b14-256fc1954c1d\\suite-results.json"
+    }
+  ]
+}

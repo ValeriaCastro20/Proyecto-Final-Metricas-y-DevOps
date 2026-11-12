@@ -1,0 +1,14 @@
+{
+  "remote_root": "/home/azureuser/met07-operational-08f72031-55fe-4107-a71f-3c07cf5f4be1",
+  "source_sha256": {
+    "met07.py": "e08ba624bc645f01c62a30f8b4088f6bc96dc803563ccaaa17916d57361c0434",
+    "met07_operate.py": "5472f28d8dc3ad17d612c253a797765ab13ece8f8f2e6f2766194eb9e4b98fb5",
+    "met07_signals.py": "63dd80fe3251420e63e0deb6b0517560b9958634192eff699c8adb8a00dd6bd1",
+    "met07_launch.py": "2cd68a2c073f48e74c71d7912b6bc9f503ff8e1f1b033c6a46ad01cf6428d1c3"
+  },
+  "execute_once": true,
+  "arm_query_performed": false,
+  "window_start": "2026-11-12T21:00:00Z",
+  "window_end": "2026-11-12T23:00:00Z",
+  "automatic_retry": false
+}

@@ -1,0 +1,77 @@
+{
+  "npm_ci": {
+    "exit": 0,
+    "prepare": "husky",
+    "packages_added": 1,
+    "packages_audited": 2,
+    "vulnerabilities": 0
+  },
+  "checks": [
+    {
+      "check": "cargo version",
+      "exit": 0,
+      "stdout": "cargo 1.97.1 (c980f4866 2026-06-30)\n",
+      "stderr": ""
+    },
+    {
+      "check": "Rustfmt",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "Husky actual pre-commit",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "Husky hooksPath",
+      "exit": 0,
+      "stdout": ".husky/_\n",
+      "stderr": ""
+    },
+    {
+      "check": "Node syntax operational dispatcher",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "Python AST changed modules",
+      "exit": 0,
+      "stdout": "5 modules parsed; no launcher invoked\r\n",
+      "stderr": ""
+    },
+    {
+      "check": "diff whitespace",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "warning: in the working copy of 'scripts/met07_operate.py', LF will be replaced by CRLF the next time Git touches it\n"
+    },
+    {
+      "check": "New index/matrix relative links",
+      "exit": 0,
+      "pending_generated_files": [
+        "publication-checks.json",
+        "secret-scan.json",
+        "published-files.txt"
+      ]
+    },
+    {
+      "check": "Original 102 and all existing evidence hashes",
+      "exit": 0,
+      "original_files": 102,
+      "all_existing_files": 149
+    },
+    {
+      "check": "Sensitive material candidate files",
+      "exit": 0,
+      "files": 386,
+      "actual_current_credentials_compared_in_memory": true,
+      "private_key_or_kubeconfig_blocks": 0,
+      "forbidden_files": []
+    }
+  ],
+  "scope": "No operational launcher, network load, Kubernetes, SSH, Azure or app/worker invoked during publication checks"
+}

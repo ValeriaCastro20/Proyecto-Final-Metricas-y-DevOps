@@ -1,0 +1,2 @@
+{"kind": "lease_probe_started_worker_unchanged", "mono": 81560.886970886, "server_anchor": null, "server_utc": "2026-11-12T21:30:37.318000+00:00"}
+{"kind": "lease_probe_passed_worker_unchanged", "mono": 81591.284032598, "server_anchor": null, "server_utc": "2026-11-12T21:31:07.715000+00:00", "result": {"run": "823f160d906f4af9b93abd06fff4ed78", "uid": "f1c9cafa-7fe9-4495-b806-94776f8a8326", "reason": "lost-supervisor", "mono": 81590.92772838, "within_deadline": true}}

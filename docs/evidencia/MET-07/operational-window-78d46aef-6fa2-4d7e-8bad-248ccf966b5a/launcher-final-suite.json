@@ -1,0 +1,7 @@
+{
+  "suite": "test_met07_launch.py",
+  "material": "OFFLINE_FIXTURES_FINAL_AUTH_AND_WORKFLOW_SHA",
+  "exit": 0,
+  "stdout": "",
+  "stderr": "test_administrative_clearance_requires_scope_provenance_and_valid_window (test_met07_launch.LaunchTests.test_administrative_clearance_requires_scope_provenance_and_valid_window) ... ok\ntest_administrative_source_does_not_claim_arm_and_does_not_bypass_local_checks (test_met07_launch.LaunchTests.test_administrative_source_does_not_claim_arm_and_does_not_bypass_local_checks) ... ok\ntest_precondition_failure_closes_forwards_and_never_enters_incident (test_met07_launch.LaunchTests.test_precondition_failure_closes_forwards_and_never_enters_incident) ... ok\ntest_recovery_time_may_use_remaining_window_but_never_go_beyond_end (test_met07_launch.LaunchTests.test_recovery_time_may_use_remaining_window_but_never_go_beyond_end) ... ok\ntest_window_boundaries_use_strict_twenty_minute_margin (test_met07_launch.LaunchTests.test_window_boundaries_use_strict_twenty_minute_margin) ... ok\ntest_workflow_inventory_covers_repository_and_records_power_source_sha (test_met07_launch.LaunchTests.test_workflow_inventory_covers_repository_and_records_power_source_sha) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.008s\n\nOK\n"
+}

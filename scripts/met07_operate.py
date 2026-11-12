@@ -66,6 +66,22 @@ def endpoint_checks(http):
     return {"passed": passed, "results": results, "producer_check": "authenticated_role_forbidden_on_analyst_route"}
 
 
+def administrative_window_clearance(value, now):
+    """Administrative evidence relayed by the user is distinct from our ARM observations."""
+    if not isinstance(value, dict):
+        return False
+    try:
+        start = core.server_instant(value.get("window_start")).timestamp()
+        end = core.server_instant(value.get("window_end")).timestamp()
+    except RuntimeError:
+        return False
+    return (value.get("source") == "user_relayed_administrator" and
+            value.get("external_shutdown_automations_absent") is True and value.get("user_accepted") is True and
+            value.get("arm_verified_by_agent") is False and value.get("context") == "default" and
+            value.get("namespace") == "eventos-development" and value.get("vm") == "vm-eventos-b97e31-k3s" and
+            start <= now < end and end - now > 1200)
+
+
 def power_check(external, now, reader=read_url, run=subprocess.run):
     scheduled = reader("http://169.254.169.254/metadata/scheduledevents?api-version=2020-07-01", True)
     compute = reader("http://169.254.169.254/metadata/instance/compute?api-version=2021-02-01", True)
@@ -94,13 +110,16 @@ def power_check(external, now, reader=read_url, run=subprocess.run):
     checked = core.server_instant(external.get("checked_server_utc"))
     fresh = 0 <= now - checked.timestamp() < 300
     next_stop = core.server_instant(external.get("next_stop_utc"))
+    administrative_clearance = administrative_window_clearance(external.get("administrator_confirmation"), now)
+    result["external_shutdown_basis"] = ("agent_arm_query" if external.get("azure_schedules_verified") is True else
+                                         "user_relayed_administrator" if administrative_clearance else "unverified")
     result["passed"] = (scheduled["http_status"] == 200 and events == [] and
         compute["http_status"] == 200 and compute.get("body", {}).get("name") == "vm-eventos-b97e31-k3s" and
         not result["local_shutdown_pending"] and result["root_cron_empty"] and timers.returncode == 0 and
         result["timer_units"] is not None and
         not any(any(word in (unit or "").lower() for word in ("shutdown", "reboot", "poweroff"))
                 for unit in result.get("timer_units") or []) and
-        fresh and next_stop.timestamp() - now > 1200 and external.get("azure_schedules_verified") is True and
+        fresh and next_stop.timestamp() - now > 1200 and (external.get("azure_schedules_verified") is True or administrative_clearance) and
         external.get("active_power_workflows") == 0)
     return result
 

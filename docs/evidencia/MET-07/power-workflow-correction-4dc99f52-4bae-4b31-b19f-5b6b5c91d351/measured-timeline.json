@@ -1,0 +1,3741 @@
+{
+  "material": "DERIVED_FROM_REAL_SERVER_ANCHORED_SNAPSHOTS",
+  "samples": [
+    {
+      "phase": "before",
+      "server_utc": "2026-11-12T21:31:10.801000+00:00",
+      "mono": 81594.390151456,
+      "backlog": 0,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519070.808,
+              "0"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519070.81,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519070.815,
+              "NaN"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 12896,
+        "validated": 12896,
+        "accepted": 12896,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 12896,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "before",
+      "server_utc": "2026-11-12T21:31:11.860000+00:00",
+      "mono": 81595.451978433,
+      "backlog": 0,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519071.871,
+              "0"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519071.873,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519071.879,
+              "NaN"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 1,
+        "validated": 1,
+        "accepted": 1,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 0,
+        "pending": 1
+      }
+    },
+    {
+      "phase": "before",
+      "server_utc": "2026-11-12T21:31:16.894000+00:00",
+      "mono": 81600.480913698,
+      "backlog": 0,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519076.902,
+              "0.07272727272727272"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519076.904,
+              "0.12727272727272726"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519076.909,
+              "0.023499999999999997"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 11,
+        "validated": 11,
+        "accepted": 11,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 10,
+        "pending": 1
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:31:27.092000+00:00",
+      "mono": 81610.67923087,
+      "backlog": 0,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519087.1,
+              "0.43636363636363634"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519087.102,
+              "0.31518566666666664"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519087.107,
+              "0.018999999999999996"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 31,
+        "validated": 31,
+        "accepted": 31,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 4
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:31:32.240000+00:00",
+      "mono": 81615.826157099,
+      "backlog": 7,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519092.248,
+              "0.6181818181818182"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519092.25,
+              "0.317792962962963"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519092.255,
+              "0.01650000000000001"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 41,
+        "validated": 41,
+        "accepted": 41,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 14
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:31:37.397000+00:00",
+      "mono": 81620.98360699,
+      "backlog": 17,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519097.404,
+              "0.7999999999999999"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519097.407,
+              "0.3209883333333334"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519097.412,
+              "0.013999999999999995"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 52,
+        "validated": 52,
+        "accepted": 52,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 25
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:31:42.543000+00:00",
+      "mono": 81626.130482253,
+      "backlog": 27,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519102.552,
+              "0.9818181818181818"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519102.554,
+              "0.325177619047619"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519102.559,
+              "0.011499999999999979"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 62,
+        "validated": 62,
+        "accepted": 62,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 35
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:31:47.698000+00:00",
+      "mono": 81631.284600339,
+      "backlog": 37,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519107.705,
+              "1.1636363636363636"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519107.708,
+              "0.3306972222222222"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519107.713,
+              "0.009926968917971485"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 72,
+        "validated": 72,
+        "accepted": 72,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 45
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:31:52.850000+00:00",
+      "mono": 81636.446402359,
+      "backlog": 47,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519112.858,
+              "1.3454545454545455"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519112.861,
+              "0.33843599999999996"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519112.867,
+              "0.009744306559389064"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 83,
+        "validated": 83,
+        "accepted": 83,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 56
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:31:58.018000+00:00",
+      "mono": 81641.605753781,
+      "backlog": 57,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519118.026,
+              "1.5272727272727271"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519118.029,
+              "0.3498316666666666"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519118.034,
+              "0.009589282556487907"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 93,
+        "validated": 93,
+        "accepted": 93,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 66
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:32:03.177000+00:00",
+      "mono": 81646.769530674,
+      "backlog": 67,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519123.186,
+              "1.709090909090909"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519123.192,
+              "0.36891888888888885"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519123.197,
+              "0.009451041514178197"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 103,
+        "validated": 103,
+        "accepted": 103,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 76
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:32:08.332000+00:00",
+      "mono": 81651.91880165,
+      "backlog": 77,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519128.34,
+              "1.8909090909090909"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519128.342,
+              "0.4074616666666666"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519128.347,
+              "0.009282571264587716"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 113,
+        "validated": 113,
+        "accepted": 113,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 86
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:32:13.484000+00:00",
+      "mono": 81657.080281429,
+      "backlog": 87,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519133.494,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519133.497,
+              "0.3075333333333333"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519133.506,
+              "0.008392857142857143"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 124,
+        "validated": 124,
+        "accepted": 124,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 97
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:32:18.653000+00:00",
+      "mono": 81662.239920376,
+      "backlog": 107,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519138.661,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519138.668,
+              "0.006071428571428573"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 134,
+        "validated": 134,
+        "accepted": 134,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 107
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:32:23.808000+00:00",
+      "mono": 81667.398209625,
+      "backlog": 117,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519143.816,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519143.824,
+              "0.0049292452830188675"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 144,
+        "validated": 144,
+        "accepted": 144,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 117
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:32:28.987000+00:00",
+      "mono": 81672.573929035,
+      "backlog": 127,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519148.995,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519149.002,
+              "0.0049292452830188675"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 155,
+        "validated": 155,
+        "accepted": 155,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 128
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:32:34.196000+00:00",
+      "mono": 81677.781875223,
+      "backlog": 137,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519154.203,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519154.21,
+              "0.004837962962962963"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 165,
+        "validated": 165,
+        "accepted": 165,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 138
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:32:39.361000+00:00",
+      "mono": 81682.953633812,
+      "backlog": 147,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519159.373,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519159.382,
+              "0.004837962962962963"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 176,
+        "validated": 176,
+        "accepted": 176,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 149
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:32:44.516000+00:00",
+      "mono": 81688.102120196,
+      "backlog": 157,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519164.523,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519164.53,
+              "0.004883177570093458"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 186,
+        "validated": 186,
+        "accepted": 186,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 159
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:32:49.665000+00:00",
+      "mono": 81693.252663753,
+      "backlog": 167,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519169.673,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519169.681,
+              "0.004837962962962963"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 196,
+        "validated": 196,
+        "accepted": 196,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 169
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:32:54.815000+00:00",
+      "mono": 81698.401435509,
+      "backlog": 177,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519174.823,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519174.83,
+              "0.004793577981651377"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 206,
+        "validated": 206,
+        "accepted": 206,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 179
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:32:59.966000+00:00",
+      "mono": 81703.552449333,
+      "backlog": 187,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519179.974,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519179.981,
+              "0.004793577981651377"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 217,
+        "validated": 217,
+        "accepted": 217,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 190
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:33:05.125000+00:00",
+      "mono": 81708.720092652,
+      "backlog": 197,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519185.133,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519185.144,
+              "0.004793577981651377"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 227,
+        "validated": 227,
+        "accepted": 227,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 200
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:33:10.290000+00:00",
+      "mono": 81713.876438513,
+      "backlog": 207,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519190.297,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519190.305,
+              "0.004793577981651377"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 237,
+        "validated": 237,
+        "accepted": 237,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 210
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:33:15.447000+00:00",
+      "mono": 81719.033254752,
+      "backlog": 217,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519195.454,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519195.461,
+              "0.004793577981651377"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 248,
+        "validated": 248,
+        "accepted": 248,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 221
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:33:20.599000+00:00",
+      "mono": 81724.185379736,
+      "backlog": 227,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519200.606,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519200.614,
+              "0.004793577981651377"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 258,
+        "validated": 258,
+        "accepted": 258,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 231
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:33:25.748000+00:00",
+      "mono": 81729.334232197,
+      "backlog": 237,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519205.755,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519205.762,
+              "0.004793577981651377"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 268,
+        "validated": 268,
+        "accepted": 268,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 241
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:33:30.902000+00:00",
+      "mono": 81734.504518299,
+      "backlog": 247,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519210.915,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519210.927,
+              "0.004793577981651377"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 279,
+        "validated": 279,
+        "accepted": 279,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 252
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:33:36.082000+00:00",
+      "mono": 81739.667906319,
+      "backlog": 257,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519216.089,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519216.096,
+              "0.004793577981651377"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 289,
+        "validated": 289,
+        "accepted": 289,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 262
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:33:41.230000+00:00",
+      "mono": 81744.817193776,
+      "backlog": 267,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519221.237,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519221.245,
+              "0.00475"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 299,
+        "validated": 299,
+        "accepted": 299,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 272
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:33:46.387000+00:00",
+      "mono": 81749.977615414,
+      "backlog": 277,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519226.395,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519226.406,
+              "0.00475"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 310,
+        "validated": 310,
+        "accepted": 310,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 283
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:33:51.551000+00:00",
+      "mono": 81755.137292223,
+      "backlog": 287,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519231.558,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519231.565,
+              "0.00475"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 320,
+        "validated": 320,
+        "accepted": 320,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 293
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:33:56.705000+00:00",
+      "mono": 81760.294126024,
+      "backlog": 297,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519236.713,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519236.722,
+              "0.004793577981651377"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 330,
+        "validated": 330,
+        "accepted": 330,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 303
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:34:01.873000+00:00",
+      "mono": 81765.460299282,
+      "backlog": 307,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519241.881,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519241.889,
+              "0.004793577981651377"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 341,
+        "validated": 341,
+        "accepted": 341,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 314
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:34:07.057000+00:00",
+      "mono": 81770.647423316,
+      "backlog": 317,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519247.065,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519247.075,
+              "0.004837962962962963"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 351,
+        "validated": 351,
+        "accepted": 351,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 324
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:34:12.220000+00:00",
+      "mono": 81775.807766922,
+      "backlog": 327,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519252.228,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519252.236,
+              "0.004837962962962963"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 361,
+        "validated": 361,
+        "accepted": 361,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 334
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:34:17.384000+00:00",
+      "mono": 81780.970760925,
+      "backlog": 337,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519257.392,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519257.399,
+              "0.004837962962962963"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 372,
+        "validated": 372,
+        "accepted": 372,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 345
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:34:22.535000+00:00",
+      "mono": 81786.121088855,
+      "backlog": 347,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519262.542,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519262.549,
+              "0.004837962962962963"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 382,
+        "validated": 382,
+        "accepted": 382,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 355
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:34:27.684000+00:00",
+      "mono": 81791.271021849,
+      "backlog": 357,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519267.692,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519267.699,
+              "0.004837962962962963"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 392,
+        "validated": 392,
+        "accepted": 392,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 365
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:34:32.833000+00:00",
+      "mono": 81796.418791209,
+      "backlog": 367,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519272.84,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519272.847,
+              "0.004837962962962963"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 402,
+        "validated": 402,
+        "accepted": 402,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 375
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:34:37.993000+00:00",
+      "mono": 81801.579140326,
+      "backlog": 377,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519278,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519278.007,
+              "0.004837962962962963"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 413,
+        "validated": 413,
+        "accepted": 413,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 386
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:34:43.143000+00:00",
+      "mono": 81806.730165819,
+      "backlog": 387,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519283.151,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519283.158,
+              "0.004837962962962963"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 423,
+        "validated": 423,
+        "accepted": 423,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 396
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:34:48.293000+00:00",
+      "mono": 81811.880377323,
+      "backlog": 397,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519288.301,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519288.308,
+              "0.004837962962962963"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 433,
+        "validated": 433,
+        "accepted": 433,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 406
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:34:53.447000+00:00",
+      "mono": 81817.033918723,
+      "backlog": 407,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519293.455,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519293.462,
+              "0.004793577981651377"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 444,
+        "validated": 444,
+        "accepted": 444,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 417
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:34:58.638000+00:00",
+      "mono": 81822.229028333,
+      "backlog": 427,
+      "alert_state": "pending",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519298.65,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519298.657,
+              "0.00475"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 454,
+        "validated": 454,
+        "accepted": 454,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 427
+      }
+    },
+    {
+      "phase": "during",
+      "server_utc": "2026-11-12T21:35:03.799000+00:00",
+      "mono": 81827.386174607,
+      "backlog": 437,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519303.806,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519303.814,
+              "0.004793577981651377"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 464,
+        "validated": 464,
+        "accepted": 464,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 27,
+        "pending": 437
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:07.651000+00:00",
+      "mono": 81831.238900998,
+      "backlog": 437,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519307.659,
+              "2"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519307.667,
+              "0.004793577981651377"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:09.794000+00:00",
+      "mono": 81833.381260005,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519309.802,
+              "1.9636363636363636"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519309.809,
+              "0.004794392523364486"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:11.954000+00:00",
+      "mono": 81835.542402792,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519311.962,
+              "1.9636363636363636"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519311.97,
+              "0.004794392523364486"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:14.093000+00:00",
+      "mono": 81837.681325891,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519314.101,
+              "1.7818181818181817"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519314.109,
+              "0.004798969072164949"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:16.233000+00:00",
+      "mono": 81839.821229512,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519316.241,
+              "1.7818181818181817"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519316.244,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519316.249,
+              "0.004798969072164949"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:18.380000+00:00",
+      "mono": 81841.969026493,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519318.389,
+              "1.7818181818181817"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519318.391,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519318.396,
+              "0.004798969072164949"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:20.544000+00:00",
+      "mono": 81844.132995856,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519320.553,
+              "1.5999999999999999"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519320.555,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519320.561,
+              "0.004804597701149425"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:22.688000+00:00",
+      "mono": 81846.276504242,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519322.695,
+              "1.5999999999999999"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519322.697,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519322.704,
+              "0.004804597701149425"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:24.831000+00:00",
+      "mono": 81848.418590433,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519324.838,
+              "1.4181818181818182"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519324.841,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519324.846,
+              "0.004811688311688312"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:26.982000+00:00",
+      "mono": 81850.584205313,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519326.998,
+              "1.4181818181818182"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519327.002,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519327.009,
+              "0.004811688311688312"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:29.147000+00:00",
+      "mono": 81852.73425462,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519329.155,
+              "1.2363636363636363"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519329.157,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519329.162,
+              "0.00482089552238806"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:31.289000+00:00",
+      "mono": 81854.876081642,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519331.296,
+              "1.2363636363636363"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519331.299,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519331.304,
+              "0.00482089552238806"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:33.466000+00:00",
+      "mono": 81857.054909029,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519333.475,
+              "1.2363636363636363"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519333.477,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519333.482,
+              "0.00482089552238806"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:35.644000+00:00",
+      "mono": 81859.23112028,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519335.652,
+              "1.0545454545454545"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519335.654,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519335.659,
+              "0.004833333333333333"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:37.782000+00:00",
+      "mono": 81861.369679552,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519337.79,
+              "1.0545454545454545"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519337.792,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519337.797,
+              "0.004833333333333333"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:39.932000+00:00",
+      "mono": 81863.519814864,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519339.939,
+              "0.8727272727272727"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519339.942,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519339.947,
+              "0.004851063829787234"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:42.074000+00:00",
+      "mono": 81865.667872462,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519342.087,
+              "0.8727272727272727"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519342.09,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519342.095,
+              "0.004851063829787234"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:44.220000+00:00",
+      "mono": 81867.807714629,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519344.228,
+              "0.6909090909090909"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519344.23,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519344.235,
+              "0.004878378378378379"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:46.371000+00:00",
+      "mono": 81869.958637551,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519346.379,
+              "0.6909090909090909"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519346.381,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519346.386,
+              "0.004878378378378379"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:48.517000+00:00",
+      "mono": 81872.118196032,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519348.528,
+              "0.6909090909090909"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519348.532,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519348.539,
+              "0.004878378378378379"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:50.682000+00:00",
+      "mono": 81874.270314653,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519350.69,
+              "0.509090909090909"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519350.692,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519350.697,
+              "0.004925925925925926"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:52.825000+00:00",
+      "mono": 81876.41322473,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519352.833,
+              "0.509090909090909"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519352.835,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519352.841,
+              "0.004925925925925926"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:54.970000+00:00",
+      "mono": 81878.558154589,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519354.978,
+              "0.32727272727272727"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519354.98,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519354.985,
+              "0.005500000000000003"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:57.118000+00:00",
+      "mono": 81880.706732444,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519357.126,
+              "0.32727272727272727"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519357.129,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519357.134,
+              "0.005500000000000003"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:35:59.262000+00:00",
+      "mono": 81882.850247706,
+      "backlog": 0,
+      "alert_state": "firing",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519359.269,
+              "0.14545454545454545"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519359.272,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519359.277,
+              "0.004749999999999999"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    },
+    {
+      "phase": "after",
+      "server_utc": "2026-11-12T21:36:01.403000+00:00",
+      "mono": 81885.004344228,
+      "backlog": 0,
+      "alert_state": "inactive",
+      "input_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519361.417,
+              "0.14545454545454545"
+            ]
+          }
+        ]
+      },
+      "processed_per_second": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519361.421,
+              "0"
+            ]
+          }
+        ]
+      },
+      "http_5xx_per_second": {
+        "resultType": "vector",
+        "result": []
+      },
+      "http_p95_seconds": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {},
+            "value": [
+              1794519361.429,
+              "0.004749999999999999"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "received": 472,
+        "validated": 472,
+        "accepted": 472,
+        "duplicates": 0,
+        "rejected": 0,
+        "processed": 472,
+        "pending": 0
+      }
+    }
+  ]
+}

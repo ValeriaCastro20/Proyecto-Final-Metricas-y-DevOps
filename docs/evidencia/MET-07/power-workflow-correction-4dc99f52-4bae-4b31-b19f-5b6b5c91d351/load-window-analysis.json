@@ -1,0 +1,11 @@
+{
+  "material": "DERIVED_FROM_REAL_JOURNAL_MONOTONIC_BOUNDARIES",
+  "start_event": "zero_worker_pods",
+  "start_mono": 81610.492336761,
+  "end_event": "worker_ready",
+  "end_mono": 81831.14458291,
+  "seconds": 220.6522461489949,
+  "attempts": 441,
+  "control_window_attempts": 451,
+  "note": "Control window starts at guard arming, before patch. The zero-pod observation window is reported separately."
+}

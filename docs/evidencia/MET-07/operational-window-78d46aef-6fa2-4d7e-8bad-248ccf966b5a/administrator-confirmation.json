@@ -1,0 +1,13 @@
+{
+  "source": "user_relayed_administrator",
+  "statement": "El administrador confirm? ausencia de automatizaciones externas de apagado y propuso la ventana 2026-11-12T21:00:00Z?23:00:00Z, aceptada por m? para continuar.",
+  "external_shutdown_automations_absent": true,
+  "user_accepted": true,
+  "window_start": "2026-11-12T21:00:00Z",
+  "window_end": "2026-11-12T23:00:00Z",
+  "context": "default",
+  "namespace": "eventos-development",
+  "vm": "vm-eventos-b97e31-k3s",
+  "arm_verified_by_agent": false,
+  "scope_note": "Administrative confirmation relayed by user; not a direct ARM observation or an independently authenticated administrator message."
+}
