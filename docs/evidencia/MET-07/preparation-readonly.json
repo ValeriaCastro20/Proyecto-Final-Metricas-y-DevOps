@@ -1,0 +1,103 @@
+{
+  "type": "REAL_READ_ONLY_PREPARATION",
+  "incident_executed": false,
+  "execution_authorized": false,
+  "isolation_verified": false,
+  "namespace": "eventos-development",
+  "context": {
+    "connection_error": false,
+    "exit": 0,
+    "value": "default"
+  },
+  "server": {
+    "connection_error": false,
+    "exit": 0,
+    "value": "2026-11-12T07:21:23Z"
+  },
+  "prometheus": {
+    "rules": {
+      "endpoint": "/api/v1/rules",
+      "http": 200,
+      "connection_error": false,
+      "server_date": "Thu, 12 Nov 2026 07:21:20 GMT",
+      "data": {
+        "groups": [
+          {
+            "name": "esc3-alerts",
+            "rules": [
+              {
+                "name": "HighEventBacklog",
+                "query": "esc3_events_backlog_total > 100",
+                "duration": 120,
+                "state": "inactive",
+                "health": "ok",
+                "lastErrorPresent": false,
+                "alerts": []
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "clock": {
+      "endpoint": "/api/v1/query?query=time%28%29",
+      "http": 200,
+      "connection_error": false,
+      "server_date": "Thu, 12 Nov 2026 07:21:20 GMT",
+      "data": {
+        "resultType": "scalar",
+        "result": [
+          1794468080.822,
+          "1794468080.822"
+        ]
+      }
+    },
+    "backlog": {
+      "endpoint": "/api/v1/query?query=esc3_events_backlog_total%7Bjob%3D%22event-service%22%7D",
+      "http": 200,
+      "connection_error": false,
+      "server_date": "Thu, 12 Nov 2026 07:21:20 GMT",
+      "data": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {
+              "__name__": "esc3_events_backlog_total",
+              "instance": "event-service.eventos-development.svc.cluster.local:8000",
+              "job": "event-service"
+            },
+            "value": [
+              1794468080.82,
+              "0"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "deployment": {
+    "connection_error": false,
+    "exit": 0,
+    "uid": "f1c9cafa-7fe9-4495-b806-94776f8a8326",
+    "resource_version": "49958",
+    "replicas": 1,
+    "ready_replicas": 1,
+    "selector": {
+      "app.kubernetes.io/component": "worker",
+      "app.kubernetes.io/name": "event-service"
+    },
+    "template_labels": {
+      "app.kubernetes.io/component": "worker",
+      "app.kubernetes.io/name": "event-service"
+    },
+    "containers": [
+      {
+        "name": "worker",
+        "args": [
+          "process"
+        ],
+        "image": "ghcr.io/marchelo23/proyecto-final-metricas-y-devops/event-service@sha256:17b4e6051228fd27df63471a3fff003bd8f2cb7ca916ef8e29d96a29835597e9"
+      }
+    ]
+  }
+}
