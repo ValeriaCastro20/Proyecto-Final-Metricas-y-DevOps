@@ -401,7 +401,7 @@ class PreparationTests(unittest.TestCase):
                     evidence.json("secret.json", {"value": "synthetic-fixture-value"})
 
     def test_preflight_saves_identity_and_rejects_foreign_worker_or_hpa(self):
-        for mode in ("valid", "context", "selector", "owner", "hpa", "replicas", "generation"):
+        for mode in ("valid", "context", "selector", "owner", "hpa", "replicas", "generation", "duplicate"):
             with self.subTest(mode=mode):
                 d = deployment()
                 if mode == "selector":
@@ -419,7 +419,12 @@ class PreparationTests(unittest.TestCase):
                     if kind == "deployment/" + M.WORKER:
                         return json.dumps(d)
                     if kind == "deployment":
+                        self.assertNotIn("-l", args)
                         items = [d]
+                        if mode == "duplicate":
+                            other = copy.deepcopy(d)
+                            other["metadata"]["uid"] = "foreign-deployment"
+                            items.append(other)
                     elif kind == "replicaset":
                         items = [{"metadata": {"uid": "rs", "ownerReferences": [{"uid": "fixture-uid", "controller": True}]}}]
                     elif kind == "pod":

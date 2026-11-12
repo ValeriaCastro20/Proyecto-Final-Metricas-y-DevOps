@@ -1,0 +1,27 @@
+{
+  "material": "REAL_READ_ONLY_PREFLIGHT",
+  "base_commit": "24620b231ef246d203f7220090bdacd039c717f9",
+  "remote_root": "/home/azureuser/met07-preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a",
+  "supervisor_exit": 1,
+  "supervisor_stdout": "{\"passed\": false, \"inspect\": \"adapter-failure.json\", \"automatic_retry\": false}",
+  "supervisor_stderr_present": false,
+  "incident_executed": false,
+  "load_attempts": 0,
+  "device_writes": 0,
+  "watchdog_executions": 0,
+  "scale_mutations": 0,
+  "producer_started": false,
+  "automatic_retry": false,
+  "worker": {
+    "uid": "f1c9cafa-7fe9-4495-b806-94776f8a8326",
+    "replicas": 1,
+    "ready": 1,
+    "available": 1,
+    "resource_version": "49958"
+  },
+  "source_sha256": {
+    "met07.py": "751cb634c150ed9c251c029b85f8eb1e517dd9cb29038e78bd67415e029d297d",
+    "met07_signals.py": "63dd80fe3251420e63e0deb6b0517560b9958634192eff699c8adb8a00dd6bd1",
+    "met07_operate.py": "4d6c536d66954e9aa4b68fcf1234849b42a863ed7fedecbd92c7b82227ba7a8c"
+  }
+}

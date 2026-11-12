@@ -1,0 +1,1 @@
+{"incident_executed": false, "scale_mutations": 0, "device_writes": 0, "load_attempts": 0, "watchdog_executions": 0, "power_passed": false, "endpoints_passed": true, "fixture_exit": 0, "watchdog_verified": false, "reason": "Diagnostic-only continuation; incident requires all preconditions and real guard probe"}

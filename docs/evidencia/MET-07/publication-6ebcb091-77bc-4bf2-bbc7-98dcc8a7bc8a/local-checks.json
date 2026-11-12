@@ -1,0 +1,92 @@
+{
+  "npm_ci": {
+    "exit": 0,
+    "source": "Executed earlier in this publication turn: npm.cmd ci; Husky prepare ran, 1 package added, 2 audited, 0 vulnerabilities; not repeated or counted as tests"
+  },
+  "checks": [
+    {
+      "check": "Rust toolchain",
+      "exit": 0,
+      "stdout": "cargo 1.97.1 (c980f4866 2026-06-30)\n",
+      "stderr": ""
+    },
+    {
+      "check": "Rustfmt",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "Husky actual pre-commit",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "Husky hooksPath",
+      "exit": 0,
+      "stdout": ".husky/_\n",
+      "stderr": ""
+    },
+    {
+      "check": "Node syntax scripts/met07_audit_os_dispatch.cjs",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "Node syntax scripts/met07_continue_readonly.cjs",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "Node syntax scripts/met07_preflight_dispatch.cjs",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "Node syntax scripts/met07_publication_validate.cjs",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "Node syntax scripts/met07_validate_linux.cjs",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "Node syntax docs/evidencia/MET-07/inspect-final-state.cjs",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "Node syntax docs/evidencia/MET-07/inspect-operational.cjs",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "Node syntax docs/evidencia/MET-07/inspect-readonly.cjs",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "Python AST changed modules",
+      "exit": 0,
+      "stdout": "9 Python files parsed\r\n",
+      "stderr": ""
+    },
+    {
+      "check": "Whitespace",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "warning: in the working copy of 'scripts/met07.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'scripts/tests/test_met07_preparation.py', LF will be replaced by CRLF the next time Git touches it\n"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "material": "LOCAL_INTEGRITY_AUDIT_NOT_INCIDENT_EVIDENCE",
+  "base_commit": "24620b231ef246d203f7220090bdacd039c717f9",
+  "original_snapshots_unchanged": [
+    "docs/evidencia/MET-07/preparation-readonly.json",
+    "docs/evidencia/MET-07/validation-hardening.txt",
+    "docs/evidencia/MET-07/validation-preparation-final.txt",
+    "docs/evidencia/MET-07/validation-preparation.txt",
+    "docs/evidencia/MET-07/validation-publication.txt"
+  ],
+  "credential_exact_value_scan": "passed_UTF8_and_UTF16LE_no_values_retained",
+  "files": [
+    {
+      "file": "docs/evidencia/MET-07/inspect-final-state.cjs",
+      "sha256": "a797a5cbc6b35e5c5dfca2bd85dda06acb778d577e6caaf31063adb24a9072ae"
+    },
+    {
+      "file": "docs/evidencia/MET-07/inspect-operational.cjs",
+      "sha256": "6ccab8d5f416c0f9d3f9d54be126fc795565f42c7c7a122aa1d969260865894a"
+    },
+    {
+      "file": "docs/evidencia/MET-07/operational-preflight-2026-11-12.md",
+      "sha256": "c49cc307fff5e396c864a23b9a9c435bb00d0e9780bbf86c0c910b12c014e01f"
+    },
+    {
+      "file": "docs/evidencia/MET-07/preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a/adapter-failure.json",
+      "sha256": "891bc56ef5820cfdfd60f54827fb2b5e50d8e69956094a95bf94c7d9115dd32a"
+    },
+    {
+      "file": "docs/evidencia/MET-07/preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a/diagnostics/endpoint-preflight.json",
+      "sha256": "e1f6d03f691c3a493c454bf3d98db068dcce8d0955cc474227d8f41060694f18"
+    },
+    {
+      "file": "docs/evidencia/MET-07/preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a/diagnostics/power-preflight.json",
+      "sha256": "52ecafdfabbdb02258d2b9b0cef747a63f0477ea3a031f47230b6024cadbac53"
+    },
+    {
+      "file": "docs/evidencia/MET-07/preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a/diagnostics/worker-selection.json",
+      "sha256": "731146e89f4a6239894ea08713010d391b3e0928913c23b0c61a5ae0b03d6f8b"
+    },
+    {
+      "file": "docs/evidencia/MET-07/preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a/dispatch-result.json",
+      "sha256": "9bceca9c68e563dd5e84ec053342d8d0652020fd15872b263434d65392297dff"
+    },
+    {
+      "file": "docs/evidencia/MET-07/preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a/final-readonly-state.json",
+      "sha256": "2c2c0c079b9e6a7ff98089e560e0540a331c92b2ac6e201892f058ec45ae8e2b"
+    },
+    {
+      "file": "docs/evidencia/MET-07/preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a/invocation.json",
+      "sha256": "adb44aa07cc0c3782ffcf016f9f6fd69ca3ff8da0e46be727bbf41f155365c1d"
+    },
+    {
+      "file": "docs/evidencia/MET-07/preflight-6d49dff7-65c8-4818-bcf4-5738b1e3569a/validation-local.txt",
+      "sha256": "5e1246df764b51f7d61b723b2f1cd5f0e51b804c08e3398b81e16be413e59999"
+    },
+    {
+      "file": "scripts/met07_operate.py",
+      "sha256": "4d6c536d66954e9aa4b68fcf1234849b42a863ed7fedecbd92c7b82227ba7a8c"
+    },
+    {
+      "file": "scripts/met07_preflight_dispatch.cjs",
+      "sha256": "d3659041618ecb9da63058e3632abac7af7a11cc1f47ca8cff7735c92b898c0f"
+    },
+    {
+      "file": "scripts/tests/test_met07_operate.py",
+      "sha256": "2171a6df915eb23d3ec1c1fa7079e54da5ad30090db45dbedc08656746e01147"
+    }
+  ]
+}

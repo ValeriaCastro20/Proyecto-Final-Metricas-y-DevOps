@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "files_reviewed": 291,
+  "forbidden_filenames": [],
+  "matches": [],
+  "scope": "Tracked and untracked candidate files; actual current application credentials compared in memory, never recorded. Public host/UID/trace IDs and SSH key path metadata reviewed separately."
+}

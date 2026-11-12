@@ -1,0 +1,49 @@
+{
+  "material": "REAL_READ_ONLY_OS_DETAILS",
+  "server_utc": "2026-11-12T15:25:41.617255+00:00",
+  "tmpfiles_unit": {
+    "exit": 0,
+    "stdout": "# /usr/lib/systemd/system/systemd-tmpfiles-clean.timer\n#  SPDX-License-Identifier: LGPL-2.1-or-later\n#\n#  This file is part of systemd.\n#\n#  systemd is free software; you can redistribute it and/or modify it\n#  under the terms of the GNU Lesser General Public License as published by\n#  the Free Software Foundation; either version 2.1 of the License, or\n#  (at your option) any later version.\n\n[Unit]\nDescription=Daily Cleanup of Temporary Directories\nDocumentation=man:tmpfiles.d(5) man:systemd-tmpfiles(8)\nConditionPathExists=!/etc/initrd-release\n\n[Timer]\nOnBootSec=15min\nOnUnitActiveSec=1d\n\n# /usr/lib/systemd/system/systemd-tmpfiles-clean.service\n#  SPDX-License-Identifier: LGPL-2.1-or-later\n#\n#  This file is part of systemd.\n#\n#  systemd is free software; you can redistribute it and/or modify it\n#  under the terms of the GNU Lesser General Public License as published by\n#  the Free Software Foundation; either version 2.1 of the License, or\n#  (at your option) any later version.\n\n[Unit]\nDescription=Cleanup of Temporary Directories\nDocumentation=man:tmpfiles.d(5) man:systemd-tmpfiles(8)\n\nDefaultDependencies=no\nAfter=local-fs.target time-set.target\nConflicts=shutdown.target initrd-switch-root.target\nBefore=shutdown.target initrd-switch-root.target\n\n[Service]\nType=oneshot\nExecStart=systemd-tmpfiles --clean\nSuccessExitStatus=DATAERR\nIOSchedulingClass=idle\nImportCredential=tmpfiles.*\n",
+    "stderr": ""
+  },
+  "user_timer": {
+    "exit": 0,
+    "stdout": "# /usr/lib/systemd/user/launchpadlib-cache-clean.timer\n[Unit]\nDescription=Clean up old files in the Launchpadlib cache\n\n[Timer]\nOnStartupSec=5min\nOnUnitActiveSec=1d\n\n[Install]\nWantedBy=timers.target\n\n# /usr/lib/systemd/user/launchpadlib-cache-clean.service\n[Unit]\nDescription=Clean up old files in the Launchpadlib cache\nConditionPathExists=%h/.launchpadlib/api.launchpad.net/cache\n\n[Service]\nType=oneshot\nExecStart=find %h/.launchpadlib/api.launchpad.net/cache -type f -mtime +30 -delete\n",
+    "stderr": ""
+  },
+  "apt_timer": {
+    "exit": 0,
+    "stdout": "NextElapseUSecRealtime=Fri 2026-11-13 06:04:23 UTC\nNextElapseUSecMonotonic=0\nActiveState=active\n",
+    "stderr": ""
+  },
+  "at_package": {
+    "exit": 1,
+    "stdout": "",
+    "stderr": "dpkg-query: package 'at' is not installed and no information is available\nUse dpkg --info (= dpkg-deb --info) to examine archive files.\n"
+  },
+  "at_binary": null,
+  "at_service": {
+    "exit": 0,
+    "stdout": "LoadState=not-found\nActiveState=inactive\n",
+    "stderr": ""
+  },
+  "canary_unit_after": {
+    "exit": 0,
+    "stdout": "MainPID=0\nLoadState=not-found\nActiveState=inactive\nSubState=dead\n",
+    "stderr": ""
+  },
+  "installed_unattended_upgrade_reboot_logic": [
+    {
+      "line": 1660,
+      "text": "        return\n    if not apt_pkg.config.find_b(\n            \"Unattended-Upgrade::Automatic-Reboot\", False):\n        return\n    # see if we need to check for logged in users\n    if not apt_pkg.config.find_b(\n            \"Unattended-Upgrade::Automatic-Reboot-WithUsers\", True):"
+    },
+    {
+      "line": 1664,
+      "text": "    # see if we need to check for logged in users\n    if not apt_pkg.config.find_b(\n            \"Unattended-Upgrade::Automatic-Reboot-WithUsers\", True):\n        users = logged_in_users()\n        if users:\n            msg = gettext.ngettext(\n                \"Found %s, but not rebooting because %s is logged in.\" % ("
+    },
+    {
+      "line": 1677,
+      "text": "    # reboot at the specified time\n    when = apt_pkg.config.find(\n        \"Unattended-Upgrade::Automatic-Reboot-Time\", \"now\")\n    logging.warning(\"Found %s, rebooting\" % REBOOT_REQUIRED_FILE)\n    cmd = [\"/sbin/shutdown\", \"-r\", when]\n    try:\n        shutdown_msg = subprocess.check_output(cmd, stderr=subprocess.STDOUT)"
+    }
+  ]
+}

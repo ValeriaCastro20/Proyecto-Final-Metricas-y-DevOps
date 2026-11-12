@@ -1,0 +1,24 @@
+{
+  "material": "REAL_PREFLIGHT_AGGREGATE_NO_INCIDENT",
+  "authorization": "User authorization and exclusive window reconfirmed in conversation",
+  "os_audit": "os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d",
+  "preflight": "continuation-72ce6c96-6c85-4058-bda0-9473c93f86b2",
+  "os_details": "os-details-c1af5d73-b3dc-4f06-b831-6b5a0ce4aed0",
+  "original_evidence_unchanged": true,
+  "original_files_checked": 36,
+  "independent_watchdog_readonly_verified": true,
+  "production_guard_with_mutation_backend_verified": false,
+  "real_worker_restoration_proven": false,
+  "power_review_passed": false,
+  "administrator_confirmation_required": [
+    "ARM schedules and other external shutdown/restart automations for actual VM subscription",
+    "Other users, indirect custom scripts and independent operator channel during incident window"
+  ],
+  "incident_executed": false,
+  "incident_attempts": 0,
+  "scale_mutations": 0,
+  "load_attempts": 0,
+  "device_writes": 0,
+  "automatic_retry": false,
+  "decision": "STOP_BEFORE_DEGRADATION"
+}

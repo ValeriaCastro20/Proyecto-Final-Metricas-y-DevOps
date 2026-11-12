@@ -1,0 +1,6 @@
+{
+  "check": "Native Gitleaks full history with translated worktree GIT_DIR/GIT_WORK_TREE",
+  "exit": 127,
+  "stdout": "203\n",
+  "stderr": "bash: line 6: /tmp/met07-publication-gitleaks.58DCIj/gitleaks: No such file or directory\n"
+}

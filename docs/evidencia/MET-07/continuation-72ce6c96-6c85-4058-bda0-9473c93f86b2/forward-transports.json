@@ -1,0 +1,1 @@
+{"material": "REAL_LOOPBACK_FORWARDS", "services": [{"service": "event-service", "port": 28000, "pid": 1524769, "alive": true}, {"service": "prometheus", "port": 29090, "pid": 1524770, "alive": true}, {"service": "jaeger-collector", "port": 26686, "pid": 1524771, "alive": true}, {"service": "grafana", "port": 23000, "pid": 1524772, "alive": true}]}

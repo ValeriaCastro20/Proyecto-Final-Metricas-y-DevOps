@@ -1,0 +1,1 @@
+{"exit": 0, "properties": "Restart=no\nRuntimeMaxUSec=50s\nMainPID=1523231\nUMask=0077\nUser=1000\nGroup=1000\nActiveState=active\nSubState=running\n", "supervisor_pid": 1522960, "boot_id": "03372dd7-02b2-4eb5-9e07-0f5b270f191f"}

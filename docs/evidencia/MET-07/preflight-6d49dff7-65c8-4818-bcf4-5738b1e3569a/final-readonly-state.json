@@ -1,0 +1,42 @@
+{
+  "material": "REAL_READ_ONLY_FINAL_STATE",
+  "server_utc": "2026-11-12T14:17:18.629980+00:00",
+  "identity": {
+    "uid": 1000,
+    "gid": 1000
+  },
+  "worker": {
+    "uid": "f1c9cafa-7fe9-4495-b806-94776f8a8326",
+    "replicas": 1,
+    "ready": 1,
+    "available": 1
+  },
+  "supervisor_file_times": {
+    "adapter-failure.json": "2026-11-12T14:07:26.774061+00:00",
+    "invocation.json": "2026-11-12T14:07:26.338783+00:00"
+  },
+  "private_modes": {
+    ".": {
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o700"
+    },
+    "evidence": {
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o700"
+    },
+    "evidence/adapter-failure.json": {
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o600"
+    },
+    "evidence/invocation.json": {
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o600"
+    }
+  },
+  "incident_directory_exists": false,
+  "watchdog_probe_directory_exists": false
+}

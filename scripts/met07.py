@@ -366,8 +366,14 @@ class Kubernetes:
         containers = d["spec"]["template"]["spec"]["containers"]
         require(len(containers) == 1 and containers[0].get("args") == ["process"], "Not the process worker")
         for kind in ("deployment", "replicaset", "pod"):
-            values = json.loads(self.k("get", kind, "-l", SELECTOR, "-o", "json"))["items"]
+            # Deployment metadata need not carry the labels of its Pods.
+            args = ("-o", "json") if kind == "deployment" else ("-l", SELECTOR, "-o", "json")
+            values = json.loads(self.k("get", kind, *args))["items"]
             if kind == "deployment":
+                values = [v for v in values if
+                          all(v.get("spec", {}).get("template", {}).get("metadata", {}).get("labels", {}).get(k) == value
+                              for k, value in LABELS.items()) or
+                          v.get("spec", {}).get("selector", {}).get("matchLabels") == LABELS]
                 require(len(values) == 1 and values[0]["metadata"]["uid"] == expected_uid,
                         "Ambiguous worker deployment")
             elif kind == "replicaset":

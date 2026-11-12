@@ -1,0 +1,23 @@
+const fs=require('node:fs'),cp=require('node:child_process'),path=require('node:path'),crypto=require('node:crypto'),assert=require('node:assert/strict');
+const root=process.cwd(),base='docs/evidencia/MET-07',dir=base+'/publication-'+crypto.randomUUID();
+const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+const old={};function walk(p){for(const e of fs.readdirSync(p,{withFileTypes:true})){const name=path.join(p,e.name);if(e.isDirectory())walk(name);else old[name]=sha(fs.readFileSync(name));}}walk(base);
+const previous=JSON.parse(fs.readFileSync(base+'/os-watchdog-66b07a85-7eea-4383-b965-e82c58de9d4d/original-evidence-sha256.json','utf8'));
+for(const [name,hash] of Object.entries(previous.files))assert.equal(sha(fs.readFileSync(name)),hash);
+fs.mkdirSync(dir);fs.writeFileSync(dir+'/original-evidence-sha256.json',JSON.stringify({files:old,prior_manifest_checked:true},null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify({publication_directory:dir}));
+const candidates=cp.spawnSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).stdout.split('\0').filter(Boolean);
+const forbidden=[],matches=[];
+const patterns=[/-----BEGIN (?:OPENSSH |RSA |EC |DSA )?PRIVATE KEY-----/,/client-key-data:\s*[A-Za-z0-9+/]{16}/,/client-certificate-data:\s*[A-Za-z0-9+/]{16}/,/kind:\s*Config\s*\r?\n(?:.|\r?\n){0,200}clusters:/];
+for(const file of candidates){if(file!=='.env.example'&&/(?:^|\/)(?:kubeconfig|\.env|terraform\.tfstate)(?:$|\.)/i.test(file))forbidden.push(file);const b=fs.readFileSync(file);const s=b.toString('utf8');for(const key of ['EVENT_PRODUCER_KEY','EVENT_ANALYST_KEY'])if(process.env[key]&&s.includes(process.env[key]))matches.push({file,kind:'environment_credential'});for(let i=0;i<patterns.length;i++)if(patterns[i].test(s))matches.push({file,kind:'private_material_pattern_'+i});}
+assert.equal(forbidden.length,0);assert.equal(matches.length,0);
+fs.writeFileSync(dir+'/sensitive-material-review.json',JSON.stringify({passed:true,files_reviewed:candidates.length,forbidden_filenames:forbidden,matches,scope:'Tracked and untracked candidate files; actual current application credentials compared in memory, never recorded. Public host/UID/trace IDs and SSH key path metadata reviewed separately.'},null,2)+'\n',{flag:'wx'});
+const translated='/mnt/'+root[0].toLowerCase()+root.slice(2).replaceAll('\\','/');
+const quote=s=>"'"+s.replaceAll("'","'\"'\"'")+"'";
+const python=`import json,subprocess,sys,os\nresults=[]\nfor name in ['test_ci_gates.py','test_k8s_delivery.py','test_k8s_render.py','test_met07_hardening.py','test_met07_operate.py','test_met07_os_watchdog.py','test_met07_preparation.py','test_met07_signals.py']:\n p=subprocess.run([sys.executable,'-B','-m','unittest','discover','-s','scripts/tests','-p',name,'-v'],capture_output=True,text=True,timeout=90)\n results.append({'suite':name,'exit':p.returncode,'stdout':p.stdout,'stderr':p.stderr,'material':'OFFLINE_FIXTURES_NO_INCIDENT'})\np=subprocess.run([sys.executable,'-B','scripts/test-observability.py'],capture_output=True,text=True,timeout=30)\nresults.append({'suite':'test-observability.py','exit':p.returncode,'stdout':p.stdout,'stderr':p.stderr,'material':'OFFLINE_NETWORKPOLICY_CONTRACTS'})\nprint(json.dumps(results))\n`;
+const command='cd '+quote(translated)+'\npython3 -B - <<\'PY\'\n'+python+"\nPY\n";
+const result=cp.spawnSync('wsl',['-d','Ubuntu','-u','root','--','bash','-s'],{input:command,encoding:'utf8',timeout:300000,windowsHide:true,maxBuffer:4000000});
+assert.equal(result.status,0,result.stderr);for(const key of ['EVENT_PRODUCER_KEY','EVENT_ANALYST_KEY'])assert(!process.env[key]||!result.stdout.includes(process.env[key]));
+const suites=JSON.parse(result.stdout);fs.writeFileSync(dir+'/suite-results.json',JSON.stringify(suites,null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify({directory:dir,original_files:Object.keys(old).length,suites:suites.map(s=>({suite:s.suite,exit:s.exit,summary:s.stderr.match(/Ran \d+ tests?[^\n]*/)?.[0]}))}));
+assert(suites.every(s=>s.exit===0),'Suite failure; do not commit');
