@@ -8,14 +8,16 @@ Desde la raíz del repositorio: PowerShell, OpenSSH, Node.js >=18 para comprobar
 
 La huella ED25519 autorizada del servidor es `SHA256:L1RxG+BO2hEHHgsmPH1rLDhddP/s5O/8R4yhtOML6MU`. Una discrepancia requiere detenerse y verificar con el responsable. No usar aceptación automática ni desactivar StrictHostKeyChecking.
 
-En PowerShell, desde la raíz del worktree:
+En PowerShell, desde la raíz del worktree. Ejecutar cada bloque completo como script (o dentro de un bloque `& { ... }`), para que `throw` interrumpa el flujo. No continuar manualmente con líneas posteriores tras un error:
 
 ```powershell
 $SshKey = 'C:/Users/itsis/.ssh/id_ed25519'
 $SshHost = 'azureuser@eventos-b97e31.mexicocentral.cloudapp.azure.com'
 $SshOptions = @('-F','NUL','-o','BatchMode=yes','-o','StrictHostKeyChecking=yes','-o','UpdateHostKeys=no','-o','ConnectTimeout=15','-o','IdentitiesOnly=yes','-i',$SshKey)
 ssh @SshOptions $SshHost 'sudo -n k3s kubectl config current-context'
+if ($LASTEXITCODE -ne 0) { throw 'Falló la comprobación del contexto SSH. Detenerse.' }
 ssh @SshOptions $SshHost 'sudo -n k3s kubectl --context default -n eventos-development get deployment/event-service-api deployment/event-service-worker'
+if ($LASTEXITCODE -ne 0) { throw 'Falló la comprobación de los deployments. Detenerse.' }
 ```
 
 Esperado: contexto `default`, API y worker disponibles. Si cambia la identidad del destino, detenerse. Revisar capacidad actual antes de desplegar: el margen histórico de MET-05 no prueba capacidad actual. Leer requests/limits y estado de los pods del namespace; el responsable de infraestructura puede aportar capacidad agregada del nodo sin ampliar este procedimiento a otros namespaces.
@@ -37,8 +39,11 @@ La carpeta debe ser nueva o estar revisada previamente con propietario azureuser
 
 ```powershell
 ssh @SshOptions $SshHost 'umask 077; mkdir -p /home/azureuser/observabilidad-manifiestos'
+if ($LASTEXITCODE -ne 0) { throw 'No se pudo preparar la carpeta remota. Detenerse.' }
 scp @SshOptions ./kubernetes/observability/jaeger.yaml ./kubernetes/observability/k8-prometheus.yaml ./kubernetes/observability/grafana-dashboards.yaml ./kubernetes/observability/grafana.yaml "${SshHost}:/home/azureuser/observabilidad-manifiestos/"
+if ($LASTEXITCODE -ne 0) { throw 'La copia de manifiestos falló. No aplicar.' }
 ssh @SshOptions $SshHost
+if ($LASTEXITCODE -ne 0) { throw 'Falló la sesión SSH. No continuar con el despliegue.' }
 ```
 
 Los siguientes bloques son Bash **en la VM**, desde `/home/azureuser/observabilidad-manifiestos`, no PowerShell:
@@ -87,11 +92,22 @@ La autorización histórica no demuestra que las condiciones de una ventana futu
 
 ## Acceso y verificación de ejecución
 
-Desde otra terminal PowerShell en la raíz del repositorio, el launcher existente abre cuatro forwards de loopback, verifica HTTP y devuelve sus procesos. Rechaza puertos ocupados sin cerrar procesos ajenos:
+Desde otra terminal PowerShell en la raíz del repositorio, el launcher existente abre cuatro forwards de loopback, verifica HTTP y devuelve sus procesos. Rechaza puertos ocupados sin cerrar procesos ajenos. En esa terminal, volver a definir `$SshKey`, `$SshHost` y `$SshOptions` con exactamente los mismos valores del primer bloque y repetir sus comprobaciones SSH. El launcher histórico tiene valores fijos por defecto: el parámetro `-Start` siguiente los sustituye por esos valores, sin editar la evidencia de MET-05. Conservar las opciones de identidad y verificación de host; si cambia el destino, verificar previamente su huella con el responsable:
 
 ```powershell
 . ./docs/evidencia/MET-05/tunnels.ps1
-$ObservabilityTunnels = Start-Met05Tunnels
+$StartObservabilitySsh = {
+    param($spec)
+    $remote = "sudo -n k3s kubectl --namespace eventos-development port-forward --address 127.0.0.1 service/$($spec.Service) $($spec.Port):$($spec.RemotePort)"
+    $sshArgs = @($SshOptions) + @('-o', 'ExitOnForwardFailure=yes',
+        '-L', "127.0.0.1:$($spec.Port):127.0.0.1:$($spec.Port)",
+        $SshHost, ('"' + $remote + '"'))
+    # Start-Process une ArgumentList: entrecomillar la ruta de clave si contiene espacios.
+    $keyIndex = [array]::IndexOf($sshArgs, '-i') + 1
+    $sshArgs[$keyIndex] = '"' + $SshKey + '"'
+    Start-Process -FilePath ssh -ArgumentList $sshArgs -WindowStyle Hidden -PassThru
+}.GetNewClosure()
+$ObservabilityTunnels = Start-Met05Tunnels -Start $StartObservabilitySsh
 Invoke-RestMethod http://127.0.0.1:28000/health/ready
 Invoke-RestMethod http://127.0.0.1:29090/-/ready
 Invoke-RestMethod http://127.0.0.1:23000/api/health
