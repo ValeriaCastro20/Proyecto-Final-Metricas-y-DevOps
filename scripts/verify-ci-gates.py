@@ -22,6 +22,8 @@ def evaluate(protection, pr):
             errors.append(f"{name}: required GitHub Actions check missing or unbound")
     if status.get("strict") is not True:
         errors.append("main must require an up-to-date branch")
+    if (protection.get("enforce_admins") or {}).get("enabled") is not True:
+        errors.append("main protection must apply to administrators")
     reviews = protection.get("required_pull_request_reviews") or {}
     if reviews.get("required_approving_review_count", 0) < 1:
         errors.append("human approval not required")
@@ -81,7 +83,7 @@ def main():
             "passed": not errors,
             "limitations": [
                 "No merge attempted; review requirements may also block this PR.",
-                "Admin exemption is preserved; this proves gates for non-exempt collaborators only.",
+                "Administrator enforcement is checked; an administrator can still change repository protection settings.",
                 "Not evidence of an independent human review or an academic defense.",
             ],
         }
