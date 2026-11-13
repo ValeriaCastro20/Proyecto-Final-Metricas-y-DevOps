@@ -27,7 +27,7 @@ class GateTests(unittest.TestCase):
                 "dismiss_stale_reviews": True,
             },
             "required_conversation_resolution": {"enabled": True},
-            "enforce_admins": {"enabled": False},
+            "enforce_admins": {"enabled": True},
         }
         self.pr = {
             "state": "OPEN", "isDraft": False, "baseRefName": "main",
@@ -39,6 +39,15 @@ class GateTests(unittest.TestCase):
 
     def test_valid_negative_control(self):
         self.assertEqual(MODULE.evaluate(self.protection, self.pr), [])
+
+    def test_admin_exemption_missing_or_invalid_fails(self):
+        for value in (None, {}, {"enabled": False}, {"enabled": "true"}):
+            with self.subTest(value=value):
+                protection = {**self.protection, "enforce_admins": value}
+                self.assertIn(
+                    "main protection must apply to administrators",
+                    MODULE.evaluate(protection, self.pr),
+                )
 
     def test_every_required_gate_is_checked(self):
         for name in MODULE.REQUIRED:
@@ -88,13 +97,22 @@ class GateTests(unittest.TestCase):
     def test_empty_responses_fail_closed(self):
         self.assertTrue(MODULE.evaluate({}, {}))
 
-    def test_committed_snapshot_matches_audit_rules(self):
+    def test_historical_snapshot_preserves_original_admin_exemption(self):
         path = Path(__file__).resolve().parents[2] / "docs/evidencia/DEV-03/control-negativo.json"
         snapshot = json.loads(path.read_text(encoding="utf-8"))
         self.assertTrue(snapshot["passed"])
         self.assertEqual(
-            MODULE.evaluate(snapshot["protection"], snapshot["negative_control"]), []
+            MODULE.evaluate(snapshot["protection"], snapshot["negative_control"]),
+            ["main protection must apply to administrators"],
         )
+
+    def test_current_snapshot_enforces_admins_and_preserves_other_gates(self):
+        path = Path(__file__).resolve().parents[2] / "docs/evidencia/DEV-03/proteccion-administradores.json"
+        snapshot = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(MODULE.evaluate(snapshot["after"], self.pr), [])
+        before = copy.deepcopy(snapshot["after"])
+        before["enforce_admins"] = {"enabled": False}
+        self.assertEqual(before, snapshot["before"])
 
 
 if __name__ == "__main__":

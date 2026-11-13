@@ -15,6 +15,17 @@ Las validaciones de infraestructura están en `terraform.yml` (DEV-08). Las depe
 
 ## Protección de `main`
 
+**Estado vigente, 2026-11-13 03:21 UTC:** se activó `enforce_admins=true`
+mediante el endpoint específico de GitHub, sin sustituir la configuración restante.
+Se volvieron a consultar los cuatro checks obligatorios vinculados a Actions,
+`strict=true`, una aprobación de CODEOWNERS, descarte de aprobaciones obsoletas
+y resolución obligatoria de conversaciones: permanecen activos.
+[Snapshot público reducido antes/después](proteccion-administradores.json).
+El cambio de configuración ya está aplicado; este PR versiona la evidencia y
+endurece el auditor, no aplica Terraform ni modifica Azure.
+
+### Antecedente conservado
+
 Estado leído de la API de GitHub el 2026-11-09 UTC: protección activa con los checks requeridos `quality`, `postgres`, `container` y `secrets`, vinculados a GitHub Actions (`app_id: 15368`), con rama actualizada obligatoria (`strict: true`) y `enforcement_level: non_admins`. [`CODEOWNERS`](../../../.github/CODEOWNERS) asigna la revisión de todos los cambios al dueño del repositorio. Se exige una aprobación, se descartan las aprobaciones obsoletas y las conversaciones deben estar resueltas.
 
 Se agregó `secrets` a los checks requeridos mediante la API de protección, conservando los otros tres checks, la revisión humana y la excepción administrativa existente. No se amplió esa excepción ni se usó para integrar el control negativo.
@@ -29,14 +40,43 @@ No hay que marcar los checks de Terraform como requeridos: solo corren si el PR 
 - [Snapshot de los campos verificados](control-negativo.json), capturado a las `2026-11-09T00:25:54Z`.
 - Control positivo de CI: [run 42539239430](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/42539239430), los cuatro checks de aplicación aprobados y artefactos disponibles.
 
-El auditor es de solo lectura y falla si faltan checks, no están vinculados a Actions, desaparecen los controles de revisión o el control negativo no tiene un check requerido fallido y estado bloqueado:
+El auditor es de solo lectura y falla si faltan checks, no están vinculados a Actions, desaparecen los controles de revisión, se desactiva la protección para administradores o el control negativo no tiene un check requerido fallido y estado bloqueado:
 
 ```bash
 python3 -m unittest discover -s scripts/tests -v
 python3 scripts/verify-ci-gates.py --negative-pr <PR-abierto-de-control> --output gates.json
 ```
 
-Requiere Python 3 y `gh auth login` para la auditoría remota; Python no forma parte del runtime Rust. Las ocho pruebas offline no requieren credenciales e incluyen la coherencia del snapshot versionado. No usar el PR #59 cerrado como entrada de una auditoría viva: conservar su snapshot histórico o crear otro control negativo, capturarlo y cerrarlo **sin merge**.
+Requiere Python 3 y `gh auth login` para la auditoría remota; Python no forma parte del runtime Rust. Las pruebas offline no requieren credenciales. El snapshot de #59 se conserva intacto: el auditor endurecido detecta su excepción administrativa histórica y no lo presenta como cumplimiento actual. No usar el PR #59 cerrado como entrada de una auditoría viva: crear otro control negativo, capturarlo y cerrarlo **sin merge**, si se necesita una demostración nueva.
+
+## Integraciones históricas sin aprobación vigente · DEV-01 / DEV-03
+
+Consulta de la API de PR y reviews realizada el 2026-11-13. Los tres PR fueron
+creados por `CristiRR` e integrados por `marchelo23` bajo la excepción administrativa.
+No se intentan aprobaciones retroactivas ni se reescribe su historial.
+
+| PR | Merge UTC | Reviews observadas | Conclusión |
+|---|---|---|---|
+| [#93](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/pull/93) | 2026-11-12 06:53:18 | CodeRabbit `COMMENTED`; Marcelo `COMMENTED` | Hubo comentarios humanos, pero no aprobación formal |
+| [#95](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/pull/95) | 2026-11-13 00:31:05 | Marcelo `DISMISSED`; CodeRabbit `COMMENTED` | No había aprobación vigente para la revisión final |
+| [#96](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/pull/96) | 2026-11-13 00:38:15 | Lista de reviews vacía | Sin revisión registrada |
+
+La configuración anterior permitió estas integraciones; por tanto, ese historial
+no acredita por sí solo PR aprobados conforme a DEV-01. El control preventivo nuevo
+aplica también a administradores. Los próximos PR requieren aprobación de otro
+CODEOWNER, checks correctos, rama actualizada y conversaciones resueltas.
+Una revisión posterior puede documentar hallazgos, pero no cambia lo ocurrido
+antes de los merges. No se afirma haber ejecutado una nueva prueba de merge fallido.
+
+### Verificación de esta corrección
+
+`npm ci`, `cargo fmt --all -- --check` y `git diff --check`: correctos.
+`python3 -B -m unittest discover -s scripts/tests -p test_ci_gates.py -v`:
+**10/10 pruebas aprobadas**, incluyendo rechazo de excepción administrativa,
+conservación del snapshot histórico y comparación de los controles antes/después.
+No se ejecutaron aplicación, PostgreSQL, contenedores ni Terraform: este cambio
+solo afecta al auditor de protección y su evidencia. CI y revisión humana del PR
+se verifican por separado; no se cuentan como aprobados por estas pruebas locales.
 
 ## Estado de aceptación
 
@@ -49,4 +89,7 @@ Requiere Python 3 y `gh auth login` para la auditoría remota; Python no forma p
 
 Los PR desde un fork no reciben OIDC ni escritura en el registro. Esto no afecta a estas validaciones, porque ninguna necesita credenciales.
 
-Con `non_admins`, un administrador puede integrar aunque los checks fallen, de modo que el bloqueo solo es total para los demás integrantes.
+La excepción `non_admins` descrita arriba es histórica: ahora la protección aplica
+también a administradores. Quien administra el repositorio aún puede cambiar esa
+configuración; no se confunde el control de merge con la imposibilidad de modificar
+los ajustes. Activarlo no subsana retroactivamente las aprobaciones ausentes.
