@@ -1,0 +1,26 @@
+{
+  "material": "OFFLINE_PARTIAL_EVALUATION_OF_REAL_MET07_CAPTURE",
+  "source": "docs/evidencia/MET-07/power-workflow-correction-4dc99f52-4bae-4b31-b19f-5b6b5c91d351/execution/incident/events.jsonl",
+  "source_sha256": "cc69a7b57ff48b9e125245613a50d0e65d7627559ac1d9e02aa4896c8606b44e",
+  "attempts": 472,
+  "completed_responses": 472,
+  "http_202": 472,
+  "connection_errors": 0,
+  "descriptive_acceptance_percent": 100,
+  "slo01_v2_partial": {
+    "objective": 0.999,
+    "N": 472,
+    "good": 472,
+    "bad": 0,
+    "permitted": 0.472,
+    "consumption_percent": 0
+  },
+  "slo01_v2_full_24h": {
+    "status": "N/A",
+    "reason": "Capture does not cover 24 hours"
+  },
+  "slo02_full_1h": {
+    "status": "N/A",
+    "reason": "Missing full-hour bucket le=0.5 and count deltas"
+  }
+}
