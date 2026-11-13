@@ -2,7 +2,7 @@
 
 La plataforma corre en **un clúster K3s de un solo nodo** sobre una VM de Azure creada con Terraform. Development y production se separan **lógicamente** con namespaces dentro del mismo clúster (condición 5.4 del proyecto). Este documento cubre la infraestructura de Azure; los manifiestos de Kubernetes, la publicación de imágenes y la entrega continua pertenecen a DEV-02…05 y DEV-09…12. Costos y apagado: [costos.md](costos.md) (DEV-14).
 
-Manifiestos de aplicación y orden de migración/rollout para revisión: [`kubernetes/README.md`](../../kubernetes/README.md). Su existencia no acredita despliegue en este clúster; la evidencia pendiente se registra en [DEV-09](../evidencia/DEV-09/index.md).
+Manifiestos de aplicación y orden de migración/rollout para revisión: [`kubernetes/README.md`](../../kubernetes/README.md). El despliegue en este clúster está acreditado en [DEV-09](../evidencia/DEV-09/index.md) (issue cerrado). La observabilidad (Prometheus, Grafana, Jaeger) corre en `eventos-development` (MET-03…07).
 
 ## Arquitectura
 
@@ -80,6 +80,7 @@ Identidades y accesos:
 | `id-eventos-plan` | Reader · Storage Blob Data Contributor | Suscripción · Storage del state | Plans en PR (subject `pull_request`) y drift programado (subject `environment:azure-ops`) |
 | `id-eventos-apply` | Contributor · Storage Blob Data Contributor | Suscripción · Storage del state | Apply desde `main` (subject `environment:azure-infra`) |
 | `id-eventos-ops` | `eventos-<sufijo>-vm-operator` (personalizado: leer, encender y desasignar VMs) | Suscripción | `vm-power.yml` (subject `environment:azure-ops`); sin acceso al state |
+| `id-eventos-deploy` | `eventos-<sufijo>-vm-deploy` (personalizado: leer la VM, ver su estado y ejecutar Run Command) | **Solo la VM** | `deliver.yml` del bloque C (subjects `environment:development` y `environment:production`); se crea con [`deploy-access.sh`](../../infra/bootstrap/deploy-access.sh) |
 
 El state nunca se versiona y no se abre ni se publica. Si se pierde, la infraestructura sigue existiendo, pero Terraform deja de saber qué administra; el versionado permite recuperar la versión anterior del blob.
 
@@ -178,6 +179,14 @@ Prerrequisitos: Azure CLI con sesión de un **Owner** de la suscripción (`az lo
    terraform apply tfplan
    ```
 
+   Después del primer apply, si se va a desplegar la aplicación (bloque C), ejecutar como Owner:
+
+   ```bash
+   bash infra/bootstrap/deploy-access.sh
+   ```
+
+   El script crea `id-eventos-deploy`, su permiso sobre la VM y sus credenciales para `development` y `production`. Al terminar imprime el `DEPLOY_CLIENT_ID` para la variable de GitHub. Si la VM se reemplaza, se vuelve a ejecutar, porque el permiso apunta a la VM. Es idempotente.
+
 5. Verificar el ambiente, unos 5 minutos después del apply para que cloud-init instale K3s:
 
    ```bash
@@ -216,6 +225,7 @@ Todos los pasos son reintentables. El bootstrap es idempotente, `terraform apply
 Intervenciones manuales declaradas:
 
 - el bootstrap: identidades, rol personalizado, credenciales federadas y backend (se deshace con [`teardown.sh`](../../infra/bootstrap/teardown.sh));
+- el acceso de despliegue de la aplicación (`deploy-access.sh`), después del primer apply;
 - la configuración de los environments y las variables de GitHub;
 - la creación del par de claves SSH.
 
@@ -251,7 +261,7 @@ az group exists --name rg-eventos-<sufijo>                       # false
 bash ../bootstrap/teardown.sh      # solo al cerrar el proyecto: elimina el state, las identidades y sus permisos
 ```
 
-`teardown.sh` elimina también las asignaciones de rol en la suscripción y el rol personalizado. Borrar solo `rg-eventos-tfstate` las dejaría huérfanas. Pide escribir el sufijo para confirmar y se detiene sin borrar nada en tres casos: si la sesión de `az` está en otra suscripción, si la plataforma aún existe o si el Resource Group contiene el state de otro bootstrap.
+`teardown.sh` elimina también todas las asignaciones de rol de las cuatro identidades (incluida la de despliegue sobre la VM) y los dos roles personalizados. Borrar solo `rg-eventos-tfstate` las dejaría huérfanas. Pide escribir el sufijo para confirmar y se detiene sin borrar nada en tres casos: si la sesión de `az` está en otra suscripción, si la plataforma aún existe o si el Resource Group contiene el state de otro bootstrap.
 
 Simulacro de reconstrucción desde cero por otro integrante, en su propia suscripción: [simulacro-reconstruccion.md](simulacro-reconstruccion.md).
 
@@ -266,3 +276,4 @@ Simulacro de reconstrucción desde cero por otro integrante, en su propia suscri
 | 2026-11-08 | Un plan para agregar tags quería **recrear la subred** | `replace_triggered_by` apuntaba al recurso VNet completo, que también se dispara con actualizaciones en sitio | Se cambió a `azurerm_virtual_network.main.id`, que solo cambia cuando la VNet se reemplaza. El plan quedó en `0 to add, 6 to change, 0 to destroy` |
 | 2026-11-08 | `state blob is already locked` después de un plan interrumpido por la red | El plan alcanzó a tomar el lease y no pudo liberarlo | Se confirmó que no había otra ejecución en curso y se liberó con `az storage blob lease break` |
 | 2026-11-08 | Valeria necesitaba acceso SSH para el bloque C | `admin_ssh_key` solo admite la clave del administrador sin reemplazar la VM | **Intervención manual registrada.** La IP se agregó a `admin_cidrs` con Terraform: apply local de un valor, sin cambio de código, con `1 to change` solo en el NSG. La clave se agregó a mano a `authorized_keys`. Se reconcilia con la extensión `team-ssh-keys` e `infra/ssh/valeria.pub`; su apply reemplaza el archivo por el contenido declarado. El secret `INFRA_ADMIN_CIDRS` debe incluir la misma IP |
+| 2026-11-09 | `id-eventos-deploy` (despliegue del bloque C) se creó a mano, sin script | Faltaba en el bootstrap: una reconstrucción no la recreaba y el teardown dejaba su rol huérfano | **Intervención manual registrada.** Se reconcilió el 2026-11-12 con `deploy-access.sh`, que crea exactamente la misma configuración: la verificación de solo lectura encontró la identidad, el rol, la asignación sobre la VM y las cuatro credenciales. `teardown.sh` ahora la elimina |

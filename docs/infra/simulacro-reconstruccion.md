@@ -98,6 +98,8 @@ az vm list-skus --location mexicocentral --size Standard_B2s_v2 --query "[].rest
 
 Si solo la zona 1 está restringida, repetir el plan con `-var vm_zone=3` y registrar la decisión.
 
+Para el ensayo de punta a punta, con el despliegue del bloque C, ejecutar además `& "C:\Program Files\Git\bin\bash.exe" infra/bootstrap/deploy-access.sh` después del apply. Para el simulacro solo de B no hace falta.
+
 ### 5. Verificar
 
 Unos 5 minutos después del apply, cuando cloud-init termina de instalar K3s:
