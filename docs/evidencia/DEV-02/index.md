@@ -48,10 +48,10 @@ Prueba funcional con Compose: la migración se aplicó y `/health/live` y `/heal
 
 La vulnerabilidad alta es `CVE-2026-84782` en `libssl3`, relacionada con DTLS y con parche disponible. La API usa rustls y no DTLS, por lo que no se considera explotable aquí. Se corrige al actualizar el digest de la base. CI publica el reporte y los SBOM en el artefacto `container-security-evidence`.
 
-## Pendiente
+## Verificación
 
-- [ ] Publicar en GHCR con tags semver y SHA (DEV-04).
-- [ ] Desplegar por digest (DEV-05 y DEV-09).
+- [x] Publicación en GHCR con tag `sha-<corto>` y digest firmado en cada push a `main` ([DEV-04](../DEV-04/index.md)). El workflow también publica el tag `X.Y.Z` cuando se crea un tag `vX.Y.Z`; al 2026-11-12 el repositorio no tiene tags de versión, así que no hay imágenes semver publicadas.
+- [x] Despliegue por digest en Azure: [DEV-09](../DEV-09/index.md) y la entrega controlada [43114911744](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/43114911744) de `84e43ab` a development y production ([DEV-05](../DEV-05/index.md)).
 
 ## Limitaciones
 

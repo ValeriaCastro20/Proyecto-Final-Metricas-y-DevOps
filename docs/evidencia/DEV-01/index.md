@@ -24,10 +24,10 @@ Revisa el historial completo de todas las ramas con gitleaks, y el job `secrets`
 
 Los dos hallazgos son claves ficticias de una prueba Python ya eliminada (`com03-test-producer-key` y `com03-test-analyst-key`). Nunca fueron credenciales. La excepción acepta exactamente esos dos valores, no el archivo ni la regla completa.
 
-## Pendiente
+## Verificación
 
-- [ ] Enlazar la ejecución del job `secrets` en el PR.
-- [ ] Agregar `secrets` a los checks requeridos de `main`. La protección ya está activa; el detalle está en [DEV-03](../DEV-03/index.md).
+- [x] Ejecución del job `secrets` en un PR: [PR #76](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/pull/76), [job `secrets`](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/42758088749/job/129637057847) exitoso.
+- [x] `secrets` es un check requerido de `main`, junto con `quality`, `postgres` y `container`. Lo registra [DEV-03](../DEV-03/index.md) y se volvió a comprobar el 2026-11-12 con `gh pr checks 97 --required`.
 
 ## Limitaciones
 
