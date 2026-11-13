@@ -22,7 +22,7 @@ El margen restante cubre picos de uso (pruebas de carga, defensa) y cargos que n
 
 | Medida | Implementación |
 |---|---|
-| Apagado diario automático | Workflow [`vm-power.yml`](../../.github/workflows/vm-power.yml): desasigna la VM a las 23:00 (El Salvador, cron `0 5 * * *` UTC). Verificado en [run `42628212259`](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/42628212259) (`vm-eventos-b97e31-k3s: VM deallocated`) |
+| Apagado diario automático | Workflow [`vm-power.yml`](../../.github/workflows/vm-power.yml): desasigna la VM a las 23:00 (El Salvador, cron `0 5 * * *` UTC). Verificado en [run `42628212259`](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/42628212259) (`vm-eventos-b97e31-k3s: VM deallocated`). **No es fiable a la hora indicada:** del 9 al 12 de noviembre GitHub ejecutó las corridas programadas con 7 a 9 h de retraso y la del 2026-11-12 falló al iniciar, así que la VM no se apagó. Mientras tanto, apagarla a mano al terminar (fila siguiente). Ver [DEV-14](../evidencia/DEV-14/index.md#actualización--2026-11-12) |
 | Encendido solo cuando se usa | **Actions → Energía de la VM → Run workflow** (`start` / `stop` / `status`), disponible para todo el equipo sin credenciales de Azure; o `bash infra/scripts/vm.sh start` / `stop` con Azure CLI. Ambos desasignan, no solo apagan el sistema operativo |
 | Privilegio mínimo | `id-eventos-ops` solo tiene el rol personalizado `eventos-<sufijo>-vm-operator`: leer, encender y desasignar VMs. No puede crear, modificar ni borrar recursos |
 | Presupuesto con alertas | `azurerm_consumption_budget_subscription`: US$100 mensuales; correo al 50 % y 80 % real y al 100 % pronosticado |
@@ -49,6 +49,7 @@ Los cargos tardan hasta 24 horas en aparecer.
 | Fecha | Mes (suscripción) | Acumulado del proyecto | `rg-eventos-*` | Crédito restante | Saldo hasta US$100 | Observaciones |
 |---|---|---|---|---|---|---|
 | 2026-11-08 | US$2.07 (API) · US$2.12 (portal) | US$2.21 | US$0.17 | US$98 de US$100 (vence el 2027-10-18) | US$97.79 | Laboratorio 4 (`rg-ticket-*`): US$1.42. Práctica de la clase (`devops-k3s-rg`, ya eliminada): US$0.63. Los cargos del día pueden tardar hasta 24 h en aparecer |
+| 2026-11-12 | US$5.04 (API y portal) | US$5.18 | US$2.45 | US$95 de US$100 (vence el 2027-10-18) | US$94.82 | Laboratorio 4 (`rg-ticket-*`): US$2.11. `devops-k3s-rg`: US$0.63. La plataforma costó entre US$0.31 y US$0.65 por día del 8 al 12 de noviembre. El apagado programado corrió con 7 a 9 h de retraso (ver DEV-14) |
 
 Consulta reproducible de los cargos reales, de solo lectura, en la API de Cost Management:
 

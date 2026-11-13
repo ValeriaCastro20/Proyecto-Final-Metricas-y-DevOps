@@ -19,7 +19,8 @@ Scripts:
 - Terraform y cloud-init ([`cloud-init.yaml.tftpl`](../../../infra/terraform/cloud-init.yaml.tftpl)), que instala K3s con reintentos;
 - [`verify.sh`](../../../infra/scripts/verify.sh): verificación final;
 - [`vm.sh`](../../../infra/scripts/vm.sh) y [`kube-access.sh`](../../../infra/scripts/kube-access.sh): operación;
-- [`teardown.sh`](../../../infra/bootstrap/teardown.sh): deshace el bootstrap sin dejar asignaciones huérfanas.
+- [`deploy-access.sh`](../../../infra/bootstrap/deploy-access.sh): acceso de despliegue del bloque C (`id-eventos-deploy`), después del primer apply;
+- [`teardown.sh`](../../../infra/bootstrap/teardown.sh): deshace el bootstrap y el acceso de despliegue sin dejar asignaciones huérfanas.
 
 ## Alcance
 
@@ -76,7 +77,14 @@ Acceso de administración desde el equipo local: `kube-access.sh` obtuvo el kube
 ## Pendiente
 
 - [ ] **Simulacro por otro integrante**, desde cero e incluido el bootstrap, en su propia suscripción Azure for Students. Así no se toca ni se destruye el ambiente compartido. Guía paso a paso con plantilla de resultados: [simulacro-reconstruccion.md](../../infra/simulacro-reconstruccion.md). Las reconstrucciones de arriba conservaron el backend y las identidades.
-- [ ] Ensayo de punta a punta con los pasos de C y D, cuando estén documentados.
+- [ ] **Ensayo de punta a punta**, con alcance actualizado al 2026-11-12. El bloque C ya está integrado (DEV-02…12 cerrados) y la observabilidad corre en `eventos-development`. El ensayo debe cubrir:
+  1. bootstrap, Terraform y K3s (`verify.sh`);
+  2. `deploy-access.sh`;
+  3. el despliegue de la aplicación según `kubernetes/README.md`;
+  4. Prometheus, Grafana y Jaeger;
+  5. un smoke de la API.
+
+  Marcelo pidió que lo ejecute otro integrante al reabrir el issue; el equipo decide si se mantiene ese requisito.
 
 ## Limitaciones
 

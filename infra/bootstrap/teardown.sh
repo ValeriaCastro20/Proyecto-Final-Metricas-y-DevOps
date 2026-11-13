@@ -21,7 +21,8 @@ source "$ENV_FILE"
 : "${TFSTATE_STORAGE_ACCOUNT:?bootstrap.env sin TFSTATE_STORAGE_ACCOUNT}"
 
 RG="${TFSTATE_RESOURCE_GROUP:-rg-eventos-tfstate}"
-ROLE="eventos-${NAME_SUFFIX}-vm-operator"
+ROLES="eventos-${NAME_SUFFIX}-vm-operator eventos-${NAME_SUFFIX}-vm-deploy"
+IDENTITIES="id-eventos-plan id-eventos-apply id-eventos-ops id-eventos-deploy"
 
 # 1. La sesión de az debe estar en la suscripción de este bootstrap.
 CURRENT_SUB="$(az account show --query id -o tsv | tr -d '\r')"
@@ -57,29 +58,36 @@ if [[ "$RG_EXISTS" == "true" ]]; then
 fi
 
 echo "Se eliminarán en ${SUB_SCOPE}:"
-echo "  - las asignaciones de rol de id-eventos-plan, id-eventos-apply e id-eventos-ops;"
-echo "  - el rol personalizado ${ROLE};"
+echo "  - todas las asignaciones de rol de ${IDENTITIES// /, };"
+echo "  - los roles personalizados ${ROLES// /, };"
 echo "  - el Resource Group ${RG} (state ${TFSTATE_STORAGE_ACCOUNT}, identidades y credenciales federadas)."
 read -r -p "Escribir el sufijo (${NAME_SUFFIX}) para confirmar: " answer
 [[ "$answer" == "$NAME_SUFFIX" ]] || { echo "Cancelado."; exit 1; }
 
 if [[ "$RG_EXISTS" == "true" ]]; then
-  for id in id-eventos-plan id-eventos-apply id-eventos-ops; do
+  for id in $IDENTITIES; do
     # Un error de Azure aborta el script (set -e); solo "no existe" deja pid vacío.
     pid="$(az identity list -g "$RG" --query "[?name=='${id}'].principalId | [0]" -o tsv | tr -d '\r')"
     if [[ -n "$pid" ]]; then
-      az role assignment delete --assignee-object-id "$pid" --scope "$SUB_SCOPE" -o none
-      echo "Asignaciones de ${id} en la suscripción eliminadas."
+      # Todas sus asignaciones, en cualquier alcance (suscripción, Storage o la VM).
+      ids="$(az role assignment list --assignee-object-id "$pid" --all --query "[].id" -o tsv | tr -d '\r')"
+      if [[ -n "$ids" ]]; then
+        # shellcheck disable=SC2086 # un ID por palabra
+        az role assignment delete --ids $ids -o none
+      fi
+      echo "Asignaciones de ${id} eliminadas."
     fi
   done
 else
   echo "${RG} ya no existe: no hay identidades cuyas asignaciones eliminar."
 fi
 
-if [[ "$(az role definition list --custom-role-only true --name "$ROLE" --query 'length(@)' -o tsv | tr -d '\r')" != "0" ]]; then
-  az role definition delete --name "$ROLE" --custom-role-only true --scope "$SUB_SCOPE" -o none
-  echo "Rol ${ROLE} eliminado."
-fi
+for role in $ROLES; do
+  if [[ "$(az role definition list --custom-role-only true --name "$role" --query 'length(@)' -o tsv | tr -d '\r')" != "0" ]]; then
+    az role definition delete --name "$role" --custom-role-only true --scope "$SUB_SCOPE" -o none
+    echo "Rol ${role} eliminado."
+  fi
+done
 
 if [[ "$RG_EXISTS" == "true" ]]; then
   # Las asignaciones con alcance en el Storage se eliminan junto con el recurso.

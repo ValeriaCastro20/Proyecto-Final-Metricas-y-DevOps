@@ -2,7 +2,7 @@
 
 La plataforma corre en **un clúster K3s de un solo nodo** sobre una VM de Azure creada con Terraform. Development y production se separan **lógicamente** con namespaces dentro del mismo clúster (condición 5.4 del proyecto). Este documento cubre la infraestructura de Azure; los manifiestos de Kubernetes, la publicación de imágenes y la entrega continua pertenecen a DEV-02…05 y DEV-09…12. Costos y apagado: [costos.md](costos.md) (DEV-14).
 
-Manifiestos de aplicación y orden de migración/rollout para revisión: [`kubernetes/README.md`](../../kubernetes/README.md). Su existencia no acredita despliegue en este clúster; la evidencia pendiente se registra en [DEV-09](../evidencia/DEV-09/index.md).
+Manifiestos de aplicación y orden de migración/rollout para revisión: [`kubernetes/README.md`](../../kubernetes/README.md). El despliegue en este clúster está acreditado en [DEV-09](../evidencia/DEV-09/index.md) (issue cerrado). La observabilidad (Prometheus, Grafana, Jaeger) corre en `eventos-development` (MET-03…07).
 
 ## Arquitectura
 
@@ -11,7 +11,7 @@ flowchart LR
     subgraph gh["GitHub · marchelo23/Proyecto-Final-Metricas-y-DevOps"]
         pr["terraform.yml en PR:<br/>fmt · validate · plan"]
         main["terraform.yml en main:<br/>plan guardado → apply<br/>(environment azure-infra, aprobación)"]
-        power["vm-power.yml:<br/>apagado 23:00 · start/stop manual<br/>(environment azure-ops)"]
+        power["vm-power.yml:<br/>apagado programado (cron 05:00 UTC, con retraso) · start/stop manual<br/>(environment azure-ops)"]
     end
     subgraph boot["rg-eventos-tfstate · bootstrap"]
         st[("sttfeventos&lt;sufijo&gt;/tfstate<br/>eventos.tfstate")]
@@ -56,7 +56,7 @@ El bootstrap crea, fuera de Terraform, el Resource Group `rg-eventos-tfstate` co
 - **2 vCPU y 8 GB.** El nodo aloja K3s, la API en dos namespaces, PostgreSQL y la observabilidad (Prometheus, Grafana, OpenTelemetry Collector, visor de trazas). Recién instalado, K3s usa unos 1.1 GiB.
 - **Un nodo, sin HA.** El proyecto no exige alta disponibilidad ni tolerancia a la pérdida de la VM. Un reinicio de Pod no equivale a perder la VM.
 - **K3s por cloud-init, con reintentos.** Versión fija `v1.35.2+k3s1`, la misma de la clase. `/usr/local/sbin/k3s-bootstrap.sh` reintenta la instalación hasta 10 veces y espera como máximo 10 minutos a que el nodo esté `Ready`. Si falla, cloud-init termina en `error` en vez de quedarse esperando. El registro queda en `/var/log/k3s-bootstrap.log`. Cambiar la versión o el template **reemplaza la VM** (y los volúmenes `local-path`); el plan lo muestra antes de aplicar. El instalador se descarga por HTTPS desde `get.k3s.io`, como en la plantilla del docente, y verifica el SHA256 del binario contra los checksums de la release. Pendiente para el próximo reemplazo planificado de la VM: fijar `install.sh` a la etiqueta de la versión y comprobar su checksum. Hacerlo ahora obligaría a reemplazar la VM sin otra necesidad.
-- **Apagado diario con GitHub Actions.** `Microsoft.DevTestLab/schedules`, el apagado automático de Azure, no existe en `mexicocentral` (`LocationNotAvailableForResourceType`) y no se puede crear en otra región (`InvalidScheduleLocation`). El workflow [`vm-power.yml`](../../.github/workflows/vm-power.yml) desasigna la VM a las 23:00. También permite a cualquier integrante encenderla o apagarla sin credenciales de Azure.
+- **Apagado diario con GitHub Actions.** `Microsoft.DevTestLab/schedules`, el apagado automático de Azure, no existe en `mexicocentral` (`LocationNotAvailableForResourceType`) y no se puede crear en otra región (`InvalidScheduleLocation`). El workflow [`vm-power.yml`](../../.github/workflows/vm-power.yml) desasigna la VM con un cron de 05:00 UTC (23:00 en El Salvador). GitHub no garantiza la hora de los cron: del 9 al 12 de noviembre corrió con 7 a 9 h de retraso, y una corrida falló al iniciar ([DEV-14](../evidencia/DEV-14/index.md#actualización--2026-11-12)). Por eso no se puede tratar como apagado puntual: al terminar de trabajar se apaga a mano. También permite a cualquier integrante encenderla o apagarla sin credenciales de Azure.
 - **API de Kubernetes cerrada.** El puerto 6443 no se publica. La administración se hace por SSH con clave (sin contraseña) y un túnel: `ssh -N -L 6443:127.0.0.1:6443 azureuser@<fqdn>`.
 - **DNS y TLS.** La IP tiene una etiqueta DNS de Azure (`<label>.mexicocentral.cloudapp.azure.com`), que sirve de nombre para el Ingress y para el certificado TLS que emita el clúster.
 - **Sin registro automático de resource providers** (`resource_provider_registrations = "none"`). La identidad de plan es Reader y no podría registrarlos; el bootstrap registra los que se usan.
@@ -80,6 +80,7 @@ Identidades y accesos:
 | `id-eventos-plan` | Reader · Storage Blob Data Contributor | Suscripción · Storage del state | Plans en PR (subject `pull_request`) y drift programado (subject `environment:azure-ops`) |
 | `id-eventos-apply` | Contributor · Storage Blob Data Contributor | Suscripción · Storage del state | Apply desde `main` (subject `environment:azure-infra`) |
 | `id-eventos-ops` | `eventos-<sufijo>-vm-operator` (personalizado: leer, encender y desasignar VMs) | Suscripción | `vm-power.yml` (subject `environment:azure-ops`); sin acceso al state |
+| `id-eventos-deploy` | `eventos-<sufijo>-vm-deploy` (personalizado: leer la VM, ver su estado y ejecutar Run Command) | **Solo la VM** | `deliver.yml` del bloque C (subjects `environment:development` y `environment:production`); se crea con [`deploy-access.sh`](../../infra/bootstrap/deploy-access.sh) |
 
 El state nunca se versiona y no se abre ni se publica. Si se pierde, la infraestructura sigue existiendo, pero Terraform deja de saber qué administra; el versionado permite recuperar la versión anterior del blob.
 
@@ -178,6 +179,14 @@ Prerrequisitos: Azure CLI con sesión de un **Owner** de la suscripción (`az lo
    terraform apply tfplan
    ```
 
+   Después del primer apply, si se va a desplegar la aplicación (bloque C), ejecutar como Owner:
+
+   ```bash
+   bash infra/bootstrap/deploy-access.sh
+   ```
+
+   El script crea `id-eventos-deploy`, su permiso sobre la VM y sus credenciales para `development` y `production`. Al terminar imprime el `DEPLOY_CLIENT_ID` para la variable de GitHub. Si la VM se reemplaza, se vuelve a ejecutar, porque el permiso apunta a la VM. Es idempotente.
+
 5. Verificar el ambiente, unos 5 minutos después del apply para que cloud-init instale K3s:
 
    ```bash
@@ -216,6 +225,7 @@ Todos los pasos son reintentables. El bootstrap es idempotente, `terraform apply
 Intervenciones manuales declaradas:
 
 - el bootstrap: identidades, rol personalizado, credenciales federadas y backend (se deshace con [`teardown.sh`](../../infra/bootstrap/teardown.sh));
+- el acceso de despliegue de la aplicación (`deploy-access.sh`), después del primer apply;
 - la configuración de los environments y las variables de GitHub;
 - la creación del par de claves SSH.
 
@@ -240,7 +250,7 @@ bash infra/scripts/vm.sh fingerprint  # huella SSH del servidor
 SSH_KEY=~/.ssh/<clave> bash infra/scripts/verify.sh   # verificación completa
 ```
 
-Sin acceso a Azure: **Actions → Energía de la VM → Run workflow** con `start`, `stop` o `status`. El mismo workflow desasigna la VM todos los días a las 23:00. La IP pública es estática y K3s arranca solo: después de encender la VM, el clúster vuelve a `Ready` en uno o dos minutos.
+Sin acceso a Azure: **Actions → Energía de la VM → Run workflow** con `start`, `stop` o `status`. El mismo workflow desasigna la VM una vez al día con un cron de 05:00 UTC, pero GitHub lo ejecuta con horas de retraso: apagarla a mano al terminar. La IP pública es estática y K3s arranca solo: después de encender la VM, el clúster vuelve a `Ready` en uno o dos minutos.
 
 Eliminar la plataforma (los datos de los volúmenes del clúster se pierden):
 
@@ -251,7 +261,7 @@ az group exists --name rg-eventos-<sufijo>                       # false
 bash ../bootstrap/teardown.sh      # solo al cerrar el proyecto: elimina el state, las identidades y sus permisos
 ```
 
-`teardown.sh` elimina también las asignaciones de rol en la suscripción y el rol personalizado. Borrar solo `rg-eventos-tfstate` las dejaría huérfanas. Pide escribir el sufijo para confirmar y se detiene sin borrar nada en tres casos: si la sesión de `az` está en otra suscripción, si la plataforma aún existe o si el Resource Group contiene el state de otro bootstrap.
+`teardown.sh` elimina también todas las asignaciones de rol de las cuatro identidades (incluida la de despliegue sobre la VM) y los dos roles personalizados. Borrar solo `rg-eventos-tfstate` las dejaría huérfanas. Pide escribir el sufijo para confirmar y se detiene sin borrar nada en tres casos: si la sesión de `az` está en otra suscripción, si la plataforma aún existe o si el Resource Group contiene el state de otro bootstrap.
 
 Simulacro de reconstrucción desde cero por otro integrante, en su propia suscripción: [simulacro-reconstruccion.md](simulacro-reconstruccion.md).
 
@@ -266,3 +276,4 @@ Simulacro de reconstrucción desde cero por otro integrante, en su propia suscri
 | 2026-11-08 | Un plan para agregar tags quería **recrear la subred** | `replace_triggered_by` apuntaba al recurso VNet completo, que también se dispara con actualizaciones en sitio | Se cambió a `azurerm_virtual_network.main.id`, que solo cambia cuando la VNet se reemplaza. El plan quedó en `0 to add, 6 to change, 0 to destroy` |
 | 2026-11-08 | `state blob is already locked` después de un plan interrumpido por la red | El plan alcanzó a tomar el lease y no pudo liberarlo | Se confirmó que no había otra ejecución en curso y se liberó con `az storage blob lease break` |
 | 2026-11-08 | Valeria necesitaba acceso SSH para el bloque C | `admin_ssh_key` solo admite la clave del administrador sin reemplazar la VM | **Intervención manual registrada.** La IP se agregó a `admin_cidrs` con Terraform: apply local de un valor, sin cambio de código, con `1 to change` solo en el NSG. La clave se agregó a mano a `authorized_keys`. Se reconcilia con la extensión `team-ssh-keys` e `infra/ssh/valeria.pub`; su apply reemplaza el archivo por el contenido declarado. El secret `INFRA_ADMIN_CIDRS` debe incluir la misma IP |
+| 2026-11-09 | `id-eventos-deploy` (despliegue del bloque C) se creó a mano, sin script | Faltaba en el bootstrap: una reconstrucción no la recreaba y el teardown dejaba su rol huérfano | **Intervención manual registrada.** Se reconcilió el 2026-11-12 con `deploy-access.sh`, que crea exactamente la misma configuración: la verificación de solo lectura encontró la identidad, el rol, la asignación sobre la VM y las cuatro credenciales. `teardown.sh` ahora la elimina |
