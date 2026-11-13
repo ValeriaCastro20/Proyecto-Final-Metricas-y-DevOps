@@ -11,7 +11,7 @@ flowchart LR
     subgraph gh["GitHub · marchelo23/Proyecto-Final-Metricas-y-DevOps"]
         pr["terraform.yml en PR:<br/>fmt · validate · plan"]
         main["terraform.yml en main:<br/>plan guardado → apply<br/>(environment azure-infra, aprobación)"]
-        power["vm-power.yml:<br/>apagado 23:00 · start/stop manual<br/>(environment azure-ops)"]
+        power["vm-power.yml:<br/>apagado programado (cron 05:00 UTC, con retraso) · start/stop manual<br/>(environment azure-ops)"]
     end
     subgraph boot["rg-eventos-tfstate · bootstrap"]
         st[("sttfeventos&lt;sufijo&gt;/tfstate<br/>eventos.tfstate")]
@@ -56,7 +56,7 @@ El bootstrap crea, fuera de Terraform, el Resource Group `rg-eventos-tfstate` co
 - **2 vCPU y 8 GB.** El nodo aloja K3s, la API en dos namespaces, PostgreSQL y la observabilidad (Prometheus, Grafana, OpenTelemetry Collector, visor de trazas). Recién instalado, K3s usa unos 1.1 GiB.
 - **Un nodo, sin HA.** El proyecto no exige alta disponibilidad ni tolerancia a la pérdida de la VM. Un reinicio de Pod no equivale a perder la VM.
 - **K3s por cloud-init, con reintentos.** Versión fija `v1.35.2+k3s1`, la misma de la clase. `/usr/local/sbin/k3s-bootstrap.sh` reintenta la instalación hasta 10 veces y espera como máximo 10 minutos a que el nodo esté `Ready`. Si falla, cloud-init termina en `error` en vez de quedarse esperando. El registro queda en `/var/log/k3s-bootstrap.log`. Cambiar la versión o el template **reemplaza la VM** (y los volúmenes `local-path`); el plan lo muestra antes de aplicar. El instalador se descarga por HTTPS desde `get.k3s.io`, como en la plantilla del docente, y verifica el SHA256 del binario contra los checksums de la release. Pendiente para el próximo reemplazo planificado de la VM: fijar `install.sh` a la etiqueta de la versión y comprobar su checksum. Hacerlo ahora obligaría a reemplazar la VM sin otra necesidad.
-- **Apagado diario con GitHub Actions.** `Microsoft.DevTestLab/schedules`, el apagado automático de Azure, no existe en `mexicocentral` (`LocationNotAvailableForResourceType`) y no se puede crear en otra región (`InvalidScheduleLocation`). El workflow [`vm-power.yml`](../../.github/workflows/vm-power.yml) desasigna la VM a las 23:00. También permite a cualquier integrante encenderla o apagarla sin credenciales de Azure.
+- **Apagado diario con GitHub Actions.** `Microsoft.DevTestLab/schedules`, el apagado automático de Azure, no existe en `mexicocentral` (`LocationNotAvailableForResourceType`) y no se puede crear en otra región (`InvalidScheduleLocation`). El workflow [`vm-power.yml`](../../.github/workflows/vm-power.yml) desasigna la VM con un cron de 05:00 UTC (23:00 en El Salvador). GitHub no garantiza la hora de los cron: del 9 al 12 de noviembre corrió con 7 a 9 h de retraso, y una corrida falló al iniciar ([DEV-14](../evidencia/DEV-14/index.md#actualización--2026-11-12)). Por eso no se puede tratar como apagado puntual: al terminar de trabajar se apaga a mano. También permite a cualquier integrante encenderla o apagarla sin credenciales de Azure.
 - **API de Kubernetes cerrada.** El puerto 6443 no se publica. La administración se hace por SSH con clave (sin contraseña) y un túnel: `ssh -N -L 6443:127.0.0.1:6443 azureuser@<fqdn>`.
 - **DNS y TLS.** La IP tiene una etiqueta DNS de Azure (`<label>.mexicocentral.cloudapp.azure.com`), que sirve de nombre para el Ingress y para el certificado TLS que emita el clúster.
 - **Sin registro automático de resource providers** (`resource_provider_registrations = "none"`). La identidad de plan es Reader y no podría registrarlos; el bootstrap registra los que se usan.
@@ -240,7 +240,7 @@ bash infra/scripts/vm.sh fingerprint  # huella SSH del servidor
 SSH_KEY=~/.ssh/<clave> bash infra/scripts/verify.sh   # verificación completa
 ```
 
-Sin acceso a Azure: **Actions → Energía de la VM → Run workflow** con `start`, `stop` o `status`. El mismo workflow desasigna la VM todos los días a las 23:00. La IP pública es estática y K3s arranca solo: después de encender la VM, el clúster vuelve a `Ready` en uno o dos minutos.
+Sin acceso a Azure: **Actions → Energía de la VM → Run workflow** con `start`, `stop` o `status`. El mismo workflow desasigna la VM una vez al día con un cron de 05:00 UTC, pero GitHub lo ejecuta con horas de retraso: apagarla a mano al terminar. La IP pública es estática y K3s arranca solo: después de encender la VM, el clúster vuelve a `Ready` en uno o dos minutos.
 
 Eliminar la plataforma (los datos de los volúmenes del clúster se pierden):
 

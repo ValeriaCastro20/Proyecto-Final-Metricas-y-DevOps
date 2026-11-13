@@ -41,7 +41,7 @@ location = mexicocentral → LocationNotAvailableForResourceType
 location = westus3       → InvalidScheduleLocation: The schedule should be created in location mexicocentral.
 ```
 
-Se reemplazó por [`vm-power.yml`](../../../.github/workflows/vm-power.yml), que desasigna la VM a las 23:00 y permite `start`, `stop` y `status` manuales desde GitHub. Usa `id-eventos-ops`, con un rol personalizado limitado a cuatro acciones (`virtualMachines/read`, `instanceView/read`, `start/action`, `deallocate/action`). Los nombres de las acciones se validaron contra `az provider operation show`. El bootstrap del 2026-11-08 creó la identidad y el rol (`az role definition list --name eventos-b97e31-vm-operator`):
+Se reemplazó por [`vm-power.yml`](../../../.github/workflows/vm-power.yml), que desasigna la VM con un cron de 05:00 UTC (23:00 en El Salvador; en la práctica con horas de retraso, ver *Actualización · 2026-11-12*) y permite `start`, `stop` y `status` manuales desde GitHub. Usa `id-eventos-ops`, con un rol personalizado limitado a cuatro acciones (`virtualMachines/read`, `instanceView/read`, `start/action`, `deallocate/action`). Los nombres de las acciones se validaron contra `az provider operation show`. El bootstrap del 2026-11-08 creó la identidad y el rol (`az role definition list --name eventos-b97e31-vm-operator`):
 
 ```text
 nombre:   eventos-b97e31-vm-operator
@@ -90,6 +90,46 @@ Costos de noviembre              2,12 US$
 
 El crédito se activó el 2026-10-18, dos días antes del inicio del proyecto. Lo consumido según el portal (≈ US$2, redondeado) coincide con el acumulado de la API. Los costos de noviembre del portal (US$2.12) son algo mayores que los de la consulta (US$2.07) porque incluyen cargos más recientes.
 
+## Actualización · 2026-11-12
+
+**Cargos reales** (API de Cost Management, `ActualCost` agrupado por Resource Group, consultada el 2026-11-12 UTC):
+
+```text
+Desde 2026-10-20 (proyecto)              Mes de noviembre
+rg-eventos-b97e31            2.4487      rg-eventos-b97e31         2.4487
+rg-ticket-e3065e-shared      2.0555      rg-ticket-e3065e-shared   1.9645
+devops-k3s-rg                0.6250      devops-k3s-rg             0.6250
+rg-ticket-e3065e-production  0.0254      rg-eventos-tfstate        0.0003
+rg-ticket-e3065e-development 0.0251
+rg-ticket-e3065e             0.0043
+rg-eventos-tfstate           0.0003
+rg-ticket-bootstrap          0.0002
+TOTAL                        5.1845 USD  TOTAL                     5.0385 USD
+```
+
+Costo diario de la plataforma (`rg-eventos-b97e31`): 2026-11-08 US$0.31 · 11-09 US$0.58 · 11-10 US$0.58 · 11-11 US$0.32 · 11-12 US$0.65. Saldo hasta el límite: US$100 − US$5.18 = **US$94.82**.
+
+**Crédito de Azure for Students** (portal, *Education → Información general*): **US$95 de US$100** disponibles, 340 días hasta que venza (18/10/2027); costos de noviembre según el portal: US$5.04, igual que la consulta de la API. Lo consumido del crédito (≈ US$5, redondeado) coincide con el acumulado del proyecto.
+
+**Comportamiento observado del apagado programado.** El cron de `vm-power.yml` es `0 5 * * *` (23:00 en El Salvador), pero GitHub ejecutó las corridas programadas mucho más tarde. Además, la VM se encendió a mano en dos ocasiones (2026-11-11 22:50 y 2026-11-12 07:03 UTC):
+
+| Fecha | Inicio real (UTC) | Retraso | Resultado |
+|---|---|---|---|
+| 2026-11-09 | 13:45 | 8 h 45 min | `stop`: éxito |
+| 2026-11-10 | 13:23 | 8 h 23 min | `stop`: éxito |
+| 2026-11-11 | 12:34 | 7 h 34 min | `stop`: éxito |
+| 2026-11-12 | 13:38 | 8 h 38 min | Falló al iniciar (0 jobs, sin cambios en el workflow): la VM no se apagó |
+
+**Impacto:** la VM pasa la noche encendida, unas 8 h más por día (≈ US$0.66 diarios con `Standard_B2s_v2`). El control sigue siendo útil, porque la VM no queda encendida días enteros, pero no actúa a la hora documentada.
+
+**Mitigación vigente:** apagar a mano al terminar de trabajar (*Actions → Energía de la VM → stop* o `bash infra/scripts/vm.sh stop`). El presupuesto, las alertas y el registro semanal siguen activos.
+
+En la suscripción no hay otras automatizaciones que enciendan o apaguen la VM. Revisión del 2026-11-12:
+
+- sin `Microsoft.DevTestLab/schedules`, Automation, Logic Apps, Functions ni alertas con acciones;
+- el presupuesto solo notifica por correo;
+- la VM es `Regular` (no Spot) y no tiene configuraciones de mantenimiento.
+
 ## Verificación y seguimiento continuo
 
 - [x] Ejecutar el bootstrap actualizado, que crea `id-eventos-ops` y su rol (2026-11-08).
@@ -97,7 +137,7 @@ El crédito se activó el 2026-10-18, dos días antes del inicio del proyecto. L
 - [x] Enlazar la primera ejecución programada de `vm-power.yml` (`VM deallocated`): [run `42628212259`](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/42628212259) (2026-11-09).
 - [x] Primer registro de cargos reales (2026-11-08).
 - [x] Crédito restante de Azure for Students, leído en el portal: US$98 de US$100 (2026-11-08).
-- [ ] Seguimiento periódico: registrar cada semana, y antes de cada entrega y de la defensa, el acumulado del mes, el acumulado del proyecto, el crédito restante y el saldo hasta US$100 (tabla de `costos.md`). El presupuesto mensual no cubre el agregado de varios meses.
+- [ ] Seguimiento periódico (último registro: 2026-11-12): registrar cada semana, y antes de cada entrega y de la defensa, el acumulado del mes, el acumulado del proyecto, el crédito restante y el saldo hasta US$100 (tabla de `costos.md`). El presupuesto mensual no cubre el agregado de varios meses.
 - [ ] Destruir los recursos del Laboratorio 4 después de su revisión docente (≈ US$1/día).
 
 ## Limitaciones
