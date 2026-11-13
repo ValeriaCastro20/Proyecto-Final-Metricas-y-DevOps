@@ -2,7 +2,49 @@
 
 Contrato y comandos: [docs/escenario.md](../../escenario.md).
 
-## Ejecución local · 2026-11-08
+## Carga completa en Azure/K3s · 2026-11-13
+
+[Ejecución real y JSON íntegros versionados](azure-2026-11-13/README.md), contra
+`eventos-development`, API y worker existentes con PostgreSQL persistente:
+
+- **P3-1:** 1.000 válidos únicos.
+- **P3-3:** 50 duplicados y 50 tardíos únicos adicionales; históricos, recibos,
+  orden temporal, ventanas `[from,to)` y count/min/max/avg comprobados.
+- **P3-2:** 2.400 únicos a 20/s durante **120.001 s**.
+- Sin pérdida ni solicitudes inciertas; pendientes finales cero en los tres perfiles.
+
+Se publican reportes originales, todos los recibos consultados, históricos y
+agregados completos, hashes, UIDs y digests de los componentes antes/después.
+Worker activo: no se detuvo ni se desplegó la aplicación para esta prueba.
+No acredita production, P3-5 ni cierre de MET-07.
+
+## Carga obligatoria completa publicada · P3-1, P3-3 y P3-2
+
+La nueva [evidencia P3 versionada](p3/README.md) publica los JSON completos de los
+tres perfiles, históricos antes/después, todos los recibos, consultas por ventana,
+agregados y hashes verificables sin BD. Ya no depende de los ficheros locales
+ignorados descritos en la sección histórica siguiente.
+
+Incluye 1.000 válidos (P3-1), 50 duplicados + 50 tardíos con consultas y agregados
+comprobados (P3-3), y 2.400 únicos a 20/s durante 120 s reales (P3-2). El workflow
+`ESC3 compulsory P3 load` repite y publica íntegramente la carga en GitHub Actions;
+véanse alcance, reproducción y verificaciones en la carpeta enlazada. No acredita
+carga Azure/K3s ni cierra MET-07.
+
+**Ejecución remota publicada:** [Actions 43360836707, aprobada](https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/43360836707).
+Sus JSON y logs íntegros se conservan en [`p3/`](p3/README.md), incluido el
+manifiesto con commit y hashes; no dependen de la caducidad del artefacto remoto.
+
+| Prueba | Únicos aceptados | Duplicados | Tardíos únicos incluidos | Emisión | Pérdida | Pendientes antes → después |
+|---|---:|---:|---:|---:|---:|---:|
+| P3-1 · burst | 1000 | 0 | 0 | 1.057 s | 0 | 1000 → 0 |
+| P3-3 · extra | 1050 | 50 | 50 | 0.984 s (base de 1000) | 0 | 1050 → 0 |
+| P3-2 · sustained | 2400 | 0 | 0 | 120.001 s, 20/s | 0 | 2400 → 0 |
+
+Burst y extra añaden 20 rechazos cada uno. Consultas, agregados completos y
+ventana semiabierta comprobados; latencias y retrasos exactos en los JSON.
+
+## Histórico: ejecución local · 2026-11-08
 
 Entorno: Linux, ejecutables Rust de debug, HTTP loopback y PostgreSQL 16 en un
 contenedor exclusivo de pruebas. **No es una prueba de rendimiento en Azure/K3s.**
