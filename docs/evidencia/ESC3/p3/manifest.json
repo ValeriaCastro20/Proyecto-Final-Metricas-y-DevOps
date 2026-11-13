@@ -1,0 +1,24 @@
+{
+  "finished_utc": "2026-11-13T03:47:04.753790+00:00",
+  "github_run_url": "https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/43360836707",
+  "platform": "Linux-7.0.0-1019-azure-x86_64-with-glibc2.43",
+  "runner_sha256": "1f480d8683e18250bdb687677d8417fb24b1d7ebf5dd67c15563544003abd208",
+  "rust": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+  "scope": "isolated loopback API and PostgreSQL; not Azure/K3s",
+  "sha256": {
+    "api.log": "3e9de841b28c67f082c3014e7216fe2afbd5615baa98afb5cc015970d3993824",
+    "burst-drain.log": "41ee1e5a250ce6d8ec61830469c2337340748aee31c5b0cfd97f11038f80ece0",
+    "burst-load.json": "cd2a5bed077fa08c0881f5c28fac4f5a4e118f77281b9becd556b0d52431f4a9",
+    "burst-queries.json": "b8831b71da684508fd1dc4c29ac0de0ce11150b573d0bbd0ff296003df22e2c8",
+    "extra-drain.log": "3076d9058d98eb6eec53275f3ee39769e6c9db1f7d0992565d5eab7422c0a894",
+    "extra-load.json": "bab59e880f4ef48cb2b93f0d3f0b10ae14524c27a0e2008e222a17cf31f9ab55",
+    "extra-queries.json": "2646737e0ed3a8bde6f044b0316d619620ec852708e4df4c89889f76ee34528e",
+    "migrate.log": "4d9782a6d5256248306214c5af83a1cabdadfc6b226a0ea5e5d7c415903d7475",
+    "summary.json": "db7dc75789a57897dc375a3a21aab4c79948f3494bdf3bea5a608e2d4290f125",
+    "sustained-drain.log": "4ef91a257285e57b890e557b19eca1a960ff13a85af589ea80aa55c320f00cbf",
+    "sustained-load.json": "74a460672eca60a251c6daab06911283a19e99a081f665feb0b354ac842b8a7f",
+    "sustained-queries.json": "0d20c0b61e45f11ffcb985613aa7ca20d02212e81450abd4dc3f05d0e6a711d8"
+  },
+  "source_commit": "f0af1013e2fe6f8074c20982d72a9d6617539df2",
+  "started_utc": "2026-11-13T03:44:50.028063+00:00"
+}

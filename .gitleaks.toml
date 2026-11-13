@@ -5,3 +5,10 @@ useDefault = true
 [[allowlists]]
 description = "Claves ficticias de una prueba Python ya eliminada (tests/test_persistence.py, commit 86e922b)"
 regexes = ['''^com03-test-(producer|analyst)-key$''']
+
+[[allowlists]]
+description = "ESC3: SHA-256 público de api.log en el manifiesto de evidencia, no una API key"
+condition = "AND"
+paths = ['''^docs/evidencia/ESC3/p3/manifest\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"api\.log": "[0-9a-f]{64}",?\s*$''']

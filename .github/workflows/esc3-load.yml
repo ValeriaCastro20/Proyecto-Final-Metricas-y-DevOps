@@ -1,0 +1,58 @@
+name: ESC3 compulsory P3 load
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/esc3-load.yml'
+      - 'scripts/esc3-evidence.py'
+      - 'scripts/esc3-resume-reads.py'
+      - 'scripts/tests/test_esc3_evidence.py'
+      - 'docs/evidencia/ESC3/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compulsory-load:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: acceptance
+          POSTGRES_PASSWORD: ci-${{ github.run_id }}-${{ github.run_attempt }}
+          POSTGRES_DB: esc3_test
+        ports: [5432:5432]
+        options: >-
+          --health-cmd "pg_isready -U acceptance -d esc3_test"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      DATABASE_URL: postgresql://acceptance:ci-${{ github.run_id }}-${{ github.run_attempt }}@127.0.0.1:5432/esc3_test
+      EVENT_PRODUCER_KEY: fictitious-producer-${{ github.run_id }}
+      EVENT_ANALYST_KEY: fictitious-analyst-${{ github.run_id }}
+      BIND_ADDR: 127.0.0.1:18083
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: rustup show
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --locked --bin event-service --example scenario_load
+      - name: P3-1, P3-3 and P3-2 (real 120-second sustained load)
+        run: python3 scripts/esc3-evidence.py artifacts/esc3-p3
+      - name: Independently recheck saved responses offline
+        run: python3 scripts/esc3-evidence.py --verify artifacts/esc3-p3
+      - name: Verify committed ESC3 P3 evidence and manifest hashes
+        run: python3 scripts/esc3-evidence.py --verify docs/evidencia/ESC3/p3
+      - name: Verify committed Azure evidence offline (no cloud credentials or writes)
+        run: python3 scripts/esc3-evidence.py --verify docs/evidencia/ESC3/azure-2026-11-13
+      - name: Publish full reports, receipts, historical queries, aggregates and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: esc3-p3-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/esc3-p3/
+          if-no-files-found: error
+          retention-days: 90

@@ -1,0 +1,340 @@
+{
+  "after": {
+    "nodes": [
+      {
+        "conditions": [
+          {
+            "status": "False",
+            "type": "MemoryPressure"
+          },
+          {
+            "status": "False",
+            "type": "DiskPressure"
+          },
+          {
+            "status": "False",
+            "type": "PIDPressure"
+          },
+          {
+            "status": "True",
+            "type": "Ready"
+          }
+        ],
+        "name": "k3s-eventos",
+        "node_info": {
+          "architecture": "amd64",
+          "bootID": "03372dd7-02b2-4eb5-9e07-0f5b270f191f",
+          "containerRuntimeVersion": "containerd://2.1.5-k3s1",
+          "kernelVersion": "7.0.0-1017-azure",
+          "kubeProxyVersion": "",
+          "kubeletVersion": "v1.35.2+k3s1",
+          "machineID": "a821edc769564ef48c5ed58eb165404a",
+          "operatingSystem": "linux",
+          "osImage": "Ubuntu 24.04.5 LTS",
+          "systemUUID": "80faf14c-f22c-44c5-98a6-b40ca9c71772"
+        },
+        "uid": "6e3ce180-51c2-484d-bdce-6adcafe7b3ff"
+      }
+    ],
+    "pods": [
+      {
+        "containers": [
+          {
+            "image": "sha256:800db5000da2e4f808b8da067a59682e28e2f0019f0d15ecbec6644050fafe66",
+            "image_id": "ghcr.io/marchelo23/proyecto-final-metricas-y-devops/event-service@sha256:17b4e6051228fd27df63471a3fff003bd8f2cb7ca916ef8e29d96a29835597e9",
+            "name": "api",
+            "ready": true,
+            "restart_count": 0
+          }
+        ],
+        "labels": {
+          "app.kubernetes.io/component": "api",
+          "app.kubernetes.io/name": "event-service",
+          "pod-template-hash": "57b4978887"
+        },
+        "name": "event-service-api-57b4978887-rh9jj",
+        "node": "k3s-eventos",
+        "phase": "Running",
+        "uid": "36d40616-5a54-4402-b33f-238576fcfe34"
+      },
+      {
+        "containers": [
+          {
+            "image": "sha256:800db5000da2e4f808b8da067a59682e28e2f0019f0d15ecbec6644050fafe66",
+            "image_id": "ghcr.io/marchelo23/proyecto-final-metricas-y-devops/event-service@sha256:17b4e6051228fd27df63471a3fff003bd8f2cb7ca916ef8e29d96a29835597e9",
+            "name": "worker",
+            "ready": true,
+            "restart_count": 0
+          }
+        ],
+        "labels": {
+          "app.kubernetes.io/component": "worker",
+          "app.kubernetes.io/name": "event-service",
+          "pod-template-hash": "676865cbdb"
+        },
+        "name": "event-service-worker-676865cbdb-vh22g",
+        "node": "k3s-eventos",
+        "phase": "Running",
+        "uid": "ed95ed71-e9d7-4c29-b0cf-4621792fa565"
+      },
+      {
+        "containers": [
+          {
+            "image": "docker.io/grafana/grafana:11.6.0",
+            "image_id": "docker.io/grafana/grafana@sha256:62d2b9d20a19714ebfe48d1bb405086081bc602aa053e28cf6d73c7537640dfb",
+            "name": "grafana",
+            "ready": true,
+            "restart_count": 0
+          }
+        ],
+        "labels": {
+          "app": "grafana",
+          "pod-template-hash": "6966ff6799"
+        },
+        "name": "grafana-6966ff6799-qtr7s",
+        "node": "k3s-eventos",
+        "phase": "Running",
+        "uid": "dc482d23-a06b-44b8-95f1-aaca23429b6f"
+      },
+      {
+        "containers": [
+          {
+            "image": "docker.io/jaegertracing/all-in-one:1.68.0",
+            "image_id": "docker.io/jaegertracing/all-in-one@sha256:6279882637ae03e70f519965d2ba5ca84cb785f4baf4f0d7237e827a37c33a42",
+            "name": "jaeger",
+            "ready": true,
+            "restart_count": 0
+          }
+        ],
+        "labels": {
+          "app": "jaeger",
+          "pod-template-hash": "6675bd9bb9"
+        },
+        "name": "jaeger-6675bd9bb9-wczxp",
+        "node": "k3s-eventos",
+        "phase": "Running",
+        "uid": "49021c25-22fc-4a96-83c4-440d2adfc67b"
+      },
+      {
+        "containers": [
+          {
+            "image": "sha256:cadebe7c08430c896edac883fa92f8de2c36e330805e770fbee8a7eae13f144f",
+            "image_id": "docker.io/library/postgres@sha256:5264710be20f409750ac6dc4e5706dcef929c87e241605463f0f9aefa932a8d9",
+            "name": "postgres",
+            "ready": true,
+            "restart_count": 1
+          }
+        ],
+        "labels": {
+          "app.kubernetes.io/name": "postgres",
+          "apps.kubernetes.io/pod-index": "0",
+          "controller-revision-hash": "postgres-6b7d94bb48",
+          "statefulset.kubernetes.io/pod-name": "postgres-0"
+        },
+        "name": "postgres-0",
+        "node": "k3s-eventos",
+        "phase": "Running",
+        "uid": "215a8a82-8ba3-4ce5-a570-e8faf2f5a6a3"
+      },
+      {
+        "containers": [
+          {
+            "image": "docker.io/prom/prometheus:v3.2.1",
+            "image_id": "docker.io/prom/prometheus@sha256:6927e0919a144aa7616fd0137d4816816d42f6b816de3af269ab065250859a62",
+            "name": "prometheus",
+            "ready": true,
+            "restart_count": 0
+          }
+        ],
+        "labels": {
+          "app": "prometheus",
+          "pod-template-hash": "84687df8df"
+        },
+        "name": "prometheus-84687df8df-66knl",
+        "node": "k3s-eventos",
+        "phase": "Running",
+        "uid": "dae1df7c-25d7-40de-8ffa-2a3528c20cd7"
+      }
+    ],
+    "server_utc": "2026-11-13T04:37:27Z"
+  },
+  "before": {
+    "nodes": [
+      {
+        "conditions": [
+          {
+            "status": "False",
+            "type": "MemoryPressure"
+          },
+          {
+            "status": "False",
+            "type": "DiskPressure"
+          },
+          {
+            "status": "False",
+            "type": "PIDPressure"
+          },
+          {
+            "status": "True",
+            "type": "Ready"
+          }
+        ],
+        "name": "k3s-eventos",
+        "node_info": {
+          "architecture": "amd64",
+          "bootID": "03372dd7-02b2-4eb5-9e07-0f5b270f191f",
+          "containerRuntimeVersion": "containerd://2.1.5-k3s1",
+          "kernelVersion": "7.0.0-1017-azure",
+          "kubeProxyVersion": "",
+          "kubeletVersion": "v1.35.2+k3s1",
+          "machineID": "a821edc769564ef48c5ed58eb165404a",
+          "operatingSystem": "linux",
+          "osImage": "Ubuntu 24.04.5 LTS",
+          "systemUUID": "80faf14c-f22c-44c5-98a6-b40ca9c71772"
+        },
+        "uid": "6e3ce180-51c2-484d-bdce-6adcafe7b3ff"
+      }
+    ],
+    "pods": [
+      {
+        "containers": [
+          {
+            "image": "sha256:800db5000da2e4f808b8da067a59682e28e2f0019f0d15ecbec6644050fafe66",
+            "image_id": "ghcr.io/marchelo23/proyecto-final-metricas-y-devops/event-service@sha256:17b4e6051228fd27df63471a3fff003bd8f2cb7ca916ef8e29d96a29835597e9",
+            "name": "api",
+            "ready": true,
+            "restart_count": 0
+          }
+        ],
+        "labels": {
+          "app.kubernetes.io/component": "api",
+          "app.kubernetes.io/name": "event-service",
+          "pod-template-hash": "57b4978887"
+        },
+        "name": "event-service-api-57b4978887-rh9jj",
+        "node": "k3s-eventos",
+        "phase": "Running",
+        "uid": "36d40616-5a54-4402-b33f-238576fcfe34"
+      },
+      {
+        "containers": [
+          {
+            "image": "sha256:800db5000da2e4f808b8da067a59682e28e2f0019f0d15ecbec6644050fafe66",
+            "image_id": "ghcr.io/marchelo23/proyecto-final-metricas-y-devops/event-service@sha256:17b4e6051228fd27df63471a3fff003bd8f2cb7ca916ef8e29d96a29835597e9",
+            "name": "worker",
+            "ready": true,
+            "restart_count": 0
+          }
+        ],
+        "labels": {
+          "app.kubernetes.io/component": "worker",
+          "app.kubernetes.io/name": "event-service",
+          "pod-template-hash": "676865cbdb"
+        },
+        "name": "event-service-worker-676865cbdb-vh22g",
+        "node": "k3s-eventos",
+        "phase": "Running",
+        "uid": "ed95ed71-e9d7-4c29-b0cf-4621792fa565"
+      },
+      {
+        "containers": [
+          {
+            "image": "docker.io/grafana/grafana:11.6.0",
+            "image_id": "docker.io/grafana/grafana@sha256:62d2b9d20a19714ebfe48d1bb405086081bc602aa053e28cf6d73c7537640dfb",
+            "name": "grafana",
+            "ready": true,
+            "restart_count": 0
+          }
+        ],
+        "labels": {
+          "app": "grafana",
+          "pod-template-hash": "6966ff6799"
+        },
+        "name": "grafana-6966ff6799-qtr7s",
+        "node": "k3s-eventos",
+        "phase": "Running",
+        "uid": "dc482d23-a06b-44b8-95f1-aaca23429b6f"
+      },
+      {
+        "containers": [
+          {
+            "image": "docker.io/jaegertracing/all-in-one:1.68.0",
+            "image_id": "docker.io/jaegertracing/all-in-one@sha256:6279882637ae03e70f519965d2ba5ca84cb785f4baf4f0d7237e827a37c33a42",
+            "name": "jaeger",
+            "ready": true,
+            "restart_count": 0
+          }
+        ],
+        "labels": {
+          "app": "jaeger",
+          "pod-template-hash": "6675bd9bb9"
+        },
+        "name": "jaeger-6675bd9bb9-wczxp",
+        "node": "k3s-eventos",
+        "phase": "Running",
+        "uid": "49021c25-22fc-4a96-83c4-440d2adfc67b"
+      },
+      {
+        "containers": [
+          {
+            "image": "sha256:cadebe7c08430c896edac883fa92f8de2c36e330805e770fbee8a7eae13f144f",
+            "image_id": "docker.io/library/postgres@sha256:5264710be20f409750ac6dc4e5706dcef929c87e241605463f0f9aefa932a8d9",
+            "name": "postgres",
+            "ready": true,
+            "restart_count": 1
+          }
+        ],
+        "labels": {
+          "app.kubernetes.io/name": "postgres",
+          "apps.kubernetes.io/pod-index": "0",
+          "controller-revision-hash": "postgres-6b7d94bb48",
+          "statefulset.kubernetes.io/pod-name": "postgres-0"
+        },
+        "name": "postgres-0",
+        "node": "k3s-eventos",
+        "phase": "Running",
+        "uid": "215a8a82-8ba3-4ce5-a570-e8faf2f5a6a3"
+      },
+      {
+        "containers": [
+          {
+            "image": "docker.io/prom/prometheus:v3.2.1",
+            "image_id": "docker.io/prom/prometheus@sha256:6927e0919a144aa7616fd0137d4816816d42f6b816de3af269ab065250859a62",
+            "name": "prometheus",
+            "ready": true,
+            "restart_count": 0
+          }
+        ],
+        "labels": {
+          "app": "prometheus",
+          "pod-template-hash": "84687df8df"
+        },
+        "name": "prometheus-84687df8df-66knl",
+        "node": "k3s-eventos",
+        "phase": "Running",
+        "uid": "dae1df7c-25d7-40de-8ffa-2a3528c20cd7"
+      }
+    ],
+    "server_utc": "2026-11-13T04:12:55Z"
+  },
+  "host": "eventos-b97e31.mexicocentral.cloudapp.azure.com",
+  "host_key_basis": "Matches Azure-verified fingerprint in docs/evidencia/DEV-13/index.md",
+  "host_key_sha256": "SHA256:L1RxG+BO2hEHHgsmPH1rLDhddP/s5O/8R4yhtOML6MU",
+  "namespace": "eventos-development",
+  "power_status_run_url": "https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/43361832253",
+  "service": {
+    "cluster_ip": "10.43.118.234",
+    "name": "event-service",
+    "ports": [
+      {
+        "name": "http",
+        "port": 8000,
+        "protocol": "TCP",
+        "targetPort": "http"
+      }
+    ],
+    "uid": "8febfcd0-b1e1-46ee-bc57-f2cb455ae459"
+  },
+  "terraform_run_url": "https://github.com/marchelo23/Proyecto-Final-Metricas-y-DevOps/actions/runs/43361832125",
+  "transport": "SSH local forward to development service ClusterIP:8000; no public API-key transmission"
+}

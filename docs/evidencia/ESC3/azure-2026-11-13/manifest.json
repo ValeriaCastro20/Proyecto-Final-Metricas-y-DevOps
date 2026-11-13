@@ -1,0 +1,20 @@
+{
+  "collection_resumed": true,
+  "deployment_evidence": "deployment.json",
+  "finished_utc": "2026-11-13T04:37:05.215346+00:00",
+  "runner_sha256": "920cc895ec046abba90537757fb3bc0103b741d4a3057593a4b318d6dfc73bb5",
+  "scope": "Azure/K3s eventos-development through verified SSH tunnel, live worker, no restart/deployment/drain",
+  "sha256": {
+    "burst-load.json": "efae62fdb3851c59229e220242e644080b3a4dc77c57646370b33ec437bbc31b",
+    "burst-queries.json": "52cf3bc75e3e9d648b05496117b1e0a9f6b080b539594d81ace878fed7269311",
+    "deployment.json": "485a494a80fa2d520afd9090e5d1b46de207309fa0fbe09a93521ec7ec4d051b",
+    "extra-load.json": "e702853708fedac688028b85ae75285d65cdbaa517e3fdb533e20597d06c8939",
+    "extra-queries.json": "f93d07b90ffc342ac83b1a543ed782a6174c624b76ebe49eb3487bc0ca36b16d",
+    "summary.json": "23b668296634e5e867ab337bee20b1ed0b8bbfdd4211e82224e8a08eb4dc8246",
+    "sustained-load.json": "274137caaa95cda2ed10f40ffab851afebd32b152163aaadddf7072278b4627d",
+    "sustained-queries.json": "78618a6cba610c49255491475001cb8b9ebb88b9c26f67209453aa2503299b7e"
+  },
+  "source_commit": "b16c6aa89de7e32a1cd3c1bc091b843a5277ec0a",
+  "started_utc": "2026-11-13T04:35:10.831315+00:00",
+  "verifier_sha256": "3c277dd42f33d5dfb88093243538625a824a6008bfa40a9f51a9c0a0001b6d20"
+}

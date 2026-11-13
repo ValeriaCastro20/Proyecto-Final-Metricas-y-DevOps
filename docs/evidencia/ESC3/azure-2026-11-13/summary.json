@@ -1,0 +1,32 @@
+{
+  "burst": {
+    "accepted": 1000,
+    "duplicates": 0,
+    "emission_seconds": 1.997400292,
+    "late": 0,
+    "lost_accepted": 0,
+    "passed": true,
+    "pending_after": 0,
+    "pending_before": 0
+  },
+  "extra": {
+    "accepted": 1050,
+    "duplicates": 50,
+    "emission_seconds": 2.112277131,
+    "late": 50,
+    "lost_accepted": 0,
+    "passed": true,
+    "pending_after": 0,
+    "pending_before": 0
+  },
+  "sustained": {
+    "accepted": 2400,
+    "duplicates": 0,
+    "emission_seconds": 120.001282362,
+    "late": 0,
+    "lost_accepted": 0,
+    "passed": true,
+    "pending_after": 0,
+    "pending_before": 0
+  }
+}
